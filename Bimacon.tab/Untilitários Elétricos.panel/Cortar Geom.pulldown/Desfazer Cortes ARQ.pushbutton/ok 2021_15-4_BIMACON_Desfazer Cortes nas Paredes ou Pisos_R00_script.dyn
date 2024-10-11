@@ -2,19 +2,11 @@
   "Uuid": "c804fca6-a35f-4afc-b7ca-b3f0394379fe",
   "IsCustomNode": false,
   "Description": null,
-  "Name": "2021_15-4_BIMACON_Desfazer Cortes nas Paredes ou Pisos",
+  "Name": "ok 2021_15-4_BIMACON_Desfazer Cortes nas Paredes ou Pisos",
   "ElementResolver": {
     "ResolutionMap": {}
   },
-  "Inputs": [
-    {
-      "Id": "d1811153aba74003b2af34bb2f5660ba",
-      "Name": "Corte parede ou Corte piso?",
-      "Type": "string",
-      "Value": "Corte parede",
-      "Description": "Cria uma sequência de caracteres."
-    }
-  ],
+  "Inputs": [],
   "Outputs": [],
   "Nodes": [
     {
@@ -159,7 +151,7 @@
     {
       "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
       "NodeType": "StringInputNode",
-      "InputValue": "Corte parede",
+      "InputValue": "Corte",
       "Id": "d1811153aba74003b2af34bb2f5660ba",
       "Inputs": [],
       "Outputs": [
@@ -175,45 +167,6 @@
       ],
       "Replication": "Disabled",
       "Description": "Cria uma sequência de caracteres."
-    },
-    {
-      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
-      "NodeType": "FunctionNode",
-      "FunctionSignature": "==@var[]..[],var[]..[]",
-      "Id": "540517baa3174978b918622d9f2e6259",
-      "Inputs": [
-        {
-          "Id": "9a19551e2bd04968ad586e64e935d7f7",
-          "Name": "x",
-          "Description": "valor de x.\n\nvar[]..[]",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        },
-        {
-          "Id": "ffd71b7e10564f169bfd505d86d7e7bf",
-          "Name": "y",
-          "Description": "valor de y.\n\nvar[]..[]",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Outputs": [
-        {
-          "Id": "6bfa6ab995434644adf1520545c242a5",
-          "Name": "var[]..[]",
-          "Description": "var[]..[]",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Replication": "Auto",
-      "Description": "Igualar x a y?\n\n== (x: var[]..[], y: var[]..[]): var[]..[]"
     },
     {
       "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
@@ -578,6 +531,54 @@
       ],
       "Replication": "Disabled",
       "Description": "Executa um script IronPython incorporado."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "DSCore.String.Contains@string,string,bool",
+      "Id": "192c8e9d66ee4ad49b82ef72c91187b6",
+      "Inputs": [
+        {
+          "Id": "4539f844fc1341eeba3765b35f6e8197",
+          "Name": "str",
+          "Description": "A sequência de caracteres na qual pesquisar.\n\nstring",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "f3de9a3b92a446f4a04618aabaecaa40",
+          "Name": "searchFor",
+          "Description": "Subsequência de caracteres que desejar pesquisar.\n\nstring",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "8d23dcb086c04b7e9676245de091580d",
+          "Name": "ignoreCase",
+          "Description": "Se desejar ou não levar em conta a comparação entre maiúsculas e minúsculas.\n\nbool\nValor padrão : false",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "a5b493976ba9442baebc2813b0b877d4",
+          "Name": "bool",
+          "Description": "Se uma sequência de caracteres contiver a subsequência de caracteres.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Determina se a determinada sequência de caracteres contém a determinada subsequência de caracteres.\n\nString.Contains (str: string, searchFor: string, ignoreCase: bool = false): bool"
     }
   ],
   "Connectors": [
@@ -613,13 +614,8 @@
     },
     {
       "Start": "ea605f18bda14ee1a36fa71296b6a756",
-      "End": "ffd71b7e10564f169bfd505d86d7e7bf",
-      "Id": "ae06c856ae194027ab4e5894aae8b116"
-    },
-    {
-      "Start": "6bfa6ab995434644adf1520545c242a5",
-      "End": "b450accf815340d4bbb0d2f8bf9afb2e",
-      "Id": "7b5ee5f2cb4d4a9db19417877f124e64"
+      "End": "f3de9a3b92a446f4a04618aabaecaa40",
+      "Id": "c06121ad60464f81a74b7a0cae770956"
     },
     {
       "Start": "dc60f154e4f24e05acc9a79b94e8e7d6",
@@ -663,8 +659,8 @@
     },
     {
       "Start": "3273fa7a946b480581988e75f08c17d5",
-      "End": "9a19551e2bd04968ad586e64e935d7f7",
-      "Id": "33792601619d49b49e5ea4028e81a3fa"
+      "End": "4539f844fc1341eeba3765b35f6e8197",
+      "Id": "17d858fa66294812925651f4becdc3e4"
     },
     {
       "Start": "993ddf9d4b684f7bb37a6ca3245eb205",
@@ -675,6 +671,11 @@
       "Start": "45a92b4194ec4b8aa4d76056c1fd6988",
       "End": "7b82acf2836947d68aafeecd89903df3",
       "Id": "ea157c7375234932b164b3f27ecba7c9"
+    },
+    {
+      "Start": "a5b493976ba9442baebc2813b0b877d4",
+      "End": "b450accf815340d4bbb0d2f8bf9afb2e",
+      "Id": "d001606f868448aeb38639c905a71e30"
     }
   ],
   "Dependencies": [],
@@ -780,23 +781,13 @@
       },
       {
         "ShowGeometry": true,
-        "Name": "Corte parede ou Corte piso?",
+        "Name": "String",
         "Id": "d1811153aba74003b2af34bb2f5660ba",
-        "IsSetAsInput": true,
-        "IsSetAsOutput": false,
-        "Excluded": false,
-        "X": 831.59774892813584,
-        "Y": 486.03622441198956
-      },
-      {
-        "ShowGeometry": true,
-        "Name": "==",
-        "Id": "540517baa3174978b918622d9f2e6259",
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 1129.3404848270227,
-        "Y": 364.1549322425941
+        "X": 828.81210134661569,
+        "Y": 495.26940691815241
       },
       {
         "ShowGeometry": true,
@@ -907,6 +898,16 @@
         "Excluded": false,
         "X": 3629.1777116648768,
         "Y": 650.95421274714806
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "String.Contains",
+        "Id": "192c8e9d66ee4ad49b82ef72c91187b6",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1017.3218575863475,
+        "Y": 415.15657151912939
       }
     ],
     "Annotations": [
@@ -925,18 +926,18 @@
           "029e40fd5cc04a919355031c86646ea4"
         ],
         "Left": 1952.3813090576598,
-        "Top": 290.63985337776018,
+        "Top": 313.63985337776018,
         "Width": 1810.796402607217,
-        "Height": 573.19035402918507,
+        "Height": 550.19035402918507,
         "FontSize": 36.0,
         "InitialTop": 343.63985337776018,
-        "InitialHeight": 688.85657352337421,
-        "TextblockHeight": 43.0,
+        "InitialHeight": 572.19035402918507,
+        "TextblockHeight": 0.0,
         "Background": "#FFC1D676"
       }
     ],
-    "X": 46.871473593879841,
-    "Y": 193.64993187418884,
-    "Zoom": 0.1590149535663237
+    "X": -14.233351295361075,
+    "Y": 159.29620896734073,
+    "Zoom": 0.178597035543034
   }
 }
