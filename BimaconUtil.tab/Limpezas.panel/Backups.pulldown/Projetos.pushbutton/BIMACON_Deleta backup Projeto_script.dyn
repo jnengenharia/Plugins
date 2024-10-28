@@ -1,0 +1,502 @@
+{
+  "Uuid": "55d10e0c-ab29-4ebb-bbe4-b898943eb312",
+  "IsCustomNode": false,
+  "Description": null,
+  "Name": "BIMACON_Delete backup Projeto",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [
+    {
+      "Id": "8e3cdd7a62674ede8506caa47224e1b7",
+      "Name": "Selecione a pasta para deletar Backups de projeto",
+      "Type": "string",
+      "Value": "C:\\Users\\jneng\\Desktop\\teste parameter",
+      "Description": "Permite que você selecione um diretório no sistema para obter seu caminho"
+    }
+  ],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "CoreNodeModels.Input.Directory, CoreNodeModels",
+      "HintPath": "C:\\Users\\jneng\\Desktop\\teste parameter",
+      "InputValue": "C:\\Users\\jneng\\Desktop\\teste parameter",
+      "NodeType": "ExtensionNode",
+      "Id": "8e3cdd7a62674ede8506caa47224e1b7",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "7b426729492b4a5ea5cef432ea225336",
+          "Name": "",
+          "Description": "Directory",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Permite que você selecione um diretório no sistema para obter seu caminho"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "import sys\r\nsys.path.append(r\"C:\\Program Files (x86)\\IronPython 2.7\\Lib\")\r\n\r\nimport os\r\nimport re\r\n\r\n\r\nfilelist = list()\r\nfor root, dirs, files in os.walk(IN[0]):\r\n\tfor file in files:\r\n\t\tmatches = re.match(\".*\\.[0-9]+\\.(rvt|RVT)$\", file)\r\n\t\r\n\t\tif matches:\r\n\t\t\tbackup = os.path.join(root, file)\r\n\t\t\tfilelist.append(backup)\r\n\t\t\tos.remove(backup)\r\n\r\nOUT = filelist",
+      "VariableInputPorts": true,
+      "Id": "5b62267f73cb466ba42ca260a85b8038",
+      "Inputs": [
+        {
+          "Id": "877c600667f944cfa5802e19676fddb2",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "d4592931047148459eb0e01e2ceaedbb",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Executa um script IronPython incorporado."
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "import clr\n\nclr.AddReference(\"System.Windows.Forms\")\nfrom System.Windows.Forms import Form,Label,FormStartPosition\n\ndef popup(text):\n\tform = Form()\n\tform.StartPosition = FormStartPosition.CenterScreen\n\tform.Width = 300\n\tform.Height = 100\t\n\tlabel = Label()\n\tlabel.Text = text\n\tlabel.Width = 280\n\tlabel.Height = 70\n\tlabel.Parent = form\t\n\tform.ShowDialog()\n\t\nText=\"\\n\".join(IN[0])\npopup(Text)",
+      "VariableInputPorts": true,
+      "Id": "3308b51bec3d4f2bb1201fc0d77bbb53",
+      "Inputs": [
+        {
+          "Id": "c3e62ac5203e40e68637ed00c92ffddb",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "31a8cc26aadd487ca58b390bc8a99e78",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "dc3b29c2ce5e4ad2b90bfc0053a3f591",
+          "Name": "OUT",
+          "Description": "Resultado do script Python",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Executa um script IronPython incorporado."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": false,
+      "Id": "91ce0944bdbb49618fe725def99d22d5",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "9cf2d99114d34142a29b3e0237536f2d",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Seleção entre True e False."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Logic.If, CoreNodeModels",
+      "NodeType": "ExtensionNode",
+      "Id": "e3eff3a012c5492fa792f78012a93827",
+      "Inputs": [
+        {
+          "Id": "619a5e081733491ab84510b36f8442de",
+          "Name": "test",
+          "Description": "Testar bloco",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "6f4ec5d5921e4132878ed8ab75392c50",
+          "Name": "true",
+          "Description": "Bloco verdadeiro",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "f62c208d33d14377a3f4cd2f13a96bf1",
+          "Name": "false",
+          "Description": "Bloco falso",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "ee8b1a5ed42e4e10980ffc6adfd68a33",
+          "Name": "result",
+          "Description": "resultado",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Declaração condicional"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "NodeType": "CodeBlockNode",
+      "Code": "[\"Nenhum backup foi excluído\"];",
+      "Id": "c4bb79fcfc0742d988b845109ccf7ef7",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "e3aeb84fec5e4c2982f0d6e9383af435",
+          "Name": "",
+          "Description": "Valor da expressão na linha 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Permite que o código DesignScript seja criado diretamente"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "NodeType": "CodeBlockNode",
+      "Code": "[\"Feito! você excluiu \"+N+\" backups\"];",
+      "Id": "602017849983412ba3d84b50b3d4e251",
+      "Inputs": [
+        {
+          "Id": "7400c068573c438e98becb6d8302df2f",
+          "Name": "N",
+          "Description": "N",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "b3beba1210804511af78e5ddfecd3c0c",
+          "Name": "",
+          "Description": "Valor da expressão na linha 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Permite que o código DesignScript seja criado diretamente"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": ">@var[]..[],var[]..[]",
+      "Id": "1ff5a84ccbe84943a8a1b6c001d67db5",
+      "Inputs": [
+        {
+          "Id": "7c125270fdf2428cb93a1c169209de77",
+          "Name": "x",
+          "Description": "valor de x.\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "60abae99af944af3990362b3a4fee0b9",
+          "Name": "y",
+          "Description": "valor de y.\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "75968e2d2121471cb839ca9e1d760a2a",
+          "Name": "var[]..[]",
+          "Description": "var[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "x é maior do que y?\n\n> (x: var[]..[], y: var[]..[]): var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "DSCore.List.Count@var[]..[]",
+      "Id": "2a5c25ed4b1a48aeb498e848dca9d39f",
+      "Inputs": [
+        {
+          "Id": "f49935093ea74224b21c72146e1429ad",
+          "Name": "list",
+          "Description": "Lista da qual para obter a contagem de itens.\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "b3bd5a6fae7a4f79927aef0730106384",
+          "Name": "count",
+          "Description": "Comprimento da lista.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Retorna o número de itens armazenados na determinada lista.\n\nList.Count (list: var[]..[]): int"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "NodeType": "CodeBlockNode",
+      "Code": "0;",
+      "Id": "1a6fb623389f48c2a4acfc3af1273f9d",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "f7c85f6095c04faf8fbbf1079cfb0f67",
+          "Name": "",
+          "Description": "Valor da expressão na linha 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Permite que o código DesignScript seja criado diretamente"
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "7b426729492b4a5ea5cef432ea225336",
+      "End": "877c600667f944cfa5802e19676fddb2",
+      "Id": "131eec3fbbc7433f952af9a20a389f17"
+    },
+    {
+      "Start": "d4592931047148459eb0e01e2ceaedbb",
+      "End": "f49935093ea74224b21c72146e1429ad",
+      "Id": "24fffe3d4eb3497b94f4f29a10b1abbb"
+    },
+    {
+      "Start": "9cf2d99114d34142a29b3e0237536f2d",
+      "End": "31a8cc26aadd487ca58b390bc8a99e78",
+      "Id": "25c8c773c396494db7b2dfca08d86c1a"
+    },
+    {
+      "Start": "ee8b1a5ed42e4e10980ffc6adfd68a33",
+      "End": "c3e62ac5203e40e68637ed00c92ffddb",
+      "Id": "c79ba2cc98e1441db9a8d1d11f6f1533"
+    },
+    {
+      "Start": "e3aeb84fec5e4c2982f0d6e9383af435",
+      "End": "f62c208d33d14377a3f4cd2f13a96bf1",
+      "Id": "788719e18f0e4ef596c019506ddff972"
+    },
+    {
+      "Start": "b3beba1210804511af78e5ddfecd3c0c",
+      "End": "6f4ec5d5921e4132878ed8ab75392c50",
+      "Id": "5d253990a61b445e9e6acaa0d5abf00b"
+    },
+    {
+      "Start": "75968e2d2121471cb839ca9e1d760a2a",
+      "End": "619a5e081733491ab84510b36f8442de",
+      "Id": "65e569d090094a748fb9adb0c4b46f89"
+    },
+    {
+      "Start": "b3bd5a6fae7a4f79927aef0730106384",
+      "End": "7400c068573c438e98becb6d8302df2f",
+      "Id": "8d9d1d0e433b41bd8cb0edeffc2c6da5"
+    },
+    {
+      "Start": "b3bd5a6fae7a4f79927aef0730106384",
+      "End": "7c125270fdf2428cb93a1c169209de77",
+      "Id": "e907f92ea15f4387b839c282f5ec5ada"
+    },
+    {
+      "Start": "f7c85f6095c04faf8fbbf1079cfb0f67",
+      "End": "60abae99af944af3990362b3a4fee0b9",
+      "Id": "cb895c9f990942aaa8a63b3b89fa1a09"
+    }
+  ],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [],
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.6.1.8786",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Visualização do plano de fundo",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": true,
+        "Name": "Selecione a pasta para deletar Backups de projeto",
+        "Id": "8e3cdd7a62674ede8506caa47224e1b7",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -143.0,
+        "Y": 256.5
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script",
+        "Id": "5b62267f73cb466ba42ca260a85b8038",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 320.0,
+        "Y": 285.5
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Window Prompt With Text",
+        "Id": "3308b51bec3d4f2bb1201fc0d77bbb53",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1644.3440022499781,
+        "Y": 651.64996580647869
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Boolean",
+        "Id": "91ce0944bdbb49618fe725def99d22d5",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1370.2564725658081,
+        "Y": 770.14201705400581
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "If",
+        "Id": "e3eff3a012c5492fa792f78012a93827",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1442.8194802370981,
+        "Y": 438.53733785982672
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Code Block",
+        "Id": "c4bb79fcfc0742d988b845109ccf7ef7",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 893.01654369514722,
+        "Y": 743.2841773905717
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Code Block",
+        "Id": "602017849983412ba3d84b50b3d4e251",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 698.41604199207825,
+        "Y": 611.0442336974387
+      },
+      {
+        "ShowGeometry": true,
+        "Name": ">",
+        "Id": "1ff5a84ccbe84943a8a1b6c001d67db5",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 898.17435308761526,
+        "Y": 358.68621401013581
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "List.Count",
+        "Id": "2a5c25ed4b1a48aeb498e848dca9d39f",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 626.77284834150294,
+        "Y": 260.02425262330723
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Code Block",
+        "Id": "1a6fb623389f48c2a4acfc3af1273f9d",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 785.04210761221623,
+        "Y": 483.0556579444027
+      }
+    ],
+    "Annotations": [],
+    "X": 131.84497513632815,
+    "Y": 105.21159103985006,
+    "Zoom": 0.34208163087100518
+  }
+}

@@ -1,0 +1,554 @@
+{
+  "Uuid": "55d10e0c-ab29-4ebb-bbe4-b898943eb312",
+  "IsCustomNode": false,
+  "Description": null,
+  "Name": "BIMACON_Delete backup Famílias",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [
+    {
+      "Id": "8e3cdd7a62674ede8506caa47224e1b7",
+      "Name": "Selecione a pasta para deletar Backups de famílias",
+      "Type": "string",
+      "Value": "C:\\Users\\jneng\\Desktop\\teste parameter",
+      "Description": "Permite que você selecione um diretório no sistema para obter seu caminho"
+    }
+  ],
+  "Outputs": [
+    {
+      "Id": "5b62267f73cb466ba42ca260a85b8038",
+      "Name": "Python Script",
+      "Type": "unknown",
+      "InitialValue": "",
+      "Description": "Executa um script IronPython incorporado."
+    }
+  ],
+  "Nodes": [
+    {
+      "ConcreteType": "CoreNodeModels.Input.Directory, CoreNodeModels",
+      "HintPath": "C:\\Users\\jneng\\Desktop\\teste parameter",
+      "InputValue": "C:\\Users\\jneng\\Desktop\\teste parameter",
+      "NodeType": "ExtensionNode",
+      "Id": "8e3cdd7a62674ede8506caa47224e1b7",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "7b426729492b4a5ea5cef432ea225336",
+          "Name": "",
+          "Description": "Directory",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Permite que você selecione um diretório no sistema para obter seu caminho"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "import sys\r\nsys.path.append(r\"C:\\Program Files (x86)\\IronPython 2.7\\Lib\")\r\n\r\nimport os\r\nimport re\r\n\r\n\r\nfilelist = list()\r\nfor root, dirs, files in os.walk(IN[0]):\r\n\tfor file in files:\r\n\t\tmatches = re.match(\".*\\.[0-9]+\\.(rfa|RFA)$\", file)\r\n\t\r\n\t\tif matches:\r\n\t\t\tbackup = os.path.join(root, file)\r\n\t\t\tfilelist.append(backup)\r\n\t\t\tos.remove(backup)\r\n\r\nOUT = filelist",
+      "VariableInputPorts": true,
+      "Id": "5b62267f73cb466ba42ca260a85b8038",
+      "Inputs": [
+        {
+          "Id": "877c600667f944cfa5802e19676fddb2",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "d4592931047148459eb0e01e2ceaedbb",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Executa um script IronPython incorporado."
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "import clr\n\nclr.AddReference(\"System.Windows.Forms\")\nfrom System.Windows.Forms import Form,Label,FormStartPosition\n\ndef popup(text):\n\tform = Form()\n\tform.StartPosition = FormStartPosition.CenterScreen\n\tform.Width = 300\n\tform.Height = 100\t\n\tlabel = Label()\n\tlabel.Text = text\n\tlabel.Width = 280\n\tlabel.Height = 70\n\tlabel.Parent = form\t\n\tform.ShowDialog()\n\t\nText=\"\\n\".join(IN[0])\npopup(Text)",
+      "VariableInputPorts": true,
+      "Id": "fefddf4535e54c0995545078283218bf",
+      "Inputs": [
+        {
+          "Id": "ec95de79f954407197f0593a325154c5",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "5df7f133d3fd49aaa7847ebc8d85e891",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "d9f1e71cf8c54d47be7dbb9ea7875794",
+          "Name": "OUT",
+          "Description": "Resultado do script Python",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Executa um script IronPython incorporado."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": false,
+      "Id": "fe59f0baaad74d54b738b2007230a5dc",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "7181056fb3644b1aa17ad4dea9b8f438",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Seleção entre True e False."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "NodeType": "CodeBlockNode",
+      "Code": "[\"Feito! você excluiu \"+N+\" backups\"];",
+      "Id": "c6de6407d95a4aa3bc31a0c7debef4ff",
+      "Inputs": [
+        {
+          "Id": "37095b55baf4405b8ea4d2b4e3890895",
+          "Name": "N",
+          "Description": "N",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "deefb945a560490da085cc61eb4634c4",
+          "Name": "",
+          "Description": "Valor da expressão na linha 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Permite que o código DesignScript seja criado diretamente"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "NodeType": "CodeBlockNode",
+      "Code": "[\"Nenhum backup foi excluído\"];",
+      "Id": "e5e2fdd4bb934e2892583147d762db9b",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "3ece58890adf43fe9ee45823dbc07da5",
+          "Name": "",
+          "Description": "Valor da expressão na linha 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Permite que o código DesignScript seja criado diretamente"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Logic.If, CoreNodeModels",
+      "NodeType": "ExtensionNode",
+      "Id": "c9a532b121eb45f296d2ca16b2e18881",
+      "Inputs": [
+        {
+          "Id": "12b7ce4113984d1d9a3c9377ded6e05f",
+          "Name": "test",
+          "Description": "Testar bloco",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "75180723df9943f282920345adc70724",
+          "Name": "true",
+          "Description": "Bloco verdadeiro",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "ffd7a9cff7044b94a1a66d17b180bec7",
+          "Name": "false",
+          "Description": "Bloco falso",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "ae81c422e0674ee792e66793f0e90e45",
+          "Name": "result",
+          "Description": "resultado",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Declaração condicional"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": ">@var[]..[],var[]..[]",
+      "Id": "0e98ddc8fc4542f9b656a8b8eed5dd89",
+      "Inputs": [
+        {
+          "Id": "221b3ea6e3324ddd9c269777ad2c1f58",
+          "Name": "x",
+          "Description": "valor de x.\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "c0d016b229c743779e462ed9c367419f",
+          "Name": "y",
+          "Description": "valor de y.\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "7a9894fe65264a4c822d4c880ae6cbdd",
+          "Name": "var[]..[]",
+          "Description": "var[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "x é maior do que y?\n\n> (x: var[]..[], y: var[]..[]): var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "DSCore.List.Count@var[]..[]",
+      "Id": "2a3185445988467fbe085718b5bc2d2e",
+      "Inputs": [
+        {
+          "Id": "46185aeb002c4e6fa8e37051403af350",
+          "Name": "list",
+          "Description": "Lista da qual para obter a contagem de itens.\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "6f43fbfe4c5e49daa53fe530a920c2a8",
+          "Name": "count",
+          "Description": "Comprimento da lista.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Retorna o número de itens armazenados na determinada lista.\n\nList.Count (list: var[]..[]): int"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "NodeType": "CodeBlockNode",
+      "Code": "0;",
+      "Id": "276824751761466587df71495b0e5ba3",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "ab7814c0eda54d4a8c17970794c32105",
+          "Name": "",
+          "Description": "Valor da expressão na linha 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Permite que o código DesignScript seja criado diretamente"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Watch, CoreNodeModels",
+      "NodeType": "ExtensionNode",
+      "Id": "28dd3f0cc67e4b67915fcb361e3f72ea",
+      "Inputs": [
+        {
+          "Id": "8b1fa7d0836e4c5cac2dead684ef0028",
+          "Name": "",
+          "Description": "Nó para avaliar.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "345ed233379c4cb9afbea463d9a6cc63",
+          "Name": "",
+          "Description": "Observar conteúdo.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Visualize a saída do nó."
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "7b426729492b4a5ea5cef432ea225336",
+      "End": "877c600667f944cfa5802e19676fddb2",
+      "Id": "131eec3fbbc7433f952af9a20a389f17"
+    },
+    {
+      "Start": "d4592931047148459eb0e01e2ceaedbb",
+      "End": "46185aeb002c4e6fa8e37051403af350",
+      "Id": "4a89d1b61d3848b2959434ee493773ee"
+    },
+    {
+      "Start": "d9f1e71cf8c54d47be7dbb9ea7875794",
+      "End": "8b1fa7d0836e4c5cac2dead684ef0028",
+      "Id": "bc345bfd4ece4fca826dc27947227b4a"
+    },
+    {
+      "Start": "7181056fb3644b1aa17ad4dea9b8f438",
+      "End": "5df7f133d3fd49aaa7847ebc8d85e891",
+      "Id": "d17f9718a1d24eb59c47d21cfc9763a2"
+    },
+    {
+      "Start": "deefb945a560490da085cc61eb4634c4",
+      "End": "75180723df9943f282920345adc70724",
+      "Id": "8ef890ff267042d898f4c58920686e44"
+    },
+    {
+      "Start": "3ece58890adf43fe9ee45823dbc07da5",
+      "End": "ffd7a9cff7044b94a1a66d17b180bec7",
+      "Id": "b5fee0b573794cd2ade585c70548c826"
+    },
+    {
+      "Start": "ae81c422e0674ee792e66793f0e90e45",
+      "End": "ec95de79f954407197f0593a325154c5",
+      "Id": "2c81bb81b66c4dc0a0bb10e9dab2bcf5"
+    },
+    {
+      "Start": "7a9894fe65264a4c822d4c880ae6cbdd",
+      "End": "12b7ce4113984d1d9a3c9377ded6e05f",
+      "Id": "8158b388e3964c99bd65afb70e65c5f0"
+    },
+    {
+      "Start": "6f43fbfe4c5e49daa53fe530a920c2a8",
+      "End": "221b3ea6e3324ddd9c269777ad2c1f58",
+      "Id": "af2e924befa944a58ec39d14426d94cd"
+    },
+    {
+      "Start": "6f43fbfe4c5e49daa53fe530a920c2a8",
+      "End": "37095b55baf4405b8ea4d2b4e3890895",
+      "Id": "e59c8b5d1b434a998264ebfb7f825842"
+    },
+    {
+      "Start": "ab7814c0eda54d4a8c17970794c32105",
+      "End": "c0d016b229c743779e462ed9c367419f",
+      "Id": "d4f228b0361b43f198403cc20a8a6d9b"
+    }
+  ],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [],
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.6.1.8786",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Visualização do plano de fundo",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": true,
+        "Name": "Selecione a pasta para deletar Backups de famílias",
+        "Id": "8e3cdd7a62674ede8506caa47224e1b7",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -142.78512313733881,
+        "Y": 243.35512456848437
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script",
+        "Id": "5b62267f73cb466ba42ca260a85b8038",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": true,
+        "Excluded": false,
+        "X": 301.717776592305,
+        "Y": 317.1641575148879
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Window Prompt With Text",
+        "Id": "fefddf4535e54c0995545078283218bf",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1373.3796307469074,
+        "Y": 705.3229619968829
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Boolean",
+        "Id": "fe59f0baaad74d54b738b2007230a5dc",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1099.2921010627374,
+        "Y": 823.81501324441
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Code Block",
+        "Id": "c6de6407d95a4aa3bc31a0c7debef4ff",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 427.4516704890101,
+        "Y": 664.71722988784336
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Code Block",
+        "Id": "e5e2fdd4bb934e2892583147d762db9b",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 622.05217219207861,
+        "Y": 796.95717358097556
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "If",
+        "Id": "c9a532b121eb45f296d2ca16b2e18881",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1171.8551087340275,
+        "Y": 492.21033405023104
+      },
+      {
+        "ShowGeometry": true,
+        "Name": ">",
+        "Id": "0e98ddc8fc4542f9b656a8b8eed5dd89",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 627.20998158454745,
+        "Y": 412.35921020054
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "List.Count",
+        "Id": "2a3185445988467fbe085718b5bc2d2e",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 591.59114384933741,
+        "Y": 291.80314401984197
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Code Block",
+        "Id": "276824751761466587df71495b0e5ba3",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 514.07773610914751,
+        "Y": 536.7286541348069
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Watch",
+        "Id": "28dd3f0cc67e4b67915fcb361e3f72ea",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1636.6918210051087,
+        "Y": 698.00453543924664
+      }
+    ],
+    "Annotations": [],
+    "X": -866.46147015056454,
+    "Y": -143.21998908997244,
+    "Zoom": 0.72583335096494
+  }
+}

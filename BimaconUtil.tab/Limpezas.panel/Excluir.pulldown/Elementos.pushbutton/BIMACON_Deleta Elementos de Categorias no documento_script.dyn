@@ -1,0 +1,273 @@
+{
+  "Uuid": "c804fca6-a35f-4afc-b7ca-b3f0394379fe",
+  "IsCustomNode": false,
+  "Description": null,
+  "Name": "BIMACON_Deletar Categorias no documento",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "RevitModel.Element.SelectByCategory@var,Revit.Elements.Category",
+      "Id": "e80369371f3b43aa9ad2fb5ca87c8ccd",
+      "Inputs": [
+        {
+          "Id": "58828143197a4ff0961e701f689265ab",
+          "Name": "doc",
+          "Description": "default document current\n\nvar\nValor padrão : null",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "2fad31d0e81d4ba1b4bc276acb850597",
+          "Name": "category",
+          "Description": "CateGory Element\n\nCategory",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "29c0c03d76c442a39ab60af9c15373c7",
+          "Name": "Element[]",
+          "Description": "Element[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Select Element Filter by Category\n\nElement.SelectByCategory (doc: var = null, category: Category): Element[]"
+    },
+    {
+      "ConcreteType": "DSRevitNodesUI.Categories, DSRevitNodesUI",
+      "SelectedIndex": 127,
+      "SelectedString": "OST_ConduitRun",
+      "NodeType": "ExtensionNode",
+      "Id": "04c3e056c91d4400aaa8e92245db621f",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "26b50d4b1fc640759de0fc87295a21e0",
+          "Name": "Category",
+          "Description": "A categoria selecionada.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Todas as categorias incorporadas."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "RevitModel.Documents.Current",
+      "Id": "4076f522f10647fcaa92fad21c22c4e7",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "432b57e1140240b3bce90cc533d5dcd6",
+          "Name": "doc",
+          "Description": "document",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Return Document Current\n\nDocuments.Current ( ): var"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Watch, CoreNodeModels",
+      "NodeType": "ExtensionNode",
+      "Id": "0320042ca25c43148bf07031d1b19812",
+      "Inputs": [
+        {
+          "Id": "2dd0d9646f284932a2f51c934873224f",
+          "Name": "",
+          "Description": "Nó para avaliar.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "549eecdd277644fcab56c406042ca42f",
+          "Name": "",
+          "Description": "Observar conteúdo.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Visualize a saída do nó."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "archilab.Revit.Elements.Elements.Delete@Revit.Elements.Element",
+      "Id": "958b2458d7354bae96d6318e3116b111",
+      "Inputs": [
+        {
+          "Id": "e4c8ed0176714cb2bbdedbec3141d11f",
+          "Name": "element",
+          "Description": "Element to delete.\n\nElement",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "67323981d7764456a52797c9aacfcc75",
+          "Name": "bool",
+          "Description": "bool",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Delete element from Revit DB.\n\nElements.Delete (element: Element): bool"
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "29c0c03d76c442a39ab60af9c15373c7",
+      "End": "e4c8ed0176714cb2bbdedbec3141d11f",
+      "Id": "7034b6f12e224d68b888a89b63ca0eca"
+    },
+    {
+      "Start": "26b50d4b1fc640759de0fc87295a21e0",
+      "End": "2fad31d0e81d4ba1b4bc276acb850597",
+      "Id": "750dc623584d428d8e509a25ecf9ed53"
+    },
+    {
+      "Start": "432b57e1140240b3bce90cc533d5dcd6",
+      "End": "58828143197a4ff0961e701f689265ab",
+      "Id": "47895723ab06473fb616caf9fa710a3c"
+    },
+    {
+      "Start": "67323981d7764456a52797c9aacfcc75",
+      "End": "2dd0d9646f284932a2f51c934873224f",
+      "Id": "93346d8a18df42d690fa3bd4be93c744"
+    }
+  ],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [
+    {
+      "Name": "DynaMEP",
+      "Version": "2.0.1",
+      "ReferenceType": "Package",
+      "Nodes": [
+        "e80369371f3b43aa9ad2fb5ca87c8ccd",
+        "4076f522f10647fcaa92fad21c22c4e7"
+      ]
+    },
+    {
+      "Name": "archi-lab.net",
+      "Version": "2023.213.1722",
+      "ReferenceType": "Package",
+      "Nodes": [
+        "958b2458d7354bae96d6318e3116b111"
+      ]
+    }
+  ],
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.6.1.8786",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Visualização do plano de fundo",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": true,
+        "Name": "Element.SelectByCategory",
+        "Id": "e80369371f3b43aa9ad2fb5ca87c8ccd",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 294.43471810089022,
+        "Y": 346.89465875370917
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Categories",
+        "Id": "04c3e056c91d4400aaa8e92245db621f",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -33.967578184674153,
+        "Y": 343.93352660033707
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Documents.Current",
+        "Id": "4076f522f10647fcaa92fad21c22c4e7",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -8.875370919881334,
+        "Y": 226.66468842729972
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Watch",
+        "Id": "0320042ca25c43148bf07031d1b19812",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 922.43026706231444,
+        "Y": 340.16617210682489
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Elements.Delete",
+        "Id": "958b2458d7354bae96d6318e3116b111",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 627.32640949554923,
+        "Y": 405.893175074184
+      }
+    ],
+    "Annotations": [],
+    "X": 70.122172927205213,
+    "Y": 19.06639347236154,
+    "Zoom": 0.52486542792448387
+  }
+}
