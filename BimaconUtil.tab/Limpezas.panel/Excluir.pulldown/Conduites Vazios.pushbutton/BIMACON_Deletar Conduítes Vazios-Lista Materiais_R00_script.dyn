@@ -2,7 +2,7 @@
   "Uuid": "c804fca6-a35f-4afc-b7ca-b3f0394379fe",
   "IsCustomNode": false,
   "Description": null,
-  "Name": "14-0_BIMACON_Deletar Conduítes Vazios-Lista Materiais",
+  "Name": "BIMACON_Deletar Conduítes Vazios-Lista Materiais_script",
   "ElementResolver": {
     "ResolutionMap": {}
   },
@@ -316,66 +316,6 @@
       "Description": "Filtra uma sequência examinando os índices correspondentes em lista separada de booleanos.\n\nList.FilterByBoolMask (list: var[]..[], mask: var[]..[]): var[]..[]"
     },
     {
-      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
-      "NodeType": "BooleanInputNode",
-      "InputValue": false,
-      "Id": "4541931b658444a78929b8bad2f01517",
-      "Inputs": [],
-      "Outputs": [
-        {
-          "Id": "066f68bb620b42a0bd9291914998388a",
-          "Name": "",
-          "Description": "Boolean",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Replication": "Disabled",
-      "Description": "Seleção entre True e False."
-    },
-    {
-      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
-      "NodeType": "PythonScriptNode",
-      "Code": "import clr\n\nclr.AddReference(\"System.Windows.Forms\")\nfrom System.Windows.Forms import Form,Label,FormStartPosition\n\ndef popup(text):\n\tform = Form()\n\tform.StartPosition = FormStartPosition.CenterScreen\n\tform.Width = 300\n\tform.Height = 100\t\n\tlabel = Label()\n\tlabel.Text = text\n\tlabel.Width = 280\n\tlabel.Height = 70\n\tlabel.Parent = form\t\n\tform.ShowDialog()\n\t\nText=\"\\n\".join(IN[0])\npopup(Text)",
-      "VariableInputPorts": true,
-      "Id": "ea190fdb2c38483e9346ae5c63fd824e",
-      "Inputs": [
-        {
-          "Id": "e0f097fa459145bf870cafa8fdae961a",
-          "Name": "IN[0]",
-          "Description": "Input #0",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        },
-        {
-          "Id": "177bfb31fa8b43dc9939a9e0132eaff8",
-          "Name": "IN[1]",
-          "Description": "Input #1",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Outputs": [
-        {
-          "Id": "3963420cbf264017b27dd35785ed2184",
-          "Name": "OUT",
-          "Description": "Resultado do script Python",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Replication": "Disabled",
-      "Description": "Executa um script IronPython incorporado."
-    },
-    {
       "ConcreteType": "CoreNodeModels.Logic.If, CoreNodeModels",
       "NodeType": "ExtensionNode",
       "Id": "6018ea98397b4c54b680eb54ec437a89",
@@ -560,6 +500,67 @@
       ],
       "Replication": "Auto",
       "Description": "Retorna o número de valores booleanos verdadeiros na lista fornecida.\n\nList.CountTrue (list: var[]..[]): int"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "Orchid.Common.String.FromList@var[]..[]",
+      "Id": "d69a8e1641884861b8a08d46f0f3a61a",
+      "Inputs": [
+        {
+          "Id": "bd88c8e5ebcc4a67a4e01bb91912e679",
+          "Name": "list",
+          "Description": "List of objects to concatenate.\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "0829eaeb420c48e7a77f6d684ce94ce2",
+          "Name": "string",
+          "Description": "String made from list of strings.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Concatenates list values to multiple line string.\n\nString.FromList (list: var[]..[]): string"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# Importar as bibliotecas necessárias do Revit\r\nimport clr\r\nclr.AddReference(\"RevitServices\")\r\nfrom RevitServices.Persistence import DocumentManager\r\n\r\nclr.AddReference(\"RevitAPI\")\r\nclr.AddReference(\"RevitAPIUI\")\r\nfrom Autodesk.Revit.UI import TaskDialog\r\n\r\n# Pegar a entrada do Dynamo\r\nmensagem = IN[0]\r\n\r\n# Criar a TaskDialog\r\ntask_dialog = TaskDialog(\"Ok\")\r\ntask_dialog.MainInstruction = mensagem\r\n\r\n# Exibir a TaskDialog\r\ntask_dialog.Show()\r\n\r\n# Saída do script\r\nOUT = \"Sucesso!\"\r\n",
+      "VariableInputPorts": true,
+      "Id": "c56176cd3fd540a4a53ba33e16904a0b",
+      "Inputs": [
+        {
+          "Id": "e4a5b6606bdb4f3ea2feabb38135ccc5",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "21d1a3e7d9a14aaca5c087bdb70b1045",
+          "Name": "OUT",
+          "Description": "Resultado do script Python",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Executa um script IronPython incorporado."
     }
   ],
   "Connectors": [
@@ -619,14 +620,9 @@
       "Id": "a9c5ba2aafbe448aa9259a99df1b4222"
     },
     {
-      "Start": "066f68bb620b42a0bd9291914998388a",
-      "End": "177bfb31fa8b43dc9939a9e0132eaff8",
-      "Id": "d83a3d2ba723423d9dfa1631a2108266"
-    },
-    {
       "Start": "a53fe7fc40594c51879d55aae7d7097f",
-      "End": "e0f097fa459145bf870cafa8fdae961a",
-      "Id": "68db63cc96bd42709914f8fa711aff49"
+      "End": "bd88c8e5ebcc4a67a4e01bb91912e679",
+      "Id": "446a5b336f614e229b44450b80f4be45"
     },
     {
       "Start": "a24608ca12fa43d4b4fd934cc54c9b90",
@@ -657,6 +653,11 @@
       "Start": "9942cd969db643ebbb1eb03171e1a9a3",
       "End": "0cb8917dcf914ecab9e0d20ce33eeae6",
       "Id": "4e3aea625ab3421ba85c133b149f0d63"
+    },
+    {
+      "Start": "0829eaeb420c48e7a77f6d684ce94ce2",
+      "End": "e4a5b6606bdb4f3ea2feabb38135ccc5",
+      "Id": "661ff769de3840439c269c0b1bc7b3d6"
     }
   ],
   "Dependencies": [],
@@ -676,6 +677,14 @@
       "ReferenceType": "Package",
       "Nodes": [
         "958b2458d7354bae96d6318e3116b111"
+      ]
+    },
+    {
+      "Name": "Orchid",
+      "Version": "2.6.10.6373",
+      "ReferenceType": "Package",
+      "Nodes": [
+        "d69a8e1641884861b8a08d46f0f3a61a"
       ]
     }
   ],
@@ -804,26 +813,6 @@
       },
       {
         "ShowGeometry": true,
-        "Name": "Boolean",
-        "Id": "4541931b658444a78929b8bad2f01517",
-        "IsSetAsInput": false,
-        "IsSetAsOutput": false,
-        "Excluded": false,
-        "X": 2967.0443603908989,
-        "Y": 887.49642690113433
-      },
-      {
-        "ShowGeometry": true,
-        "Name": "Window Prompt With Text",
-        "Id": "ea190fdb2c38483e9346ae5c63fd824e",
-        "IsSetAsInput": false,
-        "IsSetAsOutput": false,
-        "Excluded": false,
-        "X": 3179.8226996684989,
-        "Y": 685.11727755366519
-      },
-      {
-        "ShowGeometry": true,
         "Name": "If",
         "Id": "6018ea98397b4c54b680eb54ec437a89",
         "IsSetAsInput": false,
@@ -881,6 +870,26 @@
         "Excluded": false,
         "X": 1962.3813090576598,
         "Y": 343.63985337776018
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "o|String.FromList",
+        "Id": "d69a8e1641884861b8a08d46f0f3a61a",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 3149.3307766632843,
+        "Y": 646.28556667971623
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script",
+        "Id": "c56176cd3fd540a4a53ba33e16904a0b",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 3354.622349389484,
+        "Y": 647.7354934602572
       }
     ],
     "Annotations": [
@@ -888,9 +897,7 @@
         "Id": "be8c18a5308b4f5ea10abd01375e6131",
         "Title": "Mensagem final",
         "Nodes": [
-          "4541931b658444a78929b8bad2f01517",
           "75503c7322fd42cababa5c5cb527a350",
-          "ea190fdb2c38483e9346ae5c63fd824e",
           "6018ea98397b4c54b680eb54ec437a89",
           "71519a27dc184f0fa5814cd48989ab87",
           "af5243537f154a86a9d0854b7a3919d8",
@@ -899,20 +906,17 @@
         ],
         "Left": 1952.3813090576598,
         "Top": 290.63985337776018,
-        "Width": 1459.4413906108391,
-        "Height": 664.85657352337421,
+        "Width": 1179.7341611112304,
+        "Height": 573.19035402918507,
         "FontSize": 36.0,
         "InitialTop": 343.63985337776018,
-        "InitialHeight": 641.85657352337421,
+        "InitialHeight": 688.85657352337421,
         "TextblockHeight": 43.0,
         "Background": "#FFC1D676"
       }
     ],
-    "X": 127.35716725664346,
-    "Y": 271.23050663998521,
-    "Zoom": 0.12951889052691992
+    "X": -2386.5807871595662,
+    "Y": -418.44331359259,
+    "Zoom": 0.82385146913927021
   }
 }
-
-
-
