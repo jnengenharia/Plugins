@@ -2,7 +2,7 @@
   "Uuid": "ec84ffdd-9cf9-4c57-8a15-37be905879fe",
   "IsCustomNode": false,
   "Description": "",
-  "Name": "2021_01-0_BIMACON_Criar Níveis do LINK_R02_script",
+  "Name": "ok 2021_01-0_BIMACON_Criar Níveis do LINK_R02_script",
   "ElementResolver": {
     "ResolutionMap": {}
   },
@@ -778,7 +778,7 @@
       "Inputs": [],
       "Outputs": [
         {
-          "Id": "439271f0f65443128bce84bce03ce646",
+          "Id": "b4a9163572ce4e2fa737dbe8b8467089",
           "Name": "",
           "Description": "Valor da expressão na linha 1",
           "UsingDefaultValue": false,
@@ -985,7 +985,7 @@
       "Inputs": [],
       "Outputs": [
         {
-          "Id": "71b823a8819d4a35904bb1602ef70ac6",
+          "Id": "a3b3d7a033af4312883a90b61a5262f1",
           "Name": "",
           "Description": "Valor da expressão na linha 1",
           "UsingDefaultValue": false,
@@ -1210,39 +1210,6 @@
       ],
       "Replication": "Disabled",
       "Description": "Todas as categorias incorporadas."
-    },
-    {
-      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
-      "Code": "import clr\r\nclr.AddReference('RevitServices')\r\nclr.AddReference('RevitAPI')\r\nclr.AddReference('RevitNodes')\r\n\r\nfrom RevitServices.Persistence import DocumentManager\r\nfrom Autodesk.Revit.DB import *\r\n\r\n# Obter o documento ativo\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\n\r\n# Entrada 0: Elemento do vínculo selecionado pelo usuário\r\nvinculo_selecionado = UnwrapElement(IN[0])  # Desempacota o elemento Revit do Dynamo\r\n\r\n# Verificar se o vínculo selecionado é válido\r\nif vinculo_selecionado and isinstance(vinculo_selecionado, RevitLinkInstance):\r\n    # Obter o documento vinculado (arquivo RVT vinculado)\r\n    link_doc = vinculo_selecionado.GetLinkDocument()\r\n\r\n    # Verificar se o documento vinculado existe\r\n    if link_doc is None:\r\n        OUT = \"Erro: Documento vinculado não encontrado.\"\r\n    else:\r\n        # Coletar os níveis do vínculo\r\n        niveis_vinculados = FilteredElementCollector(link_doc).OfCategory(BuiltInCategory.OST_Levels).WhereElementIsNotElementType().ToElements()\r\n\r\n        # Criar duas listas, uma para os nomes e outra para as elevações usando o parâmetro 'Elevation'\r\n        nomes_niveis = [nivel.Name for nivel in niveis_vinculados]\r\n        elevacoes_niveis = []\r\n        \r\n        for nivel in niveis_vinculados:\r\n            # Acessar o parâmetro \"Elevação\" do nível\r\n            elevacao_param = nivel.get_Parameter(BuiltInParameter.LEVEL_ELEV).AsDouble()\r\n            # Converter a elevação para metros (unidade padrão do Revit é pés)\r\n            elevacao_metros = UnitUtils.ConvertFromInternalUnits(elevacao_param, UnitTypeId.Meters)\r\n            elevacoes_niveis.append(elevacao_metros)\r\n\r\n        # Saída: Duas listas - uma com os nomes dos níveis e outra com as elevações\r\n        OUT = (nomes_niveis, elevacoes_niveis)\r\nelse:\r\n    OUT = \"Erro: Por favor, selecione um vínculo válido na entrada 0.\"\r\n",
-      "Engine": "IronPython2",
-      "EngineName": "IronPython2",
-      "VariableInputPorts": true,
-      "Id": "be235dc722f74cb8a2bfb9607e74f109",
-      "NodeType": "PythonScriptNode",
-      "Inputs": [
-        {
-          "Id": "5b8f6521fc504bdaa3d386962f63205e",
-          "Name": "IN[0]",
-          "Description": "Input #0",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Outputs": [
-        {
-          "Id": "14f52a3195614bbb93dbad8de71e7efa",
-          "Name": "OUT",
-          "Description": "Resultado do script Python",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Replication": "Disabled",
-      "Description": "Executa um script Python incorporado."
     },
     {
       "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
@@ -1870,6 +1837,177 @@
       "FunctionSignature": "DSCore.List.FirstItem@var[]..[]",
       "Replication": "Auto",
       "Description": "Retorna o primeiro item em uma lista.\n\nList.FirstItem (list: var[]..[]): var[]..[]"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "Code": "import clr\r\nclr.AddReference('RevitServices')\r\nclr.AddReference('RevitAPI')\r\nclr.AddReference('RevitNodes')\r\n\r\nfrom RevitServices.Persistence import DocumentManager\r\nfrom Autodesk.Revit.DB import *\r\n\r\n# Obter o documento ativo\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\n\r\n# Entrada 0: Elemento do vínculo selecionado pelo usuário\r\nvinculo_selecionado = UnwrapElement(IN[0])  # Desempacota o elemento Revit do Dynamo\r\n\r\n# Verificar se o vínculo selecionado é válido\r\nif vinculo_selecionado and isinstance(vinculo_selecionado, RevitLinkInstance):\r\n    # Obter o documento vinculado (arquivo RVT vinculado)\r\n    link_doc = vinculo_selecionado.GetLinkDocument()\r\n\r\n    # Verificar se o documento vinculado existe\r\n    if link_doc is None:\r\n        OUT = \"Erro: Documento vinculado não encontrado.\"\r\n    else:\r\n        # Coletar os níveis do vínculo\r\n        niveis_vinculados = FilteredElementCollector(link_doc).OfCategory(BuiltInCategory.OST_Levels).WhereElementIsNotElementType().ToElements()\r\n\r\n        # Criar duas listas, uma para os nomes e outra para as elevações usando o parâmetro 'Elevation'\r\n        nomes_niveis = [nivel.Name for nivel in niveis_vinculados]\r\n        elevacoes_niveis = []\r\n        \r\n        for nivel in niveis_vinculados:\r\n            # Acessar o parâmetro \"Elevação\" do nível\r\n            elevacao_param = nivel.get_Parameter(BuiltInParameter.LEVEL_ELEV).AsDouble()\r\n            # Converter a elevação para metros (unidade padrão do Revit é pés)\r\n            elevacao_metros = UnitUtils.ConvertFromInternalUnits(elevacao_param, UnitTypeId.Meters)\r\n            elevacoes_niveis.append(elevacao_metros)\r\n\r\n        # Saída: Duas listas - uma com os nomes dos níveis e outra com as elevações\r\n        OUT = (nomes_niveis, elevacoes_niveis)\r\nelse:\r\n    OUT = \"Erro: Por favor, selecione um vínculo válido na entrada 0.\"\r\n",
+      "Engine": "IronPython2",
+      "EngineName": "IronPython2",
+      "VariableInputPorts": true,
+      "Id": "a46d4066b2d649d09480c9509c165937",
+      "NodeType": "PythonScriptNode",
+      "Inputs": [
+        {
+          "Id": "f5a69478c61348edb8b66a38483f0dcb",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "3cf667af8f5d4c858c0687709e0bb7e2",
+          "Name": "OUT",
+          "Description": "Resultado do script Python",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Executa um script Python incorporado."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "5639c5158e864e1cb6a4145a55559d08",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "c1d17888333d4904b18043c79d02f753",
+          "Name": "x",
+          "Description": "Valor inteiro, valor duplo ou sequência de caracteres\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "ef755dfdbbf84ed4aaca6a795f1de3d6",
+          "Name": "y",
+          "Description": "Valor inteiro, valor duplo ou sequência de caracteres\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "7164c7e4deac4eb784d2f722c892624c",
+          "Name": "var",
+          "Description": "A soma de dois números de entrada ou a concatenação de duas sequências de caracteres",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "+@var[]..[],var[]..[]",
+      "Replication": "Auto",
+      "Description": "Retorna a adição de x e y\n\n+ (x: var[]..[], y: var[]..[]): var[]..[]"
+    },
+    {
+      "ConcreteType": "UnitsUI.DynamoUnitConvert, UnitsNodeModels",
+      "MeasurementType": "autodesk.unit.quantity:length-1.0.4",
+      "FromConversion": "autodesk.unit.unit:millimeters-1.0.1",
+      "ToConversion": "autodesk.unit.unit:meters-1.0.0",
+      "Id": "8fa6d97ad84e4ef6ba11cc73272cd1e5",
+      "NodeType": "ExtensionNode",
+      "Inputs": [
+        {
+          "Id": "4aa6b995822b41b982123cbb5a43dd63",
+          "Name": "",
+          "Description": "A value to convert",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "ab909c6d736b4c7f8a9196518fa4bf9a",
+          "Name": "",
+          "Description": "Converted value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Converts a value between selected unit systems"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "6417bd36-c046-44ce-9da5-1cd5a6323eca",
+      "FunctionType": "Graph",
+      "Id": "f189b095f0bd4ac7922a28e2baf3d169",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "399d4cedad5841e68384fbe1c392edcf",
+          "Name": "unitFactor",
+          "Description": "Because imperial units are silly\n\ndouble\nValor padrão : 304.8",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "90a0205870de40ea9710e16d01e2ff16",
+          "Name": "docOrLink",
+          "Description": "Uses current if none provided.\nAccepts document or link instance.\n\nvar[]..[]\nValor padrão : null",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "95f7198812a84ae587c7a2823e6a19c8",
+          "Name": "NS",
+          "Description": "The Northing value of the project base\npoint returned in Revit coordinates.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "a2f023b7a8954081ac66e05e10f15d9c",
+          "Name": "EW",
+          "Description": "The Easting value of the project base\npoint returned in Revit coordinates.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "bf0ad254cd4849e5ab5047623f0fea4e",
+          "Name": "Elevation",
+          "Description": "The Elevation value of the project base\npoint returned in Revit coordinates.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "1d1bbc8d81f14bebb193bf571622fbf8",
+          "Name": "AngleToTN",
+          "Description": "The angle between project north\nand true north.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "This node will return the Revit project base point as well as the NS, EW and elevation values."
     }
   ],
   "Connectors": [
@@ -2006,7 +2144,7 @@
       "IsHidden": "False"
     },
     {
-      "Start": "439271f0f65443128bce84bce03ce646",
+      "Start": "b4a9163572ce4e2fa737dbe8b8467089",
       "End": "35321a4b1f264b0aa587216d98570d68",
       "Id": "ecdf22f9aa8e4b86ad61654300156ab4",
       "IsHidden": "False"
@@ -2048,7 +2186,7 @@
       "IsHidden": "False"
     },
     {
-      "Start": "71b823a8819d4a35904bb1602ef70ac6",
+      "Start": "a3b3d7a033af4312883a90b61a5262f1",
       "End": "821ea1b8cd2a4488ac8f96289250cb3d",
       "Id": "83a3e92bae784403bee3dd842b3cd071",
       "IsHidden": "False"
@@ -2080,7 +2218,7 @@
     {
       "Start": "cf6b8ec7f7d1485d943e50a02e6b7820",
       "End": "708a4e96f41740388ce3c768dc825948",
-      "Id": "978cd276519a49f79e46c475524e5b18",
+      "Id": "2258b54699bf4628ba01afee3e33561b",
       "IsHidden": "False"
     },
     {
@@ -2090,21 +2228,9 @@
       "IsHidden": "False"
     },
     {
-      "Start": "14f52a3195614bbb93dbad8de71e7efa",
-      "End": "62615cdaf5b04514bd01d6c4e0e73a47",
-      "Id": "dee4e4602a5e4ecbac735bc9c69269ed",
-      "IsHidden": "False"
-    },
-    {
-      "Start": "14f52a3195614bbb93dbad8de71e7efa",
-      "End": "03bb70323474471f882f67aa4cae6617",
-      "Id": "bd9bcfafb9c647e7995fafd414cf81a9",
-      "IsHidden": "False"
-    },
-    {
       "Start": "dab7d51014074d27a54c361079ba1de7",
-      "End": "5b8f6521fc504bdaa3d386962f63205e",
-      "Id": "381a89a8e5e3401a9593494b8150cced",
+      "End": "f5a69478c61348edb8b66a38483f0dcb",
+      "Id": "324ab179760f4138beaa23b64c29fe51",
       "IsHidden": "False"
     },
     {
@@ -2163,14 +2289,14 @@
     },
     {
       "Start": "21528f5a42cd4a01be0497503b2bf754",
-      "End": "6538e20a1b15411f89c9381698c9cbac",
-      "Id": "3d67c30f847e4a36a8d8f497eb17afb4",
+      "End": "f6afb0444c0c4f42a524f81598d0813c",
+      "Id": "f57181cb744c4d86a9a8bdc42b006848",
       "IsHidden": "False"
     },
     {
       "Start": "21528f5a42cd4a01be0497503b2bf754",
-      "End": "f6afb0444c0c4f42a524f81598d0813c",
-      "Id": "f57181cb744c4d86a9a8bdc42b006848",
+      "End": "ef755dfdbbf84ed4aaca6a795f1de3d6",
+      "Id": "76ab10c57b9f45cfa3feb1f8f2b9e3c4",
       "IsHidden": "False"
     },
     {
@@ -2244,6 +2370,36 @@
       "End": "39755df6d9ed4f9aa0b57bf376bd1360",
       "Id": "0eb42110ca6b48cba5f5c341a2391e66",
       "IsHidden": "False"
+    },
+    {
+      "Start": "3cf667af8f5d4c858c0687709e0bb7e2",
+      "End": "03bb70323474471f882f67aa4cae6617",
+      "Id": "4264a9bef74b4eab9b45c2b261927dcc",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "3cf667af8f5d4c858c0687709e0bb7e2",
+      "End": "62615cdaf5b04514bd01d6c4e0e73a47",
+      "Id": "705d07f60da347118eb0bd090d50791b",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "7164c7e4deac4eb784d2f722c892624c",
+      "End": "6538e20a1b15411f89c9381698c9cbac",
+      "Id": "5f6be6cec7b841aa9c725706ae901c2d",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "ab909c6d736b4c7f8a9196518fa4bf9a",
+      "End": "c1d17888333d4904b18043c79d02f753",
+      "Id": "d5276d44787d468f918f17eb516a53b1",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "bf0ad254cd4849e5ab5047623f0fea4e",
+      "End": "4aa6b995822b41b982123cbb5a43dd63",
+      "Id": "d91ccb6af09d4876bc104c0b62625254",
+      "IsHidden": "False"
     }
   ],
   "Dependencies": [
@@ -2253,7 +2409,8 @@
     "928e40a7-91ac-45c3-8d59-4d899fc49b83",
     "fb17113f-7ff8-4345-b663-4d1cbb814de7",
     "c3a36eb7-8fe8-4417-b31e-ccc9fded769b",
-    "f076090f-2845-4c5c-966b-9e523ef8453b"
+    "f076090f-2845-4c5c-966b-9e523ef8453b",
+    "6417bd36-c046-44ce-9da5-1cd5a6323eca"
   ],
   "NodeLibraryDependencies": [
     {
@@ -2301,6 +2458,14 @@
       ]
     },
     {
+      "Name": "Crumple",
+      "Version": "2021.9.24",
+      "ReferenceType": "Package",
+      "Nodes": [
+        "f189b095f0bd4ac7922a28e2baf3d169"
+      ]
+    },
+    {
       "Name": "reddonda-removebg-preview.png",
       "ReferenceType": "External",
       "Nodes": [
@@ -2331,20 +2496,7 @@
     "warningCount": 0,
     "errorCount": 0
   },
-  "Bindings": [
-    {
-      "NodeId": "8aaaf0f2-c1a3-4262-ac53-82b8b1a6768c",
-      "Binding": {
-        "ByElevationAndName_InClassDecl-1_InFunctionScope-1_Instance0_8aaaf0f2-c1a3-4262-ac53-82b8b1a6768c": "PFNPQVAtRU5WOkVudmVsb3BlIHhtbG5zOnhzaT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEtaW5zdGFuY2UiIHhtbG5zOnhzZD0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEiIHhtbG5zOlNPQVAtRU5DPSJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy9zb2FwL2VuY29kaW5nLyIgeG1sbnM6U09BUC1FTlY9Imh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3NvYXAvZW52ZWxvcGUvIiB4bWxuczpjbHI9Imh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vc29hcC9lbmNvZGluZy9jbHIvMS4wIiBTT0FQLUVOVjplbmNvZGluZ1N0eWxlPSJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy9zb2FwL2VuY29kaW5nLyI+DQo8U09BUC1FTlY6Qm9keT4NCjxhMTpDYWxsU2l0ZV94MDAyQl9UcmFjZVNlcmlhbGlzZXJIZWxwZXIgaWQ9InJlZi0xIiB4bWxuczphMT0iaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS9jbHIvbnNhc3NlbS9Qcm90b0NvcmUvUHJvdG9Db3JlJTJDJTIwVmVyc2lvbiUzRDIuMTkuMy42Mzk0JTJDJTIwQ3VsdHVyZSUzRG5ldXRyYWwlMkMlMjBQdWJsaWNLZXlUb2tlbiUzRG51bGwiPg0KPE51bWJlck9mRWxlbWVudHM+MTwvTnVtYmVyT2ZFbGVtZW50cz4NCjxCYXNlLTBfSGFzRGF0YT5mYWxzZTwvQmFzZS0wX0hhc0RhdGE+DQo8QmFzZS0wX0hhc05lc3RlZERhdGE+dHJ1ZTwvQmFzZS0wX0hhc05lc3RlZERhdGE+DQo8QmFzZS0wX05lc3RlZERhdGFDb3VudD4yPC9CYXNlLTBfTmVzdGVkRGF0YUNvdW50Pg0KPEJhc2UtMC0wX0hhc0RhdGE+ZmFsc2U8L0Jhc2UtMC0wX0hhc0RhdGE+DQo8QmFzZS0wLTBfSGFzTmVzdGVkRGF0YT50cnVlPC9CYXNlLTAtMF9IYXNOZXN0ZWREYXRhPg0KPEJhc2UtMC0wX05lc3RlZERhdGFDb3VudD4xPC9CYXNlLTAtMF9OZXN0ZWREYXRhQ291bnQ+DQo8QmFzZS0wLTAtMF9IYXNEYXRhPnRydWU8L0Jhc2UtMC0wLTBfSGFzRGF0YT4NCjxCYXNlLTAtMC0wX0RhdGEgaWQ9InJlZi0zIj5QRk5QUVZBdFJVNVdPa1Z1ZG1Wc2IzQmxJSGh0Ykc1ek9uaHphVDBpYUhSMGNEb3ZMM2QzZHk1M015NXZjbWN2TWpBd01TOVlUVXhUWTJobGJXRXRhVzV6ZEdGdVkyVWlJSGh0Ykc1ek9uaHpaRDBpYUhSMGNEb3ZMM2QzZHk1M015NXZjbWN2TWpBd01TOVlUVXhUWTJobGJXRWlJSGh0Ykc1ek9sTlBRVkF0UlU1RFBTSm9kSFJ3T2k4dmMyTm9aVzFoY3k1NGJXeHpiMkZ3TG05eVp5OXpiMkZ3TDJWdVkyOWthVzVuTHlJZ2VHMXNibk02VTA5QlVDMUZUbFk5SW1oMGRIQTZMeTl6WTJobGJXRnpMbmh0YkhOdllYQXViM0puTDNOdllYQXZaVzUyWld4dmNHVXZJaUI0Yld4dWN6cGpiSEk5SW1oMGRIQTZMeTl6WTJobGJXRnpMbTFwWTNKdmMyOW1kQzVqYjIwdmMyOWhjQzlsYm1OdlpHbHVaeTlqYkhJdk1TNHdJaUJUVDBGUUxVVk9WanBsYm1OdlpHbHVaMU4wZVd4bFBTSm9kSFJ3T2k4dmMyTm9aVzFoY3k1NGJXeHpiMkZ3TG05eVp5OXpiMkZ3TDJWdVkyOWthVzVuTHlJK0RRbzhVMDlCVUMxRlRsWTZRbTlrZVQ0TkNqeGhNVHBNWlhabGJGUnlZV05sUkdGMFlTQnBaRDBpY21WbUxURWlJSGh0Ykc1ek9tRXhQU0pvZEhSd09pOHZjMk5vWlcxaGN5NXRhV055YjNOdlpuUXVZMjl0TDJOc2NpOXVjMkZ6YzJWdEwxSmxkbWwwTGtWc1pXMWxiblJ6TDFKbGRtbDBUbTlrWlhNbE1rTWxNakJXWlhKemFXOXVKVE5FTWk0eE9TNDBMakV6TURrMkpUSkRKVEl3UTNWc2RIVnlaU1V6Ukc1bGRYUnlZV3dsTWtNbE1qQlFkV0pzYVdOTFpYbFViMnRsYmlVelJHNTFiR3dpUGcwS1BITjBjbWx1WjBsRUlHbGtQU0p5WldZdE15SStNVGRpWmpobU16UXRZVGMzWXkwMFl6aGhMV0U1TnpRdE1EUTNZalZsWVdVelpEa3lMVEF6TlRBMU16WXdQQzl6ZEhKcGJtZEpSRDROQ2p4cGJuUkpSRDQxTlRVNU5UZzNNand2YVc1MFNVUStEUW84YVc1d2RYUk9ZVzFsSUdsa1BTSnlaV1l0TkNJK1RFRmFSVklnUmxWT1JFOVRYMDVQSUMwZ1JVeEZQQzlwYm5CMWRFNWhiV1UrRFFvOEwyRXhPa3hsZG1Wc1ZISmhZMlZFWVhSaFBnMEtQQzlUVDBGUUxVVk9WanBDYjJSNVBnMEtQQzlUVDBGUUxVVk9WanBGYm5abGJHOXdaVDROQ2c9PTwvQmFzZS0wLTAtMF9EYXRhPg0KPEJhc2UtMC0wLTBfSGFzTmVzdGVkRGF0YT5mYWxzZTwvQmFzZS0wLTAtMF9IYXNOZXN0ZWREYXRhPg0KPEJhc2UtMC0xX0hhc0RhdGE+ZmFsc2U8L0Jhc2UtMC0xX0hhc0RhdGE+DQo8QmFzZS0wLTFfSGFzTmVzdGVkRGF0YT50cnVlPC9CYXNlLTAtMV9IYXNOZXN0ZWREYXRhPg0KPEJhc2UtMC0xX05lc3RlZERhdGFDb3VudD4xPC9CYXNlLTAtMV9OZXN0ZWREYXRhQ291bnQ+DQo8QmFzZS0wLTEtMF9IYXNEYXRhPnRydWU8L0Jhc2UtMC0xLTBfSGFzRGF0YT4NCjxCYXNlLTAtMS0wX0RhdGEgaWQ9InJlZi00Ij5QRk5QUVZBdFJVNVdPa1Z1ZG1Wc2IzQmxJSGh0Ykc1ek9uaHphVDBpYUhSMGNEb3ZMM2QzZHk1M015NXZjbWN2TWpBd01TOVlUVXhUWTJobGJXRXRhVzV6ZEdGdVkyVWlJSGh0Ykc1ek9uaHpaRDBpYUhSMGNEb3ZMM2QzZHk1M015NXZjbWN2TWpBd01TOVlUVXhUWTJobGJXRWlJSGh0Ykc1ek9sTlBRVkF0UlU1RFBTSm9kSFJ3T2k4dmMyTm9aVzFoY3k1NGJXeHpiMkZ3TG05eVp5OXpiMkZ3TDJWdVkyOWthVzVuTHlJZ2VHMXNibk02VTA5QlVDMUZUbFk5SW1oMGRIQTZMeTl6WTJobGJXRnpMbmh0YkhOdllYQXViM0puTDNOdllYQXZaVzUyWld4dmNHVXZJaUI0Yld4dWN6cGpiSEk5SW1oMGRIQTZMeTl6WTJobGJXRnpMbTFwWTNKdmMyOW1kQzVqYjIwdmMyOWhjQzlsYm1OdlpHbHVaeTlqYkhJdk1TNHdJaUJUVDBGUUxVVk9WanBsYm1OdlpHbHVaMU4wZVd4bFBTSm9kSFJ3T2k4dmMyTm9aVzFoY3k1NGJXeHpiMkZ3TG05eVp5OXpiMkZ3TDJWdVkyOWthVzVuTHlJK0RRbzhVMDlCVUMxRlRsWTZRbTlrZVQ0TkNqeGhNVHBNWlhabGJGUnlZV05sUkdGMFlTQnBaRDBpY21WbUxURWlJSGh0Ykc1ek9tRXhQU0pvZEhSd09pOHZjMk5vWlcxaGN5NXRhV055YjNOdlpuUXVZMjl0TDJOc2NpOXVjMkZ6YzJWdEwxSmxkbWwwTGtWc1pXMWxiblJ6TDFKbGRtbDBUbTlrWlhNbE1rTWxNakJXWlhKemFXOXVKVE5FTWk0eE9TNDBMakV6TURrMkpUSkRKVEl3UTNWc2RIVnlaU1V6Ukc1bGRYUnlZV3dsTWtNbE1qQlFkV0pzYVdOTFpYbFViMnRsYmlVelJHNTFiR3dpUGcwS1BITjBjbWx1WjBsRUlHbGtQU0p5WldZdE15SStNVGRpWmpobU16UXRZVGMzWXkwMFl6aGhMV0U1TnpRdE1EUTNZalZsWVdVelpEa3lMVEF6TlRBMU16WXhQQzl6ZEhKcGJtZEpSRDROQ2p4cGJuUkpSRDQxTlRVNU5UZzNNend2YVc1MFNVUStEUW84YVc1d2RYUk9ZVzFsSUdsa1BTSnlaV1l0TkNJK1ZFVk1TRUZFVHlCR1ZVNUVUMU5mVGs4Z0xTQkZURVU4TDJsdWNIVjBUbUZ0WlQ0TkNqd3ZZVEU2VEdWMlpXeFVjbUZqWlVSaGRHRStEUW84TDFOUFFWQXRSVTVXT2tKdlpIaytEUW84TDFOUFFWQXRSVTVXT2tWdWRtVnNiM0JsUGcwSzwvQmFzZS0wLTEtMF9EYXRhPg0KPEJhc2UtMC0xLTBfSGFzTmVzdGVkRGF0YT5mYWxzZTwvQmFzZS0wLTEtMF9IYXNOZXN0ZWREYXRhPg0KPC9hMTpDYWxsU2l0ZV94MDAyQl9UcmFjZVNlcmlhbGlzZXJIZWxwZXI+DQo8L1NPQVAtRU5WOkJvZHk+DQo8L1NPQVAtRU5WOkVudmVsb3BlPg0K"
-      }
-    },
-    {
-      "NodeId": "e8fbc562-7cf0-4ef6-ba91-025c2873e5f0",
-      "Binding": {
-        "ByLevel_InClassDecl-1_InFunctionScope-1_Instance0_e8fbc562-7cf0-4ef6-ba91-025c2873e5f0": "PFNPQVAtRU5WOkVudmVsb3BlIHhtbG5zOnhzaT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEtaW5zdGFuY2UiIHhtbG5zOnhzZD0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEiIHhtbG5zOlNPQVAtRU5DPSJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy9zb2FwL2VuY29kaW5nLyIgeG1sbnM6U09BUC1FTlY9Imh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3NvYXAvZW52ZWxvcGUvIiB4bWxuczpjbHI9Imh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vc29hcC9lbmNvZGluZy9jbHIvMS4wIiBTT0FQLUVOVjplbmNvZGluZ1N0eWxlPSJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy9zb2FwL2VuY29kaW5nLyI+DQo8U09BUC1FTlY6Qm9keT4NCjxhMTpDYWxsU2l0ZV94MDAyQl9UcmFjZVNlcmlhbGlzZXJIZWxwZXIgaWQ9InJlZi0xIiB4bWxuczphMT0iaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS9jbHIvbnNhc3NlbS9Qcm90b0NvcmUvUHJvdG9Db3JlJTJDJTIwVmVyc2lvbiUzRDIuMTkuMy42Mzk0JTJDJTIwQ3VsdHVyZSUzRG5ldXRyYWwlMkMlMjBQdWJsaWNLZXlUb2tlbiUzRG51bGwiPg0KPE51bWJlck9mRWxlbWVudHM+MTwvTnVtYmVyT2ZFbGVtZW50cz4NCjxCYXNlLTBfSGFzRGF0YT5mYWxzZTwvQmFzZS0wX0hhc0RhdGE+DQo8QmFzZS0wX0hhc05lc3RlZERhdGE+dHJ1ZTwvQmFzZS0wX0hhc05lc3RlZERhdGE+DQo8QmFzZS0wX05lc3RlZERhdGFDb3VudD4yPC9CYXNlLTBfTmVzdGVkRGF0YUNvdW50Pg0KPEJhc2UtMC0wX0hhc0RhdGE+ZmFsc2U8L0Jhc2UtMC0wX0hhc0RhdGE+DQo8QmFzZS0wLTBfSGFzTmVzdGVkRGF0YT50cnVlPC9CYXNlLTAtMF9IYXNOZXN0ZWREYXRhPg0KPEJhc2UtMC0wX05lc3RlZERhdGFDb3VudD4xPC9CYXNlLTAtMF9OZXN0ZWREYXRhQ291bnQ+DQo8QmFzZS0wLTAtMF9IYXNEYXRhPnRydWU8L0Jhc2UtMC0wLTBfSGFzRGF0YT4NCjxCYXNlLTAtMC0wX0RhdGEgaWQ9InJlZi0zIj5QRk5QUVZBdFJVNVdPa1Z1ZG1Wc2IzQmxJSGh0Ykc1ek9uaHphVDBpYUhSMGNEb3ZMM2QzZHk1M015NXZjbWN2TWpBd01TOVlUVXhUWTJobGJXRXRhVzV6ZEdGdVkyVWlJSGh0Ykc1ek9uaHpaRDBpYUhSMGNEb3ZMM2QzZHk1M015NXZjbWN2TWpBd01TOVlUVXhUWTJobGJXRWlJSGh0Ykc1ek9sTlBRVkF0UlU1RFBTSm9kSFJ3T2k4dmMyTm9aVzFoY3k1NGJXeHpiMkZ3TG05eVp5OXpiMkZ3TDJWdVkyOWthVzVuTHlJZ2VHMXNibk02VTA5QlVDMUZUbFk5SW1oMGRIQTZMeTl6WTJobGJXRnpMbmh0YkhOdllYQXViM0puTDNOdllYQXZaVzUyWld4dmNHVXZJaUI0Yld4dWN6cGpiSEk5SW1oMGRIQTZMeTl6WTJobGJXRnpMbTFwWTNKdmMyOW1kQzVqYjIwdmMyOWhjQzlsYm1OdlpHbHVaeTlqYkhJdk1TNHdJaUJUVDBGUUxVVk9WanBsYm1OdlpHbHVaMU4wZVd4bFBTSm9kSFJ3T2k4dmMyTm9aVzFoY3k1NGJXeHpiMkZ3TG05eVp5OXpiMkZ3TDJWdVkyOWthVzVuTHlJK0RRbzhVMDlCVUMxRlRsWTZRbTlrZVQ0TkNqeGhNVHBUWlhKcFlXeHBlbUZpYkdWSlpDQnBaRDBpY21WbUxURWlJSGh0Ykc1ek9tRXhQU0pvZEhSd09pOHZjMk5vWlcxaGN5NXRhV055YjNOdlpuUXVZMjl0TDJOc2NpOXVjMkZ6YzJWdEwxSmxkbWwwVTJWeWRtbGpaWE11VUdWeWMybHpkR1Z1WTJVdlVtVjJhWFJUWlhKMmFXTmxjeVV5UXlVeU1GWmxjbk5wYjI0bE0wUXlMakU1TGpRdU1UTXdPVFlsTWtNbE1qQkRkV3gwZFhKbEpUTkVibVYxZEhKaGJDVXlReVV5TUZCMVlteHBZMHRsZVZSdmEyVnVKVE5FYm5Wc2JDSStEUW84YzNSeWFXNW5TVVFnYVdROUluSmxaaTB6SWo0eE4ySm1PR1l6TkMxaE56ZGpMVFJqT0dFdFlUazNOQzB3TkRkaU5XVmhaVE5rT1RJdE1ETTFNRFV6TmpJOEwzTjBjbWx1WjBsRVBnMEtQR2x1ZEVsRVBqVTFOVGsxT0RjMFBDOXBiblJKUkQ0TkNqd3ZZVEU2VTJWeWFXRnNhWHBoWW14bFNXUStEUW84TDFOUFFWQXRSVTVXT2tKdlpIaytEUW84TDFOUFFWQXRSVTVXT2tWdWRtVnNiM0JsUGcwSzwvQmFzZS0wLTAtMF9EYXRhPg0KPEJhc2UtMC0wLTBfSGFzTmVzdGVkRGF0YT5mYWxzZTwvQmFzZS0wLTAtMF9IYXNOZXN0ZWREYXRhPg0KPEJhc2UtMC0xX0hhc0RhdGE+ZmFsc2U8L0Jhc2UtMC0xX0hhc0RhdGE+DQo8QmFzZS0wLTFfSGFzTmVzdGVkRGF0YT50cnVlPC9CYXNlLTAtMV9IYXNOZXN0ZWREYXRhPg0KPEJhc2UtMC0xX05lc3RlZERhdGFDb3VudD4xPC9CYXNlLTAtMV9OZXN0ZWREYXRhQ291bnQ+DQo8QmFzZS0wLTEtMF9IYXNEYXRhPnRydWU8L0Jhc2UtMC0xLTBfSGFzRGF0YT4NCjxCYXNlLTAtMS0wX0RhdGEgaWQ9InJlZi00Ij5QRk5QUVZBdFJVNVdPa1Z1ZG1Wc2IzQmxJSGh0Ykc1ek9uaHphVDBpYUhSMGNEb3ZMM2QzZHk1M015NXZjbWN2TWpBd01TOVlUVXhUWTJobGJXRXRhVzV6ZEdGdVkyVWlJSGh0Ykc1ek9uaHpaRDBpYUhSMGNEb3ZMM2QzZHk1M015NXZjbWN2TWpBd01TOVlUVXhUWTJobGJXRWlJSGh0Ykc1ek9sTlBRVkF0UlU1RFBTSm9kSFJ3T2k4dmMyTm9aVzFoY3k1NGJXeHpiMkZ3TG05eVp5OXpiMkZ3TDJWdVkyOWthVzVuTHlJZ2VHMXNibk02VTA5QlVDMUZUbFk5SW1oMGRIQTZMeTl6WTJobGJXRnpMbmh0YkhOdllYQXViM0puTDNOdllYQXZaVzUyWld4dmNHVXZJaUI0Yld4dWN6cGpiSEk5SW1oMGRIQTZMeTl6WTJobGJXRnpMbTFwWTNKdmMyOW1kQzVqYjIwdmMyOWhjQzlsYm1OdlpHbHVaeTlqYkhJdk1TNHdJaUJUVDBGUUxVVk9WanBsYm1OdlpHbHVaMU4wZVd4bFBTSm9kSFJ3T2k4dmMyTm9aVzFoY3k1NGJXeHpiMkZ3TG05eVp5OXpiMkZ3TDJWdVkyOWthVzVuTHlJK0RRbzhVMDlCVUMxRlRsWTZRbTlrZVQ0TkNqeGhNVHBUWlhKcFlXeHBlbUZpYkdWSlpDQnBaRDBpY21WbUxURWlJSGh0Ykc1ek9tRXhQU0pvZEhSd09pOHZjMk5vWlcxaGN5NXRhV055YjNOdlpuUXVZMjl0TDJOc2NpOXVjMkZ6YzJWdEwxSmxkbWwwVTJWeWRtbGpaWE11VUdWeWMybHpkR1Z1WTJVdlVtVjJhWFJUWlhKMmFXTmxjeVV5UXlVeU1GWmxjbk5wYjI0bE0wUXlMakU1TGpRdU1UTXdPVFlsTWtNbE1qQkRkV3gwZFhKbEpUTkVibVYxZEhKaGJDVXlReVV5TUZCMVlteHBZMHRsZVZSdmEyVnVKVE5FYm5Wc2JDSStEUW84YzNSeWFXNW5TVVFnYVdROUluSmxaaTB6SWo0eE4ySm1PR1l6TkMxaE56ZGpMVFJqT0dFdFlUazNOQzB3TkRkaU5XVmhaVE5rT1RJdE1ETTFNRFV6Tm1NOEwzTjBjbWx1WjBsRVBnMEtQR2x1ZEVsRVBqVTFOVGsxT0RnMFBDOXBiblJKUkQ0TkNqd3ZZVEU2VTJWeWFXRnNhWHBoWW14bFNXUStEUW84TDFOUFFWQXRSVTVXT2tKdlpIaytEUW84TDFOUFFWQXRSVTVXT2tWdWRtVnNiM0JsUGcwSzwvQmFzZS0wLTEtMF9EYXRhPg0KPEJhc2UtMC0xLTBfSGFzTmVzdGVkRGF0YT5mYWxzZTwvQmFzZS0wLTEtMF9IYXNOZXN0ZWREYXRhPg0KPC9hMTpDYWxsU2l0ZV94MDAyQl9UcmFjZVNlcmlhbGlzZXJIZWxwZXI+DQo8L1NPQVAtRU5WOkJvZHk+DQo8L1NPQVAtRU5WOkVudmVsb3BlPg0K"
-      }
-    }
-  ],
+  "Bindings": [],
   "View": {
     "Dynamo": {
       "ScaleFactor": 1.0,
@@ -2425,8 +2577,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 690.69356894323641,
-        "Y": 778.396013247584
+        "X": 551.236276753358,
+        "Y": 607.30099845135
       },
       {
         "Id": "ce087e5ed9754255877ee9e1e69eae95",
@@ -2435,8 +2587,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 114.75884326831215,
-        "Y": 456.25909776990051
+        "X": -190.20934865290496,
+        "Y": 581.56801683867252
       },
       {
         "Id": "85e3640b7eb14a308a0b1ee750ea434f",
@@ -2445,8 +2597,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -769.67173916874492,
-        "Y": 125.72763603047758
+        "X": -1074.6399310899619,
+        "Y": 251.03655509924954
       },
       {
         "Id": "ae314528d1b041e79d70901eb4f2d9de",
@@ -2455,8 +2607,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -1144.3404199549955,
-        "Y": 140.37326953377396
+        "X": -1449.3086118762126,
+        "Y": 265.68218860254592
       },
       {
         "Id": "ca91b73dc5ca4ce2b12222030d5aae49",
@@ -2465,8 +2617,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 10.78278589069555,
-        "Y": 138.67069902201638
+        "X": -294.18540603052156,
+        "Y": 263.97961809078834
       },
       {
         "Id": "d67d88c125d4405fb97f77f235b5a9d8",
@@ -2475,8 +2627,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -1463.7599279764293,
-        "Y": 137.23488792398723
+        "X": -1768.7281198976464,
+        "Y": 262.54380699275919
       },
       {
         "Id": "be3246e3c6034565bf8400011335400b",
@@ -2485,8 +2637,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -123.32019138363307,
-        "Y": 465.07909296191235
+        "X": -428.28838330485019,
+        "Y": 590.38801203068431
       },
       {
         "Id": "dc735106c34146bb9357d89d9e0a9688",
@@ -2495,8 +2647,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -303.871857727199,
-        "Y": 301.62102982686423
+        "X": -664.978115929587,
+        "Y": 418.15837603920329
       },
       {
         "Id": "3792edfadf594dc7ba65d797a49c82bb",
@@ -2505,8 +2657,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -866.60374800300929,
-        "Y": 260.24056723535426
+        "X": -1415.4216653330625,
+        "Y": 397.8296883031324
       },
       {
         "Id": "66470549a6d64146949a29c85dd10963",
@@ -2515,8 +2667,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -123.02086659683323,
-        "Y": 333.0287532200295
+        "X": -427.98905851805034,
+        "Y": 458.33767228880151
       },
       {
         "Id": "deab0140ce064938a8fc936522ffdedb",
@@ -2525,8 +2677,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -161.79691580992295,
-        "Y": 761.4760076080729
+        "X": -466.76510773114006,
+        "Y": 886.78492667684486
       },
       {
         "Id": "44c6c6789c174b8c975d29e28049e823",
@@ -2535,8 +2687,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -131.18816906727329,
-        "Y": 586.62337959290153
+        "X": -436.15636098849041,
+        "Y": 711.93229866167349
       },
       {
         "Id": "9b58300362a94cddacf465e79b9821f5",
@@ -2615,8 +2767,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 539.78921550170844,
-        "Y": 835.91339949259645
+        "X": 342.326093491536,
+        "Y": 684.153661303127
       },
       {
         "Id": "1bf5354e90154f1c930e61d9116f2242",
@@ -2625,8 +2777,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -767.11653362513027,
-        "Y": 1060.6617788177437
+        "X": -1114.8947944935239,
+        "Y": 1680.2324030039151
       },
       {
         "Id": "815260cc68d4419dba03ad4ad3c1b3f8",
@@ -2635,8 +2787,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -1309.5239289282047,
-        "Y": 541.31894969564269
+        "X": -1656.9046975903025,
+        "Y": 1192.4572749488618
       },
       {
         "Id": "e0b4af7bdc234fffb413845274c923c5",
@@ -2645,8 +2797,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -1026.6262974942028,
-        "Y": 1015.0596361830007
+        "X": -1374.4045583625966,
+        "Y": 1634.6302603691722
       },
       {
         "Id": "d8b72c414f3241788c9866ae4d6e7ade",
@@ -2655,8 +2807,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -322.30302546753705,
-        "Y": 493.29562671289989
+        "X": -627.271217388754,
+        "Y": 618.604545781672
       },
       {
         "Id": "07f3d8e7476446999103ab218cbfb857",
@@ -2665,8 +2817,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -1001.1454465196909,
-        "Y": 1147.1068523949154
+        "X": -1348.9237073880847,
+        "Y": 1766.6774765810869
       },
       {
         "Id": "a0c047d1d3ee45a28ecafac2f027d8f0",
@@ -2675,8 +2827,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 566.74227804435293,
-        "Y": 997.82190726387159
+        "X": 557.107557357035,
+        "Y": 893.019269405115
       },
       {
         "Id": "7664166b77c04fc7aaca9ce350d7eb45",
@@ -2685,8 +2837,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 415.83792460282496,
-        "Y": 1055.3392935088837
+        "X": 345.435191722819,
+        "Y": 1008.54248547042
       },
       {
         "Id": "c7124298a0e342ed952cd9ebb2ced586",
@@ -2695,8 +2847,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -834.89799559752441,
-        "Y": -810.63339560722909
+        "X": -472.48319480365024,
+        "Y": -736.2883277584541
       },
       {
         "Id": "ead3adedd9b547e19784a1a931b3d3a1",
@@ -2705,8 +2857,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -889.75678706819144,
-        "Y": 582.26171169602435
+        "X": -1200.9155285026309,
+        "Y": 1137.7766863202371
       },
       {
         "Id": "a09ec955b8b147a69bc5146e8e1da75b",
@@ -2715,8 +2867,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -2180.23447392928,
-        "Y": -838.337338585948
+        "X": -2452.1195884247963,
+        "Y": -898.57072667419
       },
       {
         "Id": "df3e032984044fa98299e590636bb5a1",
@@ -2725,18 +2877,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -2442.3114050094459,
-        "Y": -903.5295871224215
-      },
-      {
-        "Id": "be235dc722f74cb8a2bfb9607e74f109",
-        "Name": "Python Script",
-        "IsSetAsInput": false,
-        "IsSetAsOutput": false,
-        "Excluded": false,
-        "ShowGeometry": true,
-        "X": -1314.3294742015432,
-        "Y": -818.40951540626406
+        "X": -2743.1113666687024,
+        "Y": -974.08970634057061
       },
       {
         "Id": "82464343f181411e9d21b306f707a5ae",
@@ -2745,8 +2887,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -1589.7451047656655,
-        "Y": -855.03159627355637
+        "X": -1783.1523154462559,
+        "Y": -893.5138854181738
       },
       {
         "Id": "0dddb06c0a504bb29f6050a2bdf2658d",
@@ -2755,8 +2897,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -1757.2981326446579,
-        "Y": -725.62473751787866
+        "X": -2053.9630070576595,
+        "Y": -693.20138019906574
       },
       {
         "Id": "9fdab685f471427db27772219b6fb931",
@@ -2765,8 +2907,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -1108.6899299954507,
-        "Y": -752.88962338293834
+        "X": -937.90664095501427,
+        "Y": -1085.2257182858166
       },
       {
         "Id": "8174b0589eb54d0a8238940a03b13219",
@@ -2775,8 +2917,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 1544.1298279987632,
-        "Y": 1086.9295507971724
+        "X": 1538.2617311613421,
+        "Y": 1119.2040834029876
       },
       {
         "Id": "b01a9254059e46b0b7dec6e2ce269b4d",
@@ -2795,8 +2937,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 1842.3439939399664,
-        "Y": 1230.5684346478342
+        "X": 1823.5368009948925,
+        "Y": 1301.0954081918615
       },
       {
         "Id": "aeef935268c942d6ac6441f93c2236f0",
@@ -2805,8 +2947,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -1108.8921063333146,
-        "Y": -503.01512778785161
+        "X": -992.53779257281576,
+        "Y": -596.85394825999686
       },
       {
         "Id": "23c9194025e74d0e9dcebfc81c725127",
@@ -2815,8 +2957,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -2835.6136155125446,
-        "Y": -746.13502951364148
+        "X": -3107.4987300080611,
+        "Y": -806.36841760188349
       },
       {
         "Id": "af62c617283a4d4894280e450fb3848c",
@@ -2825,8 +2967,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -2567.7240663522443,
-        "Y": -773.34812105746153
+        "X": -2827.2171034918724,
+        "Y": -808.79735443392633
       },
       {
         "Id": "af0f2948e9b9469a89e7fb0df3a88d81",
@@ -2835,8 +2977,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -3520.19930583332,
-        "Y": -454.95751585468622
+        "X": -3792.0844203288366,
+        "Y": -515.19090394292823
       },
       {
         "Id": "f469f2759d5a4b7bbb8969fa2e10650c",
@@ -2845,8 +2987,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -3799.7445661925763,
-        "Y": -659.86555688377655
+        "X": -4071.6296806880932,
+        "Y": -720.09894497201856
       },
       {
         "Id": "8e4f5a2623b04a999f0a21b35e90ba45",
@@ -2855,8 +2997,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -3046.4398340587745,
-        "Y": -745.05805452188849
+        "X": -3318.324948554291,
+        "Y": -805.2914426101305
       },
       {
         "Id": "3ab8d71d8aac4921a688d7297b57729e",
@@ -2865,8 +3007,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -3287.4443351706345,
-        "Y": -804.91312723152055
+        "X": -3559.329449666151,
+        "Y": -865.14651531976256
       },
       {
         "Id": "7f7f2ef4289e4405a9088adaa26472bc",
@@ -2917,6 +3059,46 @@
         "ShowGeometry": true,
         "X": 3648.7106684090754,
         "Y": 1398.7783315306706
+      },
+      {
+        "Id": "a46d4066b2d649d09480c9509c165937",
+        "Name": "Python Script",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -1441.9162423414284,
+        "Y": -898.61582559927945
+      },
+      {
+        "Id": "5639c5158e864e1cb6a4145a55559d08",
+        "Name": "+",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -489.85442046191054,
+        "Y": -501.59251042430645
+      },
+      {
+        "Id": "8fa6d97ad84e4ef6ba11cc73272cd1e5",
+        "Name": "Convert By Units",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -1081.0064934629074,
+        "Y": -381.59591081521074
+      },
+      {
+        "Id": "f189b095f0bd4ac7922a28e2baf3d169",
+        "Name": "© ProjectBasePoint",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -1443.5585179858815,
+        "Y": -448.01573618306224
       }
     ],
     "Annotations": [
@@ -2943,17 +3125,18 @@
           "e0b4af7bdc234fffb413845274c923c5",
           "1bf5354e90154f1c930e61d9116f2242",
           "07f3d8e7476446999103ab218cbfb857",
-          "d8b72c414f3241788c9866ae4d6e7ade"
+          "d8b72c414f3241788c9866ae4d6e7ade",
+          "ead3adedd9b547e19784a1a931b3d3a1"
         ],
         "HasNestedGroups": false,
-        "Left": -1473.7599279764293,
-        "Top": 59.727636030477584,
+        "Left": -1778.7281198976464,
+        "Top": 185.03655509924954,
         "Width": 1965.5187712447414,
-        "Height": 1219.379216364438,
+        "Height": 1713.6409214818373,
         "FontSize": 30.0,
         "GroupStyleId": "00000000-0000-0000-0000-000000000000",
-        "InitialTop": 125.72763603047758,
-        "InitialHeight": 1166.379216364438,
+        "InitialTop": 251.03655509924954,
+        "InitialHeight": 1660.6409214818373,
         "TextblockHeight": 56.0,
         "Background": "#FFD4B6DB"
       },
@@ -3008,20 +3191,45 @@
           "df3e032984044fa98299e590636bb5a1"
         ],
         "HasNestedGroups": false,
-        "Left": -3809.7445661925763,
-        "Top": -976.5295871224215,
-        "Width": 1974.5100922632964,
-        "Height": 653.57207126773528,
+        "Left": -4081.6296806880932,
+        "Top": -1047.0897063405705,
+        "Width": 1974.5100922632969,
+        "Height": 663.89880239764227,
         "FontSize": 36.0,
         "GroupStyleId": "00000000-0000-0000-0000-000000000000",
-        "InitialTop": -903.5295871224215,
-        "InitialHeight": 593.57207126773528,
+        "InitialTop": -974.08970634057061,
+        "InitialHeight": 603.89880239764238,
+        "TextblockHeight": 63.0,
+        "Background": "#FFC1D676"
+      },
+      {
+        "Id": "09b0ad3bbae44d0d98e8a2fc51292417",
+        "Title": "saidas",
+        "DescriptionText": "Descrição <Clique duas vezes aqui para editar a descrição do grupo>",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "13952df15bc24b79aba9b2ea36183bd4",
+          "8b0cb70195844eba8c9f298e179a76b1",
+          "a0c047d1d3ee45a28ecafac2f027d8f0",
+          "7664166b77c04fc7aaca9ce350d7eb45"
+        ],
+        "HasNestedGroups": false,
+        "Left": 332.326093491536,
+        "Top": 534.30099845135,
+        "Width": 457.781463865499,
+        "Height": 606.24148701907018,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 607.30099845135,
+        "InitialHeight": 546.24148701907018,
         "TextblockHeight": 63.0,
         "Background": "#FFC1D676"
       }
     ],
-    "X": -405.074380351654,
-    "Y": 5.7390255869918292,
-    "Zoom": 0.18682636068024988
+    "X": 1529.079664596781,
+    "Y": 418.20587483869087,
+    "Zoom": 0.40954157254811291
   }
 }
