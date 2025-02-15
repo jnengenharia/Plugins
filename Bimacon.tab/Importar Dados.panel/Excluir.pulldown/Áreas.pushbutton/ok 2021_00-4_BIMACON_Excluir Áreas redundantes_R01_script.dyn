@@ -601,36 +601,6 @@
     {
       "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
       "NodeType": "FunctionNode",
-      "FunctionSignature": "Orchid.Common.String.FromList@var[]..[]",
-      "Id": "66c4b17418d44d318f1f6e37ca72a120",
-      "Inputs": [
-        {
-          "Id": "09dc5394acfa4cbf9170394e83428432",
-          "Name": "list",
-          "Description": "List of objects to concatenate.\n\nvar[]..[]",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Outputs": [
-        {
-          "Id": "938d438b9bd0407388522b5f0fa2b0f9",
-          "Name": "string",
-          "Description": "String made from list of strings.",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Replication": "Auto",
-      "Description": "Concatenates list values to multiple line string.\n\nString.FromList (list: var[]..[]): string"
-    },
-    {
-      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
-      "NodeType": "FunctionNode",
       "FunctionSignature": "DSCore.List.Flatten@var[]..[],int",
       "Id": "29f7352e5f4b455bb7dd2a7eb6a4b2db",
       "Inputs": [
@@ -666,6 +636,37 @@
       ],
       "Replication": "Auto",
       "Description": "Aplaina uma lista aninhada de listas por um determinado montante.\n\nList.Flatten (list: var[]..[], amt: int = -1): var[]..[]"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# Carregar as bibliotecas DesignScript e padrão do Python\r\nimport sys\r\nimport clr\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\n\r\n# Função para concatenar os valores de uma lista em uma única string com múltiplas linhas\r\ndef concatenate_list_to_string(input_list, delimiter=\"\\n\"):\r\n    # Verifica se a entrada é uma lista\r\n    if not isinstance(input_list, list):\r\n        return \"A entrada deve ser uma lista.\"\r\n    \r\n    # Converte todos os elementos para string e junta com o delimitador especificado\r\n    result = delimiter.join(str(item) for item in input_list)\r\n    return result\r\n\r\n# Entrada pelo nó do Dynamo\r\nlista = IN[0]  # Lista de valores a serem concatenados\r\ndelimitador = IN[1] if len(IN) > 1 else \"\\n\"  # Delimitador opcional, padrão é nova linha\r\n\r\n# Saída para o Dynamo\r\nOUT = concatenate_list_to_string(lista, delimitador)",
+      "VariableInputPorts": true,
+      "Id": "d7a81a53ec29454ea54054f98bf62378",
+      "Inputs": [
+        {
+          "Id": "b858c0915caa44708339a2cb49262bfd",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "bf8919191d1e419d9cd63a3a19ac3c32",
+          "Name": "OUT",
+          "Description": "Resultado do script Python",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Executa um script IronPython incorporado."
     }
   ],
   "Connectors": [
@@ -770,14 +771,14 @@
       "Id": "fc6d0d4fd446473fb5e51ea24da42630"
     },
     {
-      "Start": "938d438b9bd0407388522b5f0fa2b0f9",
-      "End": "918c9c897985450793d84779169e3baa",
-      "Id": "0b92f971ad3e4f2693d9acf9454c4e59"
+      "Start": "3f8346b6bdd840af8aef18ba072f8b26",
+      "End": "b858c0915caa44708339a2cb49262bfd",
+      "Id": "7288493c9c414763bcc48a3d263993ff"
     },
     {
-      "Start": "3f8346b6bdd840af8aef18ba072f8b26",
-      "End": "09dc5394acfa4cbf9170394e83428432",
-      "Id": "cace0b2fbdf54c4eb91ab28de81ca66d"
+      "Start": "bf8919191d1e419d9cd63a3a19ac3c32",
+      "End": "918c9c897985450793d84779169e3baa",
+      "Id": "beb432800daa48d2b1e78352a046bb8a"
     }
   ],
   "Dependencies": [],
@@ -788,14 +789,6 @@
       "ReferenceType": "Package",
       "Nodes": [
         "4057de2ab1f44568bc1e57697fb1a0f4"
-      ]
-    },
-    {
-      "Name": "Orchid",
-      "Version": "2.6.8.6198",
-      "ReferenceType": "Package",
-      "Nodes": [
-        "66c4b17418d44d318f1f6e37ca72a120"
       ]
     }
   ],
@@ -1014,16 +1007,6 @@
       },
       {
         "ShowGeometry": true,
-        "Name": "o|String.FromList",
-        "Id": "66c4b17418d44d318f1f6e37ca72a120",
-        "IsSetAsInput": false,
-        "IsSetAsOutput": false,
-        "Excluded": false,
-        "X": 3207.7361525781612,
-        "Y": 452.15261332399405
-      },
-      {
-        "ShowGeometry": true,
         "Name": "List.Flatten",
         "Id": "29f7352e5f4b455bb7dd2a7eb6a4b2db",
         "IsSetAsInput": false,
@@ -1031,6 +1014,16 @@
         "Excluded": false,
         "X": 2997.7456773960412,
         "Y": 439.63967068836405
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "String.FromList",
+        "Id": "d7a81a53ec29454ea54054f98bf62378",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 3211.4297095627294,
+        "Y": 450.72567771949662
       }
     ],
     "Annotations": [
@@ -1044,7 +1037,6 @@
           "dffd95e0d2364c509938afd83b4e48bc",
           "d6c0b6882be94471a5c5a50c44d7f29e",
           "e727f6cf812f4ab8aef446d1c42b0cfe",
-          "66c4b17418d44d318f1f6e37ca72a120",
           "0ad9f570ff04451ba0bfc04acb78fcc5",
           "29f7352e5f4b455bb7dd2a7eb6a4b2db"
         ],
@@ -1054,13 +1046,13 @@
         "Height": 512.720048755862,
         "FontSize": 36.0,
         "InitialTop": 219.70412479800405,
-        "InitialHeight": 489.72004875586197,
+        "InitialHeight": 511.72004875586197,
         "TextblockHeight": 43.0,
         "Background": "#FFC1D676"
       }
     ],
-    "X": -393.08840508415506,
-    "Y": 186.72530084720262,
-    "Zoom": 0.28435003501553913
+    "X": -1018.354169232254,
+    "Y": 139.92497453912256,
+    "Zoom": 0.39850200878874553
   }
 }

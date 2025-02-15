@@ -601,36 +601,6 @@
     {
       "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
       "NodeType": "FunctionNode",
-      "FunctionSignature": "Orchid.Common.String.FromList@var[]..[]",
-      "Id": "2a9addb7e37d4daeb10838b2ceaf5f89",
-      "Inputs": [
-        {
-          "Id": "851b478d1d8345dfa3acc0fd42a1816c",
-          "Name": "list",
-          "Description": "List of objects to concatenate.\n\nvar[]..[]",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Outputs": [
-        {
-          "Id": "ddb99f5cf09444b5aa8c63f1ff2804ae",
-          "Name": "string",
-          "Description": "String made from list of strings.",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Replication": "Auto",
-      "Description": "Concatenates list values to multiple line string.\n\nString.FromList (list: var[]..[]): string"
-    },
-    {
-      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
-      "NodeType": "FunctionNode",
       "FunctionSignature": "DSCore.List.Flatten@var[]..[],int",
       "Id": "d67bb87d7193412092dbdae8aebf47d9",
       "Inputs": [
@@ -666,6 +636,37 @@
       ],
       "Replication": "Auto",
       "Description": "Aplaina uma lista aninhada de listas por um determinado montante.\n\nList.Flatten (list: var[]..[], amt: int = -1): var[]..[]"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# Carregar as bibliotecas DesignScript e padrão do Python\r\nimport sys\r\nimport clr\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\n\r\n# Função para concatenar os valores de uma lista em uma única string com múltiplas linhas\r\ndef concatenate_list_to_string(input_list, delimiter=\"\\n\"):\r\n    # Verifica se a entrada é uma lista\r\n    if not isinstance(input_list, list):\r\n        return \"A entrada deve ser uma lista.\"\r\n    \r\n    # Converte todos os elementos para string e junta com o delimitador especificado\r\n    result = delimiter.join(str(item) for item in input_list)\r\n    return result\r\n\r\n# Entrada pelo nó do Dynamo\r\nlista = IN[0]  # Lista de valores a serem concatenados\r\ndelimitador = IN[1] if len(IN) > 1 else \"\\n\"  # Delimitador opcional, padrão é nova linha\r\n\r\n# Saída para o Dynamo\r\nOUT = concatenate_list_to_string(lista, delimitador)",
+      "VariableInputPorts": true,
+      "Id": "5446fc6c9052407197c02d42ddd8143c",
+      "Inputs": [
+        {
+          "Id": "a3d33346f2744c2cbf1c469fdce1bb02",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "2ed45b02859d4485b96fd06818f66e22",
+          "Name": "OUT",
+          "Description": "Resultado do script Python",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Executa um script IronPython incorporado."
     }
   ],
   "Connectors": [
@@ -770,14 +771,14 @@
       "Id": "65031ef238d44c23bdb07e8ba9e53f87"
     },
     {
-      "Start": "ddb99f5cf09444b5aa8c63f1ff2804ae",
-      "End": "a9f401d4048a427e9d2689bb380e3e94",
-      "Id": "f47beb0fe3b94388aa8a5ad4a92e8e6d"
+      "Start": "4a51a0b524e44f85a181985602c4a188",
+      "End": "a3d33346f2744c2cbf1c469fdce1bb02",
+      "Id": "c69fbca01b9241ef9cc4fb1458c1a32c"
     },
     {
-      "Start": "4a51a0b524e44f85a181985602c4a188",
-      "End": "851b478d1d8345dfa3acc0fd42a1816c",
-      "Id": "c1391c57c6f74fe5a2690ea06b7d4c76"
+      "Start": "2ed45b02859d4485b96fd06818f66e22",
+      "End": "a9f401d4048a427e9d2689bb380e3e94",
+      "Id": "bdab6928128346f3aeddc625202dee90"
     }
   ],
   "Dependencies": [],
@@ -788,14 +789,6 @@
       "ReferenceType": "Package",
       "Nodes": [
         "4057de2ab1f44568bc1e57697fb1a0f4"
-      ]
-    },
-    {
-      "Name": "Orchid",
-      "Version": "2.6.8.6198",
-      "ReferenceType": "Package",
-      "Nodes": [
-        "2a9addb7e37d4daeb10838b2ceaf5f89"
       ]
     }
   ],
@@ -859,8 +852,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 47.0,
-        "Y": 554.0
+        "X": -56.015036801156043,
+        "Y": 494.13991104797685
       },
       {
         "ShowGeometry": true,
@@ -1009,18 +1002,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 2768.2349423940964,
-        "Y": 584.54270147442821
-      },
-      {
-        "ShowGeometry": true,
-        "Name": "o|String.FromList",
-        "Id": "2a9addb7e37d4daeb10838b2ceaf5f89",
-        "IsSetAsInput": false,
-        "IsSetAsOutput": false,
-        "Excluded": false,
-        "X": 2562.0934202490566,
-        "Y": 586.37749593879835
+        "X": 2805.4962362377341,
+        "Y": 579.88503974397349
       },
       {
         "ShowGeometry": true,
@@ -1031,6 +1014,16 @@
         "Excluded": false,
         "X": 2352.1029450669366,
         "Y": 573.86455330316835
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "String.FromList",
+        "Id": "5446fc6c9052407197c02d42ddd8143c",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 2602.1495390591435,
+        "Y": 583.45292949164389
       }
     ],
     "Annotations": [
@@ -1044,23 +1037,22 @@
           "7a8fb73eee084aa193da05ee0a6245d6",
           "e95e4283ecdc4475b517e2f8ea9a5f26",
           "bf32a841c092479caaae0d2ce05879b9",
-          "2a9addb7e37d4daeb10838b2ceaf5f89",
           "70f266c0ae1f4d4bb616e6f9edc5be0f",
           "d67bb87d7193412092dbdae8aebf47d9"
         ],
         "Left": 1426.682086119202,
         "Top": 300.92900741280818,
-        "Width": 1475.5528562748943,
+        "Width": 1512.8141501185321,
         "Height": 512.72004875586208,
         "FontSize": 36.0,
         "InitialTop": 353.92900741280818,
-        "InitialHeight": 488.19534138395011,
+        "InitialHeight": 511.72004875586214,
         "TextblockHeight": 43.0,
         "Background": "#FFC1D676"
       }
     ],
-    "X": 89.5290761392551,
-    "Y": 199.4914347014996,
-    "Zoom": 0.16901085098369117
+    "X": -299.18201252945289,
+    "Y": 45.347224448000418,
+    "Zoom": 0.55958908471858348
   }
 }
