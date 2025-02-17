@@ -12,7 +12,7 @@
     {
       "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
       "NodeType": "PythonScriptNode",
-      "Code": "# coding: utf-8\r\nimport clr\r\n\r\n# Importações padrão para o Dynamo\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\n\r\nclr.AddReference('RevitNodes')\r\nimport Revit\r\nclr.ImportExtensions(Revit.Elements)\r\nclr.ImportExtensions(Revit.GeometryConversion)\r\n\r\nclr.AddReference(\"RevitServices\")\r\nimport RevitServices\r\nfrom RevitServices.Persistence import DocumentManager\r\nfrom RevitServices.Transactions import TransactionManager\r\n\r\nclr.AddReference('RevitAPI')\r\nclr.AddReference('RevitAPIUI')\r\nfrom Autodesk.Revit.DB import *\r\n\r\n# Obter o documento ativo do Revit\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\n\r\n# Classe personalizada para tratar erros\r\nclass NoConnectorManagerError(LookupError):\r\n    pass\r\n\r\n# Funções auxiliares\r\ndef get_connector_manager(element):\r\n    \"\"\"Retorna o ConnectorManager de um elemento.\"\"\"\r\n    try:\r\n        return element.ConnectorManager  # Para elementos como pipes, ducts, etc.\r\n    except AttributeError:\r\n        pass\r\n    try:\r\n        return element.MEPModel.ConnectorManager  # Para FamilyInstances\r\n    except AttributeError:\r\n        raise NoConnectorManagerError(\"Não foi possível localizar o ConnectorManager no elemento fornecido.\")\r\n\r\ndef disconnect_all_connectors(element):\r\n    \"\"\"Desconecta todos os conectores do elemento selecionado.\"\"\"\r\n    connector_manager = get_connector_manager(element)\r\n    for connector in connector_manager.Connectors:\r\n        # Ignorar conectores que não estão conectados\r\n        if not connector.IsConnected:\r\n            continue\r\n        # Desconectar de todos os conectores ligados\r\n        for other_connector in connector.AllRefs:\r\n            if other_connector == connector:\r\n                continue\r\n            connector.DisconnectFrom(other_connector)\r\n\r\n        # Dividir o sistema caso exista\r\n        system = connector.MEPSystem\r\n        if system and system.IsMultipleNetwork:\r\n            system.DivideSystem(doc)\r\n\r\n# Entradas do Dynamo\r\nelements = [UnwrapElement(el) for el in IN]  # Lista de elementos fornecidos no Dynamo\r\n\r\n# Iniciar transação\r\nTransactionManager.Instance.EnsureInTransaction(doc)\r\n\r\n# Desconectar conectores para cada elemento fornecido\r\nresults = []\r\nfor element in elements:\r\n    try:\r\n        disconnect_all_connectors(element)\r\n        results.append(\"Conectores desconectados com sucesso: Elemento ID {}\".format(element.Id))\r\n    except NoConnectorManagerError as e:\r\n        results.append(\"Erro no elemento ID {}: {}\".format(element.Id, str(e)))\r\n    except Exception as e:\r\n        results.append(\"Erro inesperado no elemento ID {}: {}\".format(element.Id, str(e)))\r\n\r\n# Finalizar transação\r\nTransactionManager.Instance.TransactionTaskDone()\r\n\r\n# Saída do script\r\nOUT = results\r\n",
+      "Code": "# coding: utf-8\r\nimport clr\r\n\r\n# Importações padrão para o Dynamo\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\n\r\nclr.AddReference('RevitNodes')\r\nimport Revit\r\nclr.ImportExtensions(Revit.Elements)\r\nclr.ImportExtensions(Revit.GeometryConversion)\r\n\r\nclr.AddReference(\"RevitServices\")\r\nimport RevitServices\r\nfrom RevitServices.Persistence import DocumentManager\r\nfrom RevitServices.Transactions import TransactionManager\r\n\r\nclr.AddReference('RevitAPI')\r\nclr.AddReference('RevitAPIUI')\r\nfrom Autodesk.Revit.DB import *\r\n\r\n# Obter o documento ativo do Revit\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\n\r\n# Classe personalizada para tratar erros\r\nclass NoConnectorManagerError(LookupError):\r\n    pass\r\n\r\n# Funções auxiliares\r\ndef get_connector_manager(element):\r\n    \"\"\"Retorna o ConnectorManager de um elemento.\"\"\"\r\n    try:\r\n        return element.ConnectorManager  # Para elementos como pipes, ducts, etc.\r\n    except AttributeError:\r\n        pass\r\n    try:\r\n        return element.MEPModel.ConnectorManager  # Para FamilyInstances\r\n    except AttributeError:\r\n        raise NoConnectorManagerError(\"Não foi possível localizar o ConnectorManager no elemento fornecido.\")\r\n\r\ndef disconnect_all_connectors(element):\r\n    \"\"\"Desconecta todos os conectores do elemento selecionado.\"\"\"\r\n    connector_manager = get_connector_manager(element)\r\n    for connector in connector_manager.Connectors:\r\n        if not connector.IsConnected:\r\n            continue\r\n        for other_connector in connector.AllRefs:\r\n            if other_connector == connector:\r\n                continue\r\n            connector.DisconnectFrom(other_connector)\r\n\r\n        system = connector.MEPSystem\r\n        if system and system.IsMultipleNetwork:\r\n            system.DivideSystem(doc)\r\n\r\ndef process_elements(elements):\r\n    \"\"\"Processa recursivamente uma lista de elementos (incluindo listas aninhadas).\"\"\"\r\n    results = []\r\n    for el in elements:\r\n        if isinstance(el, list):\r\n            results.extend(process_elements(el))  # Recursão para listas aninhadas\r\n        else:\r\n            element_name = el.Name if hasattr(el, 'Name') else \"Sem nome\"\r\n            try:\r\n                disconnect_all_connectors(el)\r\n                results.append(\"Conectores desconectados: {} (ID: {})\".format(element_name, el.Id))\r\n            except NoConnectorManagerError as e:\r\n                results.append(\"Erro no elemento {} (ID: {}): {}\".format(element_name, el.Id, str(e)))\r\n            except Exception as e:\r\n                results.append(\"Erro inesperado no elemento {} (ID: {}): {}\".format(element_name, el.Id, str(e)))\r\n    return results\r\n\r\n# Entradas do Dynamo (lista com múltiplos níveis)\r\nelements = [UnwrapElement(el) for el in IN[0]]\r\n\r\n# Iniciar transação\r\nTransactionManager.Instance.EnsureInTransaction(doc)\r\n\r\n# Processar elementos\r\nresults = process_elements(elements)\r\n\r\n# Finalizar transação\r\nTransactionManager.Instance.TransactionTaskDone()\r\n\r\n# Saída do script\r\nOUT = results\r\n",
       "VariableInputPorts": true,
       "Id": "ea84b333a5a14ce8b09187aa2354ec65",
       "Inputs": [
@@ -39,65 +39,6 @@
       ],
       "Replication": "Disabled",
       "Description": "Executa um script IronPython incorporado."
-    },
-    {
-      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
-      "NodeType": "FunctionNode",
-      "FunctionSignature": "DSCore.List.GetItemAtIndex@var[]..[],int",
-      "Id": "d184728ace184b2d892aa724b156dafc",
-      "Inputs": [
-        {
-          "Id": "eccfd42710784f70b531a16f421aae4f",
-          "Name": "list",
-          "Description": "Lista da qual obter um item.\n\nvar[]..[]",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        },
-        {
-          "Id": "f5a8bfa4dbb04d08bb7f0a278dfe9c9f",
-          "Name": "index",
-          "Description": "Índice do item a ser extraído.\n\nint",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Outputs": [
-        {
-          "Id": "7eda58e88c8743a68370bc69d42f53f7",
-          "Name": "item",
-          "Description": "Item na lista no determinado índice.",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Replication": "Auto",
-      "Description": "Retorna um item de uma determinada lista que está localizada no índice especificado.\n\nList.GetItemAtIndex (list: var[]..[], index: int): var[]..[]"
-    },
-    {
-      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
-      "NodeType": "CodeBlockNode",
-      "Code": "0;",
-      "Id": "4050de91513544c8b4bcf57d25337e30",
-      "Inputs": [],
-      "Outputs": [
-        {
-          "Id": "78b55459b0b743e0a04eea780ed73c5c",
-          "Name": "",
-          "Description": "Valor da expressão na linha 1",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Replication": "Disabled",
-      "Description": "Permite que o código DesignScript seja criado diretamente"
     },
     {
       "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
@@ -129,36 +70,6 @@
       ],
       "Replication": "Disabled",
       "Description": "Executa um script IronPython incorporado."
-    },
-    {
-      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
-      "NodeType": "FunctionNode",
-      "FunctionSignature": "Orchid.Common.String.FromList@var[]..[]",
-      "Id": "14578b716c054f0b805ea1a7e84da16c",
-      "Inputs": [
-        {
-          "Id": "ef816ed2cac14348a16675c9a00952ff",
-          "Name": "list",
-          "Description": "List of objects to concatenate.\n\nvar[]..[]",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Outputs": [
-        {
-          "Id": "ffd2b8a10b244e7ea2f70303906dccff",
-          "Name": "string",
-          "Description": "String made from list of strings.",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Replication": "Auto",
-      "Description": "Concatenates list values to multiple line string.\n\nString.FromList (list: var[]..[]): string"
     },
     {
       "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
@@ -230,12 +141,12 @@
     {
       "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
       "NodeType": "CodeBlockNode",
-      "Code": "[\"Selecione Objeto a ser Desconectado e clique em Concluir\"];",
+      "Code": "[\"Selecione Elementos a serem Desconectados e clique em Concluir\"];",
       "Id": "84d3bfcde6694b7fb8d53856b59541e9",
       "Inputs": [],
       "Outputs": [
         {
-          "Id": "cc389fac4f864798b885443d95d761e9",
+          "Id": "f849a9850df84deb9ffa6808c754e003",
           "Name": "",
           "Description": "Valor da expressão na linha 1",
           "UsingDefaultValue": false,
@@ -297,36 +208,6 @@
       ],
       "Replication": "Disabled",
       "Description": "Executa um script IronPython incorporado."
-    },
-    {
-      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
-      "NodeType": "FunctionNode",
-      "FunctionSignature": "Orchid.Common.String.FromList@var[]..[]",
-      "Id": "386eff82d1a84070816157ca52c391ab",
-      "Inputs": [
-        {
-          "Id": "4228d13667344fe5868b55a35843e228",
-          "Name": "list",
-          "Description": "List of objects to concatenate.\n\nvar[]..[]",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Outputs": [
-        {
-          "Id": "775f94d969054cd89184140d7d147933",
-          "Name": "string",
-          "Description": "String made from list of strings.",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Replication": "Auto",
-      "Description": "Concatenates list values to multiple line string.\n\nString.FromList (list: var[]..[]): string"
     },
     {
       "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
@@ -577,28 +458,114 @@
       ],
       "Replication": "Auto",
       "Description": "Aplaina uma lista aninhada de listas por um determinado montante.\n\nList.Flatten (list: var[]..[], amt: int = -1): var[]..[]"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# Carregar as bibliotecas DesignScript e padrão do Python\r\nimport sys\r\nimport clr\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\n\r\n# Função para concatenar os valores de uma lista em uma única string com múltiplas linhas\r\ndef concatenate_list_to_string(input_list, delimiter=\"\\n\"):\r\n    # Verifica se a entrada é uma lista\r\n    if not isinstance(input_list, list):\r\n        return \"A entrada deve ser uma lista.\"\r\n    \r\n    # Converte todos os elementos para string e junta com o delimitador especificado\r\n    result = delimiter.join(str(item) for item in input_list)\r\n    return result\r\n\r\n# Entrada pelo nó do Dynamo\r\nlista = IN[0]  # Lista de valores a serem concatenados\r\ndelimitador = IN[1] if len(IN) > 1 else \"\\n\"  # Delimitador opcional, padrão é nova linha\r\n\r\n# Saída para o Dynamo\r\nOUT = concatenate_list_to_string(lista, delimitador)",
+      "VariableInputPorts": true,
+      "Id": "ee7a20082d254206894dcc65781cd61e",
+      "Inputs": [
+        {
+          "Id": "bb6d1334258e42c9a3bc992342ac205e",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "37d31e95f9b84f40a03a7c67ab964de7",
+          "Name": "OUT",
+          "Description": "Resultado do script Python",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Executa um script IronPython incorporado."
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# Carregar as bibliotecas DesignScript e padrão do Python\r\nimport sys\r\nimport clr\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\n\r\n# Função para concatenar os valores de uma lista em uma única string com múltiplas linhas\r\ndef concatenate_list_to_string(input_list, delimiter=\"\\n\"):\r\n    # Verifica se a entrada é uma lista\r\n    if not isinstance(input_list, list):\r\n        return \"A entrada deve ser uma lista.\"\r\n    \r\n    # Converte todos os elementos para string e junta com o delimitador especificado\r\n    result = delimiter.join(str(item) for item in input_list)\r\n    return result\r\n\r\n# Entrada pelo nó do Dynamo\r\nlista = IN[0]  # Lista de valores a serem concatenados\r\ndelimitador = IN[1] if len(IN) > 1 else \"\\n\"  # Delimitador opcional, padrão é nova linha\r\n\r\n# Saída para o Dynamo\r\nOUT = concatenate_list_to_string(lista, delimitador)",
+      "VariableInputPorts": true,
+      "Id": "9688be97b931423ebb281b4c508f5997",
+      "Inputs": [
+        {
+          "Id": "3477d73b3a9d436295e2a2132906a532",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "af1925bbfb3d4f7cb3b1a8b7c75e439b",
+          "Name": "OUT",
+          "Description": "Resultado do script Python",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Executa um script IronPython incorporado."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "DSCore.List.Flatten@var[]..[],int",
+      "Id": "689c2caaa88d4f6399400e07ce5a8843",
+      "Inputs": [
+        {
+          "Id": "797015e0134f4a8ab23cc7097a3930b1",
+          "Name": "list",
+          "Description": "Lista para aplainar.\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "c97978369bf143479ccf7e9dd54cf3cb",
+          "Name": "amt",
+          "Description": "Camadas de aninhamento para remover.\n\nint\nValor padrão : -1",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "2d75806018f540e59431f8d0cdf03302",
+          "Name": "var[]..[]",
+          "Description": "var[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Aplaina uma lista aninhada de listas por um determinado montante.\n\nList.Flatten (list: var[]..[], amt: int = -1): var[]..[]"
     }
   ],
   "Connectors": [
     {
       "Start": "f7d46563b0c346dd92a6ffbefddf0c91",
-      "End": "ef816ed2cac14348a16675c9a00952ff",
-      "Id": "5a1f9bf02f3543e8937f551ad4066ffa"
-    },
-    {
-      "Start": "7eda58e88c8743a68370bc69d42f53f7",
-      "End": "989aff2d66ab4fdc863b63e7196fa2e5",
-      "Id": "e4ad4fab28ff4b9a9f45584d9ab85299"
-    },
-    {
-      "Start": "78b55459b0b743e0a04eea780ed73c5c",
-      "End": "f5a8bfa4dbb04d08bb7f0a278dfe9c9f",
-      "Id": "c3fd620381344cf2b4748a392f5586ba"
-    },
-    {
-      "Start": "ffd2b8a10b244e7ea2f70303906dccff",
-      "End": "3369b8c03c384e069779abeb6de7f528",
-      "Id": "ecfbc917cf594eb394c71ae89d4caf3b"
+      "End": "bb6d1334258e42c9a3bc992342ac205e",
+      "Id": "913cb7a92d3e461ea61c3f893defd90d"
     },
     {
       "Start": "8431fbf5dc9f41c8b268b7ffd4b0a587",
@@ -607,13 +574,13 @@
     },
     {
       "Start": "80a3e64474e447e4b09828b88bfefb5a",
-      "End": "4228d13667344fe5868b55a35843e228",
-      "Id": "4199412fbd434a628a8362a9f8e514a1"
+      "End": "3477d73b3a9d436295e2a2132906a532",
+      "Id": "3370827efb1041c39a74f24e0cb33427"
     },
     {
-      "Start": "cc389fac4f864798b885443d95d761e9",
+      "Start": "f849a9850df84deb9ffa6808c754e003",
       "End": "ccd0b87f2ad74827b5894ce167267df3",
-      "Id": "8040aa4cb8b14e52844dbda6b98c25ac"
+      "Id": "e7005d07f0674e5ca1016bd4adf9a451"
     },
     {
       "Start": "eceacb6300724742bdb3e346bf2e59f1",
@@ -626,14 +593,9 @@
       "Id": "4f4fea8758094a74b25d97f850851cfb"
     },
     {
-      "Start": "775f94d969054cd89184140d7d147933",
-      "End": "e180c68e3a1e41c2aa738f8dd95a9264",
-      "Id": "4e1aa26fbe0445d4b4b56e91d81b7beb"
-    },
-    {
       "Start": "b72e0c240b2740ed8d91ad62b3400488",
-      "End": "eccfd42710784f70b531a16f421aae4f",
-      "Id": "8ef8e0cc38d6495faf0bdb07c033031b"
+      "End": "797015e0134f4a8ab23cc7097a3930b1",
+      "Id": "2e246d3bcd044aabaedbba98e7a9d876"
     },
     {
       "Start": "d684f6596c024407b4e38e5809eb9298",
@@ -669,21 +631,27 @@
       "Start": "e94f68b6243d4b7391fa04acab62a8b1",
       "End": "b73d7eff8aa249988ac4d05f3a6df0ae",
       "Id": "9656978871a445b2b71c5a51773e40d6"
+    },
+    {
+      "Start": "37d31e95f9b84f40a03a7c67ab964de7",
+      "End": "3369b8c03c384e069779abeb6de7f528",
+      "Id": "2e5dcb422dce49759a31e757ab28cc67"
+    },
+    {
+      "Start": "af1925bbfb3d4f7cb3b1a8b7c75e439b",
+      "End": "e180c68e3a1e41c2aa738f8dd95a9264",
+      "Id": "870747e0699c4ea4b54ace85f86eb363"
+    },
+    {
+      "Start": "2d75806018f540e59431f8d0cdf03302",
+      "End": "989aff2d66ab4fdc863b63e7196fa2e5",
+      "Id": "71f5de917dfd40a08611ad0622146761"
     }
   ],
   "Dependencies": [
     "f076090f-2845-4c5c-966b-9e523ef8453b"
   ],
   "NodeLibraryDependencies": [
-    {
-      "Name": "Orchid",
-      "Version": "2.6.10.6373",
-      "ReferenceType": "Package",
-      "Nodes": [
-        "14578b716c054f0b805ea1a7e84da16c",
-        "386eff82d1a84070816157ca52c391ab"
-      ]
-    },
     {
       "Name": "Data-Shapes",
       "Version": "2022.2.105",
@@ -723,28 +691,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 1993.6384534090962,
-        "Y": 225.15239263101819
-      },
-      {
-        "ShowGeometry": true,
-        "Name": "List.GetItemAtIndex",
-        "Id": "d184728ace184b2d892aa724b156dafc",
-        "IsSetAsInput": false,
-        "IsSetAsOutput": false,
-        "Excluded": false,
-        "X": 1641.04021424464,
-        "Y": 230.580968997905
-      },
-      {
-        "ShowGeometry": true,
-        "Name": "Code Block",
-        "Id": "4050de91513544c8b4bcf57d25337e30",
-        "IsSetAsInput": false,
-        "IsSetAsOutput": false,
-        "Excluded": false,
-        "X": 1481.10921270137,
-        "Y": 345.709145648423
+        "X": 1904.2587721957354,
+        "Y": 144.84459078775649
       },
       {
         "ShowGeometry": true,
@@ -753,18 +701,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 2443.4455931345028,
-        "Y": 220.8025718236641
-      },
-      {
-        "ShowGeometry": true,
-        "Name": "o|String.FromList",
-        "Id": "14578b716c054f0b805ea1a7e84da16c",
-        "IsSetAsInput": false,
-        "IsSetAsOutput": false,
-        "Excluded": false,
-        "X": 2200.2957457935381,
-        "Y": 221.31024786732007
+        "X": 2367.9705495055205,
+        "Y": 153.18951190603411
       },
       {
         "ShowGeometry": true,
@@ -773,8 +711,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": -104.50524693504485,
-        "Y": 194.8098146804881
+        "X": -259.28188998007931,
+        "Y": 163.81375593899611
       },
       {
         "ShowGeometry": true,
@@ -784,7 +722,7 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "X": 136.49925417681516,
-        "Y": 254.66488739012004
+        "Y": 255.53460809907637
       },
       {
         "ShowGeometry": true,
@@ -793,8 +731,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": -616.80547795698476,
-        "Y": 339.857385028232
+        "X": -682.81316396148486,
+        "Y": 327.07034311556765
       },
       {
         "ShowGeometry": true,
@@ -803,8 +741,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": -337.26021759773494,
-        "Y": 544.76542605732322
+        "X": -397.57758584322642,
+        "Y": 543.35901966267613
       },
       {
         "ShowGeometry": true,
@@ -814,17 +752,7 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "X": 627.60709923923514,
-        "Y": 251.158975566325
-      },
-      {
-        "ShowGeometry": true,
-        "Name": "o|String.FromList",
-        "Id": "386eff82d1a84070816157ca52c391ab",
-        "IsSetAsInput": false,
-        "IsSetAsOutput": false,
-        "Excluded": false,
-        "X": 347.3254727230451,
-        "Y": 253.58791239836808
+        "Y": 252.02869627528133
       },
       {
         "ShowGeometry": true,
@@ -834,7 +762,7 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "X": 1002.7046143063053,
-        "Y": 161.38560332606096
+        "Y": 162.25532403501728
       },
       {
         "ShowGeometry": true,
@@ -905,44 +833,57 @@
         "Excluded": false,
         "X": 648.00875487855524,
         "Y": -277.75206470539365
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "String.FromList",
+        "Id": "ee7a20082d254206894dcc65781cd61e",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 2132.9473041090937,
+        "Y": 147.49043716536369
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "String.FromList",
+        "Id": "9688be97b931423ebb281b4c508f5997",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 358.7899939051498,
+        "Y": 266.37199285785778
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "List.Flatten",
+        "Id": "689c2caaa88d4f6399400e07ce5a8843",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1545.641211877117,
+        "Y": 127.36452836793086
       }
     ],
     "Annotations": [
-      {
-        "Id": "8e15302fa22a49f6ab973eecf90e9681",
-        "Title": "Separar Entradas",
-        "Nodes": [
-          "d184728ace184b2d892aa724b156dafc",
-          "4050de91513544c8b4bcf57d25337e30"
-        ],
-        "Left": 1471.10921270137,
-        "Top": 177.580968997905,
-        "Width": 358.93100154327,
-        "Height": 261.12817665051796,
-        "FontSize": 36.0,
-        "InitialTop": 230.580968997905,
-        "InitialHeight": 260.12817665051796,
-        "TextblockHeight": 43.0,
-        "Background": "#FFC1D676"
-      },
       {
         "Id": "9b56e02e64d942ddaf47bbc0a3c25d09",
         "Title": "Mensagem",
         "Nodes": [
           "8683a18d1a9e4132955f4805ed2811a1",
-          "386eff82d1a84070816157ca52c391ab",
           "a8af478c3aa1411da8a8996aa158f691",
           "e9640b5eed614c80b46f813f3fec6cad",
           "84d3bfcde6694b7fb8d53856b59541e9",
           "e231c6d400f4415dab6b06cc6e0c2dca",
-          "0c9843b2ef7041afb65916a84216ea11"
+          "0c9843b2ef7041afb65916a84216ea11",
+          "9688be97b931423ebb281b4c508f5997"
         ],
-        "Left": -626.80547795698476,
-        "Top": 108.38560332606096,
-        "Width": 1872.51009226329,
-        "Height": 529.37982273126227,
+        "Left": -692.81316396148486,
+        "Top": 109.25532403501728,
+        "Width": 1938.5177782677902,
+        "Height": 527.10369562765891,
         "FontSize": 36.0,
-        "InitialTop": 161.38560332606096,
+        "InitialTop": 162.25532403501728,
         "InitialHeight": 528.37982273126227,
         "TextblockHeight": 43.0,
         "Background": "#FFC1D676"
@@ -970,8 +911,8 @@
         "Background": "#FFD4B6DB"
       }
     ],
-    "X": 176.73397390490567,
-    "Y": 169.41651799380477,
-    "Zoom": 0.24139083614174978
+    "X": 141.64444099812894,
+    "Y": 172.9712174761155,
+    "Zoom": 0.20539444218870828
   }
 }

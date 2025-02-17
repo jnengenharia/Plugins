@@ -2,7 +2,7 @@
   "Uuid": "0f32c9ed-b6b0-4f12-8caf-4dbe1882deeb",
   "IsCustomNode": false,
   "Description": null,
-  "Name": "2021_09-0_BIMACON_Mudar Circuitos de Quadro_R01_script",
+  "Name": "ok 2021_09-0_BIMACON_Mudar Circuitos de Quadro_R01",
   "ElementResolver": {
     "ResolutionMap": {}
   },
@@ -344,36 +344,6 @@
       ],
       "Replication": "Disabled",
       "Description": "Executa um script IronPython incorporado."
-    },
-    {
-      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
-      "NodeType": "FunctionNode",
-      "FunctionSignature": "Orchid.Common.String.FromList@var[]..[]",
-      "Id": "d8b1805782ce4c9bbe29fc08da646be2",
-      "Inputs": [
-        {
-          "Id": "d8d722fb6492456b8ac4d9d6e088e750",
-          "Name": "list",
-          "Description": "List of objects to concatenate.\n\nvar[]..[]",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Outputs": [
-        {
-          "Id": "39b344095ab7452e9047b85b734668c9",
-          "Name": "string",
-          "Description": "String made from list of strings.",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Replication": "Auto",
-      "Description": "Concatenates list values to multiple line string.\n\nString.FromList (list: var[]..[]): string"
     },
     {
       "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
@@ -1337,6 +1307,37 @@
       ],
       "Replication": "Auto",
       "Description": "Filtra uma sequência examinando os índices correspondentes em lista separada de booleanos.\n\nList.FilterByBoolMask (list: var[]..[], mask: var[]..[]): var[]..[]"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# Carregar as bibliotecas DesignScript e padrão do Python\r\nimport sys\r\nimport clr\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\n\r\n# Função para concatenar os valores de uma lista em uma única string com múltiplas linhas\r\ndef concatenate_list_to_string(input_list, delimiter=\"\\n\"):\r\n    # Verifica se a entrada é uma lista\r\n    if not isinstance(input_list, list):\r\n        return \"A entrada deve ser uma lista.\"\r\n    \r\n    # Converte todos os elementos para string e junta com o delimitador especificado\r\n    result = delimiter.join(str(item) for item in input_list)\r\n    return result\r\n\r\n# Entrada pelo nó do Dynamo\r\nlista = IN[0]  # Lista de valores a serem concatenados\r\ndelimitador = IN[1] if len(IN) > 1 else \"\\n\"  # Delimitador opcional, padrão é nova linha\r\n\r\n# Saída para o Dynamo\r\nOUT = concatenate_list_to_string(lista, delimitador)",
+      "VariableInputPorts": true,
+      "Id": "6a8f2369cacf41348d133e1c7c21ee01",
+      "Inputs": [
+        {
+          "Id": "801b02c9693d4267be61fed31b0c0662",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "0c2589e5d91b48bba3b688464fb29fcc",
+          "Name": "OUT",
+          "Description": "Resultado do script Python",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Executa um script IronPython incorporado."
     }
   ],
   "Connectors": [
@@ -1392,13 +1393,8 @@
     },
     {
       "Start": "627157ee32764b54adc4416ae034cd0f",
-      "End": "d8d722fb6492456b8ac4d9d6e088e750",
-      "Id": "b3006a8321484d5cba9e127bda3f1bd6"
-    },
-    {
-      "Start": "39b344095ab7452e9047b85b734668c9",
-      "End": "3a9d3c7eea65432bb61abd76b9f8e456",
-      "Id": "e5d33d53e0a34dd49f7b6f225bdaeabb"
+      "End": "801b02c9693d4267be61fed31b0c0662",
+      "Id": "fac98c7d2f31499f9c3e7dbe77dbb5f9"
     },
     {
       "Start": "a866e09f26654b5aae60fc40a0f286f1",
@@ -1559,6 +1555,11 @@
       "Start": "8d1e988d3bbd45c5b9afe92c0ddd78ab",
       "End": "3a8dd08e95b247d89af812bff73a1a53",
       "Id": "c619076bae4b47e9b03fdcd4541318bc"
+    },
+    {
+      "Start": "0c2589e5d91b48bba3b688464fb29fcc",
+      "End": "3a9d3c7eea65432bb61abd76b9f8e456",
+      "Id": "6d2c90295633487c83577a92fff76c20"
     }
   ],
   "Dependencies": [
@@ -1575,14 +1576,6 @@
       "Nodes": [
         "62cb1d51f27e47f992e73d6f968d9ba4",
         "dc7ba0a90f78400d9c10737d937736ff"
-      ]
-    },
-    {
-      "Name": "Orchid",
-      "Version": "2.6.8.6198",
-      "ReferenceType": "Package",
-      "Nodes": [
-        "d8b1805782ce4c9bbe29fc08da646be2"
       ]
     },
     {
@@ -1718,16 +1711,6 @@
         "Excluded": false,
         "X": 2731.1975843193736,
         "Y": 627.74124505684938
-      },
-      {
-        "ShowGeometry": true,
-        "Name": "o|String.FromList",
-        "Id": "d8b1805782ce4c9bbe29fc08da646be2",
-        "IsSetAsInput": false,
-        "IsSetAsOutput": false,
-        "Excluded": false,
-        "X": 2525.056062174373,
-        "Y": 629.57603952122929
       },
       {
         "ShowGeometry": true,
@@ -2048,6 +2031,16 @@
         "Excluded": false,
         "X": 735.37434012714959,
         "Y": 62.9419532913746
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "String.FromList",
+        "Id": "6a8f2369cacf41348d133e1c7c21ee01",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 2520.6515482590485,
+        "Y": 633.57278620769353
       }
     ],
     "Annotations": [
@@ -2062,7 +2055,6 @@
           "0b77cec7bbdf46f39bb7ad380c96f6b5",
           "831dc746fd8b4ab2a0f2b0eab8ba9bae",
           "134c689fa603426388b8071ea191c6eb",
-          "d8b1805782ce4c9bbe29fc08da646be2",
           "b3cd533a125847908801b35e581c87ba"
         ],
         "Left": 1378.3189471226972,
@@ -2153,8 +2145,8 @@
         "Background": "#FFC1D676"
       }
     ],
-    "X": -2510.0507694933785,
-    "Y": -739.65262667357786,
-    "Zoom": 1.3695230524183912
+    "X": -702.50044771399257,
+    "Y": -237.95997879430303,
+    "Zoom": 0.94878409438331646
   }
 }

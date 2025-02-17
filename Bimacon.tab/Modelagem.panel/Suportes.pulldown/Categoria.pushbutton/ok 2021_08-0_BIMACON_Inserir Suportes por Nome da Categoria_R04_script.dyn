@@ -2,7 +2,7 @@
   "Uuid": "a3ab6a0d-1a07-403b-b303-4be1697e3641",
   "IsCustomNode": false,
   "Description": null,
-  "Name": "ok 2021_08-0_BIMACON_Inserir Suportes por Nome da Categoria_R03",
+  "Name": "ok 2021_08-0_BIMACON_Inserir Suportes por Nome da Categoria_R04_script",
   "ElementResolver": {
     "ResolutionMap": {
       "DSCore.Math.Round": {
@@ -16,6 +16,10 @@
       "Vector": {
         "Key": "Autodesk.DesignScript.Geometry.Vector",
         "Value": "ProtoGeometry.dll"
+      },
+      "DSCore.List": {
+        "Key": "DSCore.List",
+        "Value": "DSCoreNodes.dll"
       }
     }
   },
@@ -2587,36 +2591,6 @@
       ],
       "Replication": "Disabled",
       "Description": "Executa um script IronPython incorporado."
-    },
-    {
-      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
-      "NodeType": "FunctionNode",
-      "FunctionSignature": "Orchid.Common.String.FromList@var[]..[]",
-      "Id": "b6eaf54d58084c39adec813f95b65f03",
-      "Inputs": [
-        {
-          "Id": "f6e6e9089526460a8195ff9d73922065",
-          "Name": "list",
-          "Description": "List of objects to concatenate.\n\nvar[]..[]",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Outputs": [
-        {
-          "Id": "3271e0c630c1466c9ff9d955242e45a1",
-          "Name": "string",
-          "Description": "String made from list of strings.",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Replication": "Auto",
-      "Description": "Concatenates list values to multiple line string.\n\nString.FromList (list: var[]..[]): string"
     },
     {
       "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
@@ -6035,11 +6009,11 @@
     {
       "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
       "NodeType": "CodeBlockNode",
-      "Code": "c = List.Count(vals);\nList.OfRepeatedItem(replace,c);",
+      "Code": "c = DSCore.List.Count(vals);\nDSCore.List.OfRepeatedItem(replace,c);",
       "Id": "1a080ea5415c488b91d92bbda781b0cb",
       "Inputs": [
         {
-          "Id": "0c8db0df8bdb4e1b8567f9c8ebfd9906",
+          "Id": "b4cf735211084b6bae06ca3b94cab9ac",
           "Name": "vals",
           "Description": "vals",
           "UsingDefaultValue": false,
@@ -6048,7 +6022,7 @@
           "KeepListStructure": false
         },
         {
-          "Id": "7643012e41e04dacad6e08ea844163d0",
+          "Id": "739396be0a09426fb8d36f6fe9b95293",
           "Name": "replace",
           "Description": "replace",
           "UsingDefaultValue": false,
@@ -6059,7 +6033,7 @@
       ],
       "Outputs": [
         {
-          "Id": "5ad785b5666c49339b67a1a474560d30",
+          "Id": "66dc939159474d2d821d8034bf973573",
           "Name": "",
           "Description": "c",
           "UsingDefaultValue": false,
@@ -6068,7 +6042,7 @@
           "KeepListStructure": false
         },
         {
-          "Id": "e872072d8f6b4f8f944b94f02d8ee494",
+          "Id": "5b64f6b8bb694c02be161869ec2642a4",
           "Name": "",
           "Description": "Valor da expressão na linha 2",
           "UsingDefaultValue": false,
@@ -6168,6 +6142,37 @@
       ],
       "Replication": "Disabled",
       "Description": "Permite que o código DesignScript seja criado diretamente"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# Carregar as bibliotecas DesignScript e padrão do Python\r\nimport sys\r\nimport clr\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\n\r\n# Função para concatenar os valores de uma lista em uma única string com múltiplas linhas\r\ndef concatenate_list_to_string(input_list, delimiter=\"\\n\"):\r\n    # Verifica se a entrada é uma lista\r\n    if not isinstance(input_list, list):\r\n        return \"A entrada deve ser uma lista.\"\r\n    \r\n    # Converte todos os elementos para string e junta com o delimitador especificado\r\n    result = delimiter.join(str(item) for item in input_list)\r\n    return result\r\n\r\n# Entrada pelo nó do Dynamo\r\nlista = IN[0]  # Lista de valores a serem concatenados\r\ndelimitador = IN[1] if len(IN) > 1 else \"\\n\"  # Delimitador opcional, padrão é nova linha\r\n\r\n# Saída para o Dynamo\r\nOUT = concatenate_list_to_string(lista, delimitador)",
+      "VariableInputPorts": true,
+      "Id": "f2f70fc5f50e4311b4695a6daa1e3ee0",
+      "Inputs": [
+        {
+          "Id": "3833e405086344b7ad9c2d76b201eb7a",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "fbddeee8ee474b25ae365fda533363bd",
+          "Name": "OUT",
+          "Description": "Resultado do script Python",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Executa um script IronPython incorporado."
     }
   ],
   "Connectors": [
@@ -6223,8 +6228,8 @@
     },
     {
       "Start": "b633c5033ab045d1af2471bc2cc12c33",
-      "End": "0c8db0df8bdb4e1b8567f9c8ebfd9906",
-      "Id": "2056336108234f76879c3df5a3baf12d"
+      "End": "b4cf735211084b6bae06ca3b94cab9ac",
+      "Id": "77fe4c58dc3245fb836443d4479671a1"
     },
     {
       "Start": "b309295de38b4664931737140316d406",
@@ -6658,13 +6663,8 @@
     },
     {
       "Start": "b393605f15df49c89d662d47a42bdb92",
-      "End": "f6e6e9089526460a8195ff9d73922065",
-      "Id": "5baa296ebf244592a1b66cfd44840ede"
-    },
-    {
-      "Start": "3271e0c630c1466c9ff9d955242e45a1",
-      "End": "1a145ebfa1b54559870378bfe6ce3fbb",
-      "Id": "9e739fe4e5014091bb2cfe74ace525b6"
+      "End": "3833e405086344b7ad9c2d76b201eb7a",
+      "Id": "2664e3b141454d529022d1e24c5a8e80"
     },
     {
       "Start": "e639311db37f483fac6bbab3eea47731",
@@ -7258,13 +7258,13 @@
     },
     {
       "Start": "6c2bef30e2694ee6bb2ca7f2b2fc47b7",
-      "End": "7643012e41e04dacad6e08ea844163d0",
-      "Id": "28d7ce8a9f6c40bcbdc3970e96617d5d"
+      "End": "739396be0a09426fb8d36f6fe9b95293",
+      "Id": "d8b4c6137ca74b42a74dddd0a5836f23"
     },
     {
-      "Start": "e872072d8f6b4f8f944b94f02d8ee494",
+      "Start": "5b64f6b8bb694c02be161869ec2642a4",
       "End": "eabbbcf4251044bc83561b39d7adf6db",
-      "Id": "4b2f489f98f84feaa2232d9da1c02c60"
+      "Id": "3758937604aa4b4c9fd02b20a23d5c1a"
     },
     {
       "Start": "0068b70945d54dc6bae86b0ed3c674f6",
@@ -7280,6 +7280,11 @@
       "Start": "87954b5bb77b4674bd4300c6074ab475",
       "End": "47a2c4ba3248437f866bfc964ba2962a",
       "Id": "10935f5d9e7640c894fc0e033fce37ad"
+    },
+    {
+      "Start": "fbddeee8ee474b25ae365fda533363bd",
+      "End": "1a145ebfa1b54559870378bfe6ce3fbb",
+      "Id": "ffdfe79d6d16485bb3a25ed576e6ec16"
     }
   ],
   "Dependencies": [
@@ -7298,14 +7303,6 @@
         "c4c993bffd2f4fc8b9aa93df07d1fa94",
         "242389d7c04c412ea97dae71d88998d4",
         "49468caf0f5043079305a8f4a317784c"
-      ]
-    },
-    {
-      "Name": "Orchid",
-      "Version": "2.6.8.6198",
-      "ReferenceType": "Package",
-      "Nodes": [
-        "b6eaf54d58084c39adec813f95b65f03"
       ]
     },
     {
@@ -7401,7 +7398,7 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "X": 1599.4958598312689,
-        "Y": -575.43418897568165
+        "Y": -623.74887383564374
       },
       {
         "ShowGeometry": true,
@@ -7411,7 +7408,7 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "X": 2268.18055264766,
-        "Y": -547.510422968098
+        "Y": -595.82510782806014
       },
       {
         "ShowGeometry": true,
@@ -7421,7 +7418,7 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "X": 2842.4670719815158,
-        "Y": -445.12322319436862
+        "Y": -493.43790805433071
       },
       {
         "ShowGeometry": true,
@@ -8080,18 +8077,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 9382.7065475180116,
-        "Y": -713.65542916498725
-      },
-      {
-        "ShowGeometry": true,
-        "Name": "o|String.FromList",
-        "Id": "b6eaf54d58084c39adec813f95b65f03",
-        "IsSetAsInput": false,
-        "IsSetAsOutput": false,
-        "Excluded": false,
-        "X": 9176.5650253730146,
-        "Y": -711.82063470060757
+        "X": 9439.92864617615,
+        "Y": -710.58995959401568
       },
       {
         "ShowGeometry": true,
@@ -9162,6 +9149,16 @@
         "Excluded": false,
         "X": 3267.8535710383867,
         "Y": -425.07886526001641
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "String.FromList",
+        "Id": "f2f70fc5f50e4311b4695a6daa1e3ee0",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 9221.33229587422,
+        "Y": -694.45035515416623
       }
     ],
     "Annotations": [
@@ -9174,11 +9171,11 @@
           "f5072d262a0d422f87defb3ba2257d0b"
         ],
         "Left": 1589.4958598312689,
-        "Top": -643.43418897568165,
+        "Top": -691.74887383564374,
         "Width": 1610.9712121502469,
         "Height": 319.31096578131303,
         "FontSize": 48.0,
-        "InitialTop": -575.43418897568165,
+        "InitialTop": -623.74887383564374,
         "InitialHeight": 275.31096578131303,
         "TextblockHeight": 58.0,
         "Background": "#FFB9F9E1"
@@ -9531,13 +9528,13 @@
           "6afa575227cf48b5be4a76c7b58aba9f",
           "17a8e8cb95794960946b317a6596f05b",
           "81ca83ff1fba438eb5827e5d8376a758",
-          "b6eaf54d58084c39adec813f95b65f03",
           "8c456a65899342028c9dbaab325f08fb",
-          "9d2ff1e1f9034b579015562767722e2d"
+          "9d2ff1e1f9034b579015562767722e2d",
+          "f2f70fc5f50e4311b4695a6daa1e3ee0"
         ],
         "Left": 7142.8898997663036,
         "Top": -903.34407026803547,
-        "Width": 2373.8166477517079,
+        "Width": 2431.0387464098458,
         "Height": 528.90027853478989,
         "FontSize": 36.0,
         "InitialTop": -850.34407026803547,
@@ -9797,8 +9794,8 @@
         "Background": "#FFC1D676"
       }
     ],
-    "X": 742.78532633103032,
-    "Y": 256.51824739902582,
-    "Zoom": 0.079690177541756474
+    "X": -863.08259155162023,
+    "Y": 741.93812281887529,
+    "Zoom": 0.62118666593586125
   }
 }
