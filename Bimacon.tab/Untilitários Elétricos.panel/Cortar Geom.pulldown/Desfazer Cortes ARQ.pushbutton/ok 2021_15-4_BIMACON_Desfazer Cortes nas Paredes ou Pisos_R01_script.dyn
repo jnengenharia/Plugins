@@ -2,7 +2,7 @@
   "Uuid": "c804fca6-a35f-4afc-b7ca-b3f0394379fe",
   "IsCustomNode": false,
   "Description": null,
-  "Name": "ok 2021_15-4_BIMACON_Desfazer Cortes nas Paredes ou Pisos",
+  "Name": "ok 2021_15-4_BIMACON_Desfazer Cortes nas Paredes ou Pisos_R00_script",
   "ElementResolver": {
     "ResolutionMap": {}
   },
@@ -472,36 +472,6 @@
       "Description": "Aplaina uma lista aninhada de listas por um determinado montante.\n\nList.Flatten (list: var[]..[], amt: int = -1): var[]..[]"
     },
     {
-      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
-      "NodeType": "FunctionNode",
-      "FunctionSignature": "Orchid.Common.String.FromList@var[]..[]",
-      "Id": "a7b3ed09748d42119860c1b1c659ca2d",
-      "Inputs": [
-        {
-          "Id": "c8e2ea3602fc46b297a52bca6bd88960",
-          "Name": "list",
-          "Description": "List of objects to concatenate.\n\nvar[]..[]",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Outputs": [
-        {
-          "Id": "45a92b4194ec4b8aa4d76056c1fd6988",
-          "Name": "string",
-          "Description": "String made from list of strings.",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Replication": "Auto",
-      "Description": "Concatenates list values to multiple line string.\n\nString.FromList (list: var[]..[]): string"
-    },
-    {
       "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
       "NodeType": "PythonScriptNode",
       "Code": "# Importar as bibliotecas necessárias do Revit\r\nimport clr\r\nclr.AddReference(\"RevitServices\")\r\nfrom RevitServices.Persistence import DocumentManager\r\n\r\nclr.AddReference(\"RevitAPI\")\r\nclr.AddReference(\"RevitAPIUI\")\r\nfrom Autodesk.Revit.UI import TaskDialog\r\n\r\n# Pegar a entrada do Dynamo\r\nmensagem = IN[0]\r\n\r\n# Criar a TaskDialog\r\ntask_dialog = TaskDialog(\"Ok\")\r\ntask_dialog.MainInstruction = mensagem\r\n\r\n# Exibir a TaskDialog\r\ntask_dialog.Show()\r\n\r\n# Saída do script\r\nOUT = \"Sucesso!\"\r\n",
@@ -579,6 +549,37 @@
       ],
       "Replication": "Auto",
       "Description": "Determina se a determinada sequência de caracteres contém a determinada subsequência de caracteres.\n\nString.Contains (str: string, searchFor: string, ignoreCase: bool = false): bool"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# Carregar as bibliotecas DesignScript e padrão do Python\r\nimport sys\r\nimport clr\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\n\r\n# Função para concatenar os valores de uma lista em uma única string com múltiplas linhas\r\ndef concatenate_list_to_string(input_list, delimiter=\"\\n\"):\r\n    # Verifica se a entrada é uma lista\r\n    if not isinstance(input_list, list):\r\n        return \"A entrada deve ser uma lista.\"\r\n    \r\n    # Converte todos os elementos para string e junta com o delimitador especificado\r\n    result = delimiter.join(str(item) for item in input_list)\r\n    return result\r\n\r\n# Entrada pelo nó do Dynamo\r\nlista = IN[0]  # Lista de valores a serem concatenados\r\ndelimitador = IN[1] if len(IN) > 1 else \"\\n\"  # Delimitador opcional, padrão é nova linha\r\n\r\n# Saída para o Dynamo\r\nOUT = concatenate_list_to_string(lista, delimitador)",
+      "VariableInputPorts": true,
+      "Id": "e6a0e93a051d4994a8988055e5c4abff",
+      "Inputs": [
+        {
+          "Id": "77e70bcddebc466ca4255df4295de9a2",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "46f5a9b43e1e45459485934671ba5d42",
+          "Name": "OUT",
+          "Description": "Resultado do script Python",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Executa um script IronPython incorporado."
     }
   ],
   "Connectors": [
@@ -664,18 +665,18 @@
     },
     {
       "Start": "993ddf9d4b684f7bb37a6ca3245eb205",
-      "End": "c8e2ea3602fc46b297a52bca6bd88960",
-      "Id": "68dc997a988543dbadc3a5f2f6a511d9"
-    },
-    {
-      "Start": "45a92b4194ec4b8aa4d76056c1fd6988",
-      "End": "7b82acf2836947d68aafeecd89903df3",
-      "Id": "ea157c7375234932b164b3f27ecba7c9"
+      "End": "77e70bcddebc466ca4255df4295de9a2",
+      "Id": "b5efd85b01bf48e2b0c5f9cbeac311a8"
     },
     {
       "Start": "a5b493976ba9442baebc2813b0b877d4",
       "End": "b450accf815340d4bbb0d2f8bf9afb2e",
       "Id": "d001606f868448aeb38639c905a71e30"
+    },
+    {
+      "Start": "46f5a9b43e1e45459485934671ba5d42",
+      "End": "7b82acf2836947d68aafeecd89903df3",
+      "Id": "e789863320524083a61203603514da11"
     }
   ],
   "Dependencies": [],
@@ -695,14 +696,6 @@
       "ReferenceType": "Package",
       "Nodes": [
         "958b2458d7354bae96d6318e3116b111"
-      ]
-    },
-    {
-      "Name": "Orchid",
-      "Version": "2.6.10.6373",
-      "ReferenceType": "Package",
-      "Nodes": [
-        "a7b3ed09748d42119860c1b1c659ca2d"
       ]
     }
   ],
@@ -881,16 +874,6 @@
       },
       {
         "ShowGeometry": true,
-        "Name": "o|String.FromList",
-        "Id": "a7b3ed09748d42119860c1b1c659ca2d",
-        "IsSetAsInput": false,
-        "IsSetAsOutput": false,
-        "Excluded": false,
-        "X": 3423.886138938678,
-        "Y": 649.50428596660856
-      },
-      {
-        "ShowGeometry": true,
         "Name": "Python Script",
         "Id": "57c52bd1c1234f97a48d1d94683047e2",
         "IsSetAsInput": false,
@@ -908,6 +891,16 @@
         "Excluded": false,
         "X": 1017.3218575863475,
         "Y": 415.15657151912939
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "String.FromList",
+        "Id": "e6a0e93a051d4994a8988055e5c4abff",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 3425.2125871392091,
+        "Y": 653.4785456072259
       }
     ],
     "Annotations": [
@@ -922,22 +915,22 @@
           "9367a9c4cbcb474695a897d89ded712c",
           "a03eef8ad4c84794b8bb365d88edd343",
           "57c52bd1c1234f97a48d1d94683047e2",
-          "a7b3ed09748d42119860c1b1c659ca2d",
-          "029e40fd5cc04a919355031c86646ea4"
+          "029e40fd5cc04a919355031c86646ea4",
+          "e6a0e93a051d4994a8988055e5c4abff"
         ],
         "Left": 1952.3813090576598,
-        "Top": 313.63985337776018,
+        "Top": 290.63985337776018,
         "Width": 1810.796402607217,
-        "Height": 550.19035402918507,
+        "Height": 573.19035402918507,
         "FontSize": 36.0,
         "InitialTop": 343.63985337776018,
         "InitialHeight": 572.19035402918507,
-        "TextblockHeight": 0.0,
+        "TextblockHeight": 43.0,
         "Background": "#FFC1D676"
       }
     ],
-    "X": -14.233351295361075,
-    "Y": 159.29620896734073,
-    "Zoom": 0.178597035543034
+    "X": -18.414906907694558,
+    "Y": 182.81093839689396,
+    "Zoom": 0.15542451032577653
   }
 }
