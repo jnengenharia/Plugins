@@ -1319,7 +1319,7 @@
     },
     {
       "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
-      "Code": "# Importando as bibliotecas necessárias da API do Revit\r\nimport clr\r\nclr.AddReference('RevitServices')  # Referência aos serviços do Revit\r\nfrom RevitServices.Persistence import DocumentManager\r\n\r\nclr.AddReference('RevitAPI')  # Referência à API do Revit\r\nclr.AddReference('RevitAPIUI')  # Referência à API de Interface de Usuário do Revit\r\n\r\nfrom Autodesk.Revit.UI import TaskDialog, TaskDialogCommonButtons, TaskDialogResult\r\n\r\n# Recebe o texto de instrução como entrada do nó\r\ninstrucoes = IN[0]\r\n\r\n# Criando o TaskDialog\r\ndialog = TaskDialog(\"Aviso\")\r\ndialog.MainInstruction = instrucoes\r\ndialog.CommonButtons = TaskDialogCommonButtons.Yes | TaskDialogCommonButtons.No | TaskDialogCommonButtons.Cancel\r\n\r\n# Exibindo o dialog para o usuário e capturando a resposta\r\nresultado = dialog.Show()\r\n\r\n# Interpretando a resposta\r\nif resultado == TaskDialogResult.Yes:\r\n    OUT = True\r\nelif resultado == TaskDialogResult.No:\r\n    OUT = False\r\nelse:  # Caso o usuário pressione Cancelar ou feche a janela\r\n    OUT = None  # Ou você pode definir como False se preferir\r\n",
+      "Code": "# Importando as bibliotecas necessárias da API do Revit\r\nimport clr\r\nclr.AddReference('RevitServices')  # Referência aos serviços do Revit\r\nfrom RevitServices.Persistence import DocumentManager\r\n\r\nclr.AddReference('RevitAPI')  # Referência à API do Revit\r\nclr.AddReference('RevitAPIUI')  # Referência à API de Interface de Usuário do Revit\r\n\r\nfrom Autodesk.Revit.UI import TaskDialog, TaskDialogCommonButtons, TaskDialogResult\r\n\r\n# Recebe o texto de instrução como entrada do nó\r\ninstrucoes = IN[0]\r\n\r\n# Criando o TaskDialog\r\ndialog = TaskDialog(\"Aviso\")\r\ndialog.MainInstruction = instrucoes\r\ndialog.CommonButtons = TaskDialogCommonButtons.Yes | TaskDialogCommonButtons.No \r\n\r\n# Exibindo o dialog para o usuário e capturando a resposta\r\nresultado = dialog.Show()\r\n\r\n# Interpretando a resposta\r\nif resultado == TaskDialogResult.Yes:\r\n    OUT = True\r\nelif resultado == TaskDialogResult.No:\r\n    OUT = False\r\nelse:  # Caso o usuário pressione Cancelar ou feche a janela\r\n    OUT = None  # Ou você pode definir como False se preferir\r\n",
       "Engine": "IronPython2",
       "EngineName": "IronPython2",
       "VariableInputPorts": true,
@@ -1433,8 +1433,8 @@
     {
       "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
       "Code": "import clr\r\nimport sys\r\nimport System\r\nfrom System.Collections.Generic import *\r\n\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\n\r\nclr.AddReference('RevitNodes')\r\nimport Revit\r\nclr.ImportExtensions(Revit.Elements)\r\nclr.ImportExtensions(Revit.GeometryConversion)\r\n\r\nclr.AddReference(\"RevitServices\")\r\nimport RevitServices\r\nfrom RevitServices.Persistence import DocumentManager\r\nfrom RevitServices.Transactions import TransactionManager\r\n\r\nclr.AddReference('RevitAPI')\r\nclr.AddReference('RevitAPIUI')\r\nimport Autodesk\r\nfrom Autodesk.Revit.DB import *\r\nfrom Autodesk.Revit.UI import *\r\nfrom Autodesk.Revit.UI import Selection\r\n\r\n# Obtém o vetor do nó de entrada\r\nvector_input = IN[0]\r\n\r\n# Verifica se o vetor é válido antes de executar a seleção do ponto\r\nif vector_input and isinstance(vector_input, Vector):\r\n    doc = DocumentManager.Instance.CurrentDBDocument\r\n    uiapp = DocumentManager.Instance.CurrentUIApplication\r\n    app = uiapp.Application\r\n    uidoc = uiapp.ActiveUIDocument\r\n\r\n    # Pede ao usuário para selecionar um ponto no Revit\r\n    point = uidoc.Selection.PickPoint(\"Selecione um ponto no Revit\")\r\n    \r\n    # Converte o ponto para o formato do Dynamo\r\n    point_dyn = point.ToPoint()\r\n\r\n    OUT = point_dyn\r\nelse:\r\n    OUT = \"Aguardando um vetor válido no nó Passthrough.\"\r\n",
-      "Engine": "CPython3",
-      "EngineName": "CPython3",
+      "Engine": "IronPython2",
+      "EngineName": "IronPython2",
       "VariableInputPorts": true,
       "Id": "70a8e64f908e4b0792ff392222388d18",
       "NodeType": "PythonScriptNode",
@@ -2021,7 +2021,7 @@
           "Name": "line",
           "Description": "Location of the dimension\n\nCurve[]..[]",
           "UsingDefaultValue": false,
-          "Level": 2,
+          "Level": 3,
           "UseLevels": false,
           "KeepListStructure": false
         },
@@ -2030,7 +2030,7 @@
           "Name": "references",
           "Description": "Autodesk.Revit.DB.Reference\n\nvar[]..[]",
           "UsingDefaultValue": false,
-          "Level": 2,
+          "Level": 1,
           "UseLevels": false,
           "KeepListStructure": false
         },
@@ -2059,65 +2059,25 @@
       "Description": "Cria cotas (dimensions) dadas a vista, superfícies, linhas de inserção e tipo da cota"
     },
     {
-      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
-      "Id": "b1ea2cb2cbce4ad3986b47c03b1f160c",
-      "NodeType": "CodeBlockNode",
-      "Inputs": [],
-      "Outputs": [
-        {
-          "Id": "9b612377745f4b9a9cdd56487e50c182",
-          "Name": "",
-          "Description": "view",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Replication": "Disabled",
-      "Description": "Permite que o código DesignScript seja criado diretamente",
-      "Code": "/*View to place dimension in*/\nview: Revit.Elements.Views.View = Revit.Application.Document.Current.ActiveView;"
-    },
-    {
-      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
-      "Code": "# Desenvolvido por:\n#Alban de Chasteigner 2019\n#twitter : @geniusloci_bim\n#geniusloci.bim@gmail.com\n\n# Adaptado por: BIM Coder\n# Conheça o Curso Método AutoRevit: www.bimcoder.net/\n\nimport clr\nclr.AddReference('RevitAPI')\nfrom Autodesk.Revit.DB import *\n\nclr.AddReference('RevitNodes')\nimport Revit\nclr.ImportExtensions(Revit.GeometryConversion)\nclr.ImportExtensions(Revit.Elements)\n\nclr.AddReference('RevitServices')\nimport RevitServices\nfrom RevitServices.Persistence import DocumentManager\nfrom RevitServices.Transactions import TransactionManager\n\ndoc = DocumentManager.Instance.CurrentDBDocument\n\ndef tolist(obj1):\n    if hasattr(obj1,\"__iter__\"): return obj1\n    else: return [obj1]\n\nviews = tolist(UnwrapElement(IN[0]))\nlines = tolist(IN[1])\nif any(isinstance(el, list) for el in IN[2]) : referenceList =  IN[2]\nelse : referenceList = [(IN[2])]\ndimensionType = tolist(UnwrapElement(IN[3]))[0]\nlistRef,dimList = [], []\n\n#Thanks to Gavin Crump for the list structure improvement\nfor references in referenceList :\n\telementsRef = ReferenceArray()\n\tfor reference in references :\n\t\telementsRef.Append(reference)\n\tlistRef.append(elementsRef)\n\t\nTransactionManager.Instance.EnsureInTransaction(doc)\nfor view in views:\n\tdims = []\n\tfor line,refer in zip(lines,listRef) :\n\t\tif doc.IsFamilyDocument == True :\n\t\t\tif IN[3]== None: \n\t\t\t\tdims.append(doc.FamilyCreate.NewDimension(view, line.ToRevitType(), refer).ToDSType(True))\n\t\t\telse:\n\t\t\t\tdims.append(doc.FamilyCreate.NewDimension(view, line.ToRevitType(), refer, dimensionType).ToDSType(True))\n\t\telse:\n\t\t\tif IN[3]== None: \n\t\t\t\tdims.append(doc.Create.NewDimension(view, line.ToRevitType(), refer).ToDSType(True))\n\t\t\telse:\n\t\t\t\tdims.append(doc.Create.NewDimension(view, line.ToRevitType(), refer, dimensionType).ToDSType(True))\n\tdimList.append(dims)\nTransactionManager.Instance.TransactionTaskDone()\n\nif isinstance(IN[0], list): OUT = dimList\nelse: OUT = dimList[0]",
-      "Engine": "IronPython2",
-      "EngineName": "IronPython2",
-      "VariableInputPorts": true,
-      "Id": "8e77ac341a0a4a0a942121a500e33a5d",
-      "NodeType": "PythonScriptNode",
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "5c770bc5-de60-41c7-a2cd-2bccd79a6a89",
+      "FunctionType": "Graph",
+      "Id": "fb0244fbdfad4399a281b971820e66a7",
+      "NodeType": "FunctionNode",
       "Inputs": [
         {
-          "Id": "48a625d9476a4eae97d1bedf2bc1dfae",
-          "Name": "IN[0]",
-          "Description": "Input #0",
+          "Id": "eb1a9f45f0b948de87ccb0fd55fb1447",
+          "Name": "reference",
+          "Description": "Autodesk.DB.Reference\n\nvar[]",
           "UsingDefaultValue": false,
           "Level": 2,
           "UseLevels": false,
           "KeepListStructure": false
         },
         {
-          "Id": "c3744515ef224438aff0c3e954e5ed2d",
-          "Name": "IN[1]",
-          "Description": "Input #1",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        },
-        {
-          "Id": "ed46e247c7874b388e792197afd8ced4",
-          "Name": "IN[2]",
-          "Description": "Input #2",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        },
-        {
-          "Id": "5ae0e44ad1e1416ba1f80f8a26294fc6",
-          "Name": "IN[3]",
-          "Description": "Input #3",
+          "Id": "0872aa557d4549ca9e9cabfe284257d5",
+          "Name": "RevitLinkInstance",
+          "Description": "var[]..[]",
           "UsingDefaultValue": false,
           "Level": 2,
           "UseLevels": false,
@@ -2126,48 +2086,17 @@
       ],
       "Outputs": [
         {
-          "Id": "59a9109231714e5e84d2b140be7188dc",
-          "Name": "OUT",
-          "Description": "Resultado do script Python",
+          "Id": "f8ef1bc7dc7b426d97d85af791bb4850",
+          "Name": "Reference",
+          "Description": "valor de retorno",
           "UsingDefaultValue": false,
           "Level": 2,
           "UseLevels": false,
           "KeepListStructure": false
         }
       ],
-      "Replication": "Disabled",
-      "Description": "Executa um script Python incorporado."
-    },
-    {
-      "ConcreteType": "CoreNodeModels.Watch, CoreNodeModels",
-      "WatchWidth": 50.0,
-      "WatchHeight": 38.0,
-      "Id": "2a915ddef3c6498492737b52b4736eae",
-      "NodeType": "ExtensionNode",
-      "Inputs": [
-        {
-          "Id": "96da2819dba94f9888675ca14ae42a49",
-          "Name": "",
-          "Description": "Nó do qual a saída é exibida",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Outputs": [
-        {
-          "Id": "2d39ee2f2de64f0a987f743603ce6159",
-          "Name": "",
-          "Description": "Saída do nó",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Replication": "Disabled",
-      "Description": "Visualizar a saída do nó"
+      "Replication": "Auto",
+      "Description": "Creates a usable reference from a reference from a linked document."
     }
   ],
   "Connectors": [
@@ -2304,6 +2233,12 @@
       "IsHidden": "False"
     },
     {
+      "Start": "887fd8af8aa14ac0b03994b4e854c886",
+      "End": "0872aa557d4549ca9e9cabfe284257d5",
+      "Id": "57804cae4cda4e24a71ac8cf7beb3e1a",
+      "IsHidden": "False"
+    },
+    {
       "Start": "2e08da164469440db9f4ab126df20945",
       "End": "02f495c23de44d3487d0b8956bae00f1",
       "Id": "5e5453e3995b4ee3a66d1c403b662ecc",
@@ -2311,8 +2246,8 @@
     },
     {
       "Start": "2e08da164469440db9f4ab126df20945",
-      "End": "ed46e247c7874b388e792197afd8ced4",
-      "Id": "43c6949f24cc44fda3c1b1ae7ce3f450",
+      "End": "a9f96b7fe618436094e93fbaf6f5d10c",
+      "Id": "6c8ce84b7cf640e781537c43e99471b3",
       "IsHidden": "False"
     },
     {
@@ -2329,14 +2264,14 @@
     },
     {
       "Start": "b54b19debc0b438cbd60c957088e360a",
-      "End": "cc1fd39e928c4ec594807f2fd0ac1024",
-      "Id": "8875da90f0774777b24300f60b6a4298",
+      "End": "eb1a9f45f0b948de87ccb0fd55fb1447",
+      "Id": "0a4f35c615ac4cdeb6c1a810370bda09",
       "IsHidden": "False"
     },
     {
       "Start": "42af39e716424813aaf892f5e33dd628",
       "End": "41af675b73a746339ee6c289c793b409",
-      "Id": "556e2f21856f4b779e385791252cc446",
+      "Id": "d2f21a43ec3148eeb01149f00b0e98f2",
       "IsHidden": "False"
     },
     {
@@ -2389,8 +2324,8 @@
     },
     {
       "Start": "481d28abd0dc41ecbae0aefc8a44893d",
-      "End": "c3744515ef224438aff0c3e954e5ed2d",
-      "Id": "84e7dfc4dc99427c95e2ff7aace8ac8b",
+      "End": "7e4d0b5e04f1490a9bda6950f5a235ff",
+      "Id": "8964f80cd3184e0b9ec0d4e6714a7863",
       "IsHidden": "False"
     },
     {
@@ -2539,8 +2474,8 @@
     },
     {
       "Start": "95aaeccb1bc44080843d6a358144a4d1",
-      "End": "5ae0e44ad1e1416ba1f80f8a26294fc6",
-      "Id": "720c9ad919ac4020b836d6b6d235b602",
+      "End": "db06296e031446a7931c6bebaafc16cd",
+      "Id": "7725e353a5484e2896784a3fb8acb24c",
       "IsHidden": "False"
     },
     {
@@ -2550,15 +2485,9 @@
       "IsHidden": "False"
     },
     {
-      "Start": "9b612377745f4b9a9cdd56487e50c182",
-      "End": "48a625d9476a4eae97d1bedf2bc1dfae",
-      "Id": "09a1420c7fc64540a28238075b2563e5",
-      "IsHidden": "False"
-    },
-    {
-      "Start": "59a9109231714e5e84d2b140be7188dc",
-      "End": "96da2819dba94f9888675ca14ae42a49",
-      "Id": "ed8f6822f6374339817be5c3236c22fd",
+      "Start": "f8ef1bc7dc7b426d97d85af791bb4850",
+      "End": "cc1fd39e928c4ec594807f2fd0ac1024",
+      "Id": "2315dd470d6248a1ab4bc9df3cb70e6b",
       "IsHidden": "False"
     }
   ],
@@ -2570,7 +2499,8 @@
     "ecce77dc-1290-438e-a056-970b256fd553",
     "9fbd05c0-ec1f-4bd3-bf37-969a1552eab8",
     "b409775c-5d88-4d47-96a3-5135c775d26a",
-    "f1b7c5e1-3d44-4753-ada8-38265fa4adc0"
+    "f1b7c5e1-3d44-4753-ada8-38265fa4adc0",
+    "5c770bc5-de60-41c7-a2cd-2bccd79a6a89"
   ],
   "NodeLibraryDependencies": [
     {
@@ -2611,6 +2541,21 @@
         "7a1d407f927a4f328b87bd2751c0ee8e",
         "29aa772dddaf4c7b9991ece4ff38746b"
       ]
+    },
+    {
+      "Name": "Genius Loci",
+      "Version": "2023.2.21",
+      "ReferenceType": "Package",
+      "Nodes": [
+        "fb0244fbdfad4399a281b971820e66a7"
+      ]
+    },
+    {
+      "Name": "reddonda-removebg-preview.png",
+      "ReferenceType": "External",
+      "Nodes": [
+        "d8f2dbd7e43e47d487c6ab7a5c653b9a"
+      ]
     }
   ],
   "Thumbnail": "",
@@ -2648,15 +2593,15 @@
     },
     "Camera": {
       "Name": "_Visualização do plano de fundo",
-      "EyeX": 23.404027938842773,
-      "EyeY": 740.49884033203125,
-      "EyeZ": -27.972494125366211,
-      "LookX": -0.68596839904785156,
-      "LookY": -6.918212890625,
-      "LookZ": -4.0992717742919922,
-      "UpX": -0.14147177338600159,
-      "UpY": 0.51503777503967285,
-      "UpZ": -0.84541237354278564
+      "EyeX": 31.41819953918457,
+      "EyeY": 737.73870849609375,
+      "EyeZ": -36.883419036865234,
+      "LookX": -7.3215885162353516,
+      "LookY": -4.22991943359375,
+      "LookZ": 3.1078414916992188,
+      "UpX": -0.43215069174766541,
+      "UpY": 0.88294774293899536,
+      "UpZ": 0.18343694508075714
     },
     "ConnectorPins": [],
     "NodeViews": [
@@ -2867,8 +2812,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -438.57439423257074,
-        "Y": 341.33426544837585
+        "X": -436.4792592281791,
+        "Y": 331.90615792861354
       },
       {
         "Id": "43f460f9d5ce45a9ae0709e2f6605835",
@@ -2887,8 +2832,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -772.90069054481728,
-        "Y": 359.92382888722307
+        "X": -756.6866567695273,
+        "Y": 350.49572136746076
       },
       {
         "Id": "007a10a6eea142ecaae967c29ed1d18a",
@@ -2897,8 +2842,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -1027.6648862527338,
-        "Y": 363.597475333327
+        "X": -1025.5697512483421,
+        "Y": 354.16936781356469
       },
       {
         "Id": "05f0d05c04694eed9e7e7837308655c7",
@@ -2907,8 +2852,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 53.084908481706975,
-        "Y": 316.69492636665564
+        "X": -13.959411658824934,
+        "Y": 325.07546638422212
       },
       {
         "Id": "e53515fdb2a74389afa3cc1d0c3f5e84",
@@ -2917,8 +2862,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 463.14465884175968,
-        "Y": 271.88481131993035
+        "X": 635.01223914659681,
+        "Y": 176.65547722345502
       },
       {
         "Id": "24d946fc5f51425ab54b60fe3af13426",
@@ -2937,8 +2882,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 770.46246341592632,
-        "Y": 156.61028521998776
+        "X": 821.58024085552006,
+        "Y": 58.581379312215461
       },
       {
         "Id": "acf78c448eaa439cab145218cfe77490",
@@ -3087,8 +3032,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 1124.8924312526847,
-        "Y": -956.10756908843746
+        "X": 1144.1884968059667,
+        "Y": -954.26984855955345
       },
       {
         "Id": "dfdd5badab4747d183c301984c257cec",
@@ -3097,8 +3042,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -922.88258681845127,
-        "Y": 1477.4721165485137
+        "X": -1528.4218985647653,
+        "Y": 1510.80455572721
       },
       {
         "Id": "c327c6224aa248928b6a5743869c3956",
@@ -3107,8 +3052,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -652.54473263635646,
-        "Y": 1471.0326856966469
+        "X": -1258.0840443826705,
+        "Y": 1504.3651248753433
       },
       {
         "Id": "7a1d407f927a4f328b87bd2751c0ee8e",
@@ -3117,8 +3062,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 960.54527121913725,
-        "Y": 1466.9218726427123
+        "X": 355.00595947282318,
+        "Y": 1500.2543118214087
       },
       {
         "Id": "29aa772dddaf4c7b9991ece4ff38746b",
@@ -3127,8 +3072,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 139.74482642805697,
-        "Y": 1443.3912607992554
+        "X": -465.7944853182571,
+        "Y": 1476.7236999779518
       },
       {
         "Id": "e326854bea0544a2a1108314886eb123",
@@ -3137,8 +3082,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -101.70607527206312,
-        "Y": 815.76713487255279
+        "X": -707.24538701837719,
+        "Y": 849.09957405124919
       },
       {
         "Id": "221d8d72b3c64805a57b000c95d114f8",
@@ -3147,8 +3092,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 707.14309002915707,
-        "Y": 1170.5851205504453
+        "X": 101.603778282843,
+        "Y": 1203.9175597291417
       },
       {
         "Id": "949ba37c981648dbb006c73924644f02",
@@ -3157,8 +3102,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -68.368950833393228,
-        "Y": 1664.7793878066998
+        "X": -673.9082625797073,
+        "Y": 1698.1118269853962
       },
       {
         "Id": "e0b383acb2514dd984d4325f8e1bcae4",
@@ -3167,8 +3112,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -861.24893414713279,
-        "Y": 827.0390832551318
+        "X": -1466.7882458934469,
+        "Y": 860.3715224338282
       },
       {
         "Id": "d8f2dbd7e43e47d487c6ab7a5c653b9a",
@@ -3177,8 +3122,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -633.06462520569812,
-        "Y": 1004.1804803643065
+        "X": -1238.6039369520122,
+        "Y": 1037.5129195430029
       },
       {
         "Id": "be3ed1b910464926bb402a53d9a4c444",
@@ -3187,8 +3132,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 529.20140217997687,
-        "Y": 1320.8051393867934
+        "X": -76.3379095663372,
+        "Y": 1354.1375785654898
       },
       {
         "Id": "bb8f0931c57f4cb49c61ad79e6ed6b2c",
@@ -3197,8 +3142,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 279.38253522613695,
-        "Y": 1050.1798415956994
+        "X": -326.15677652017712,
+        "Y": 1083.5122807743958
       },
       {
         "Id": "896a3d351ed94abab6822bde7fad64e3",
@@ -3207,8 +3152,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 550.60601601663711,
-        "Y": 1636.9546130386555
+        "X": -54.933295729676956,
+        "Y": 1670.2870522173519
       },
       {
         "Id": "e6aa9a99de2a4928af40bd9352c8eb13",
@@ -3217,8 +3162,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 397.08216300294634,
-        "Y": 1805.7861626567285
+        "X": -208.45714874336772,
+        "Y": 1837.3047653451483
       },
       {
         "Id": "b61228d5393543079df4139ab158fa90",
@@ -3227,8 +3172,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 622.38810683630709,
-        "Y": 1932.4082748042836
+        "X": 16.848795089993018,
+        "Y": 1965.74071398298
       },
       {
         "Id": "a2c0acb1d8424eb5b0fd27ff6dccc6c1",
@@ -3237,8 +3182,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -344.2825831813177,
-        "Y": 1373.6999327844837
+        "X": -949.82189492763177,
+        "Y": 1407.0323719631801
       },
       {
         "Id": "d9f661086b6648ec8dfbfef74df6e941",
@@ -3247,8 +3192,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 1589.246329031402,
-        "Y": 1399.8888821285218
+        "X": 983.70701728508789,
+        "Y": 1433.2213213072182
       },
       {
         "Id": "7fcf062819b348509ac75182d03afd9e",
@@ -3257,8 +3202,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 1395.16805502523,
-        "Y": 1546.6330012640046
+        "X": 789.62874327891586,
+        "Y": 1579.965440442701
       },
       {
         "Id": "179db84adef9418aa3b34a07db8fa400",
@@ -3267,38 +3212,18 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 2041.7312788139734,
-        "Y": -143.57852552698682
+        "X": 1753.0549825216087,
+        "Y": -70.544933246597964
       },
       {
-        "Id": "b1ea2cb2cbce4ad3986b47c03b1f160c",
-        "Name": "Code Block",
+        "Id": "fb0244fbdfad4399a281b971820e66a7",
+        "Name": "Convert Linked Reference",
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 1217.4677979217181,
-        "Y": 309.17530661664324
-      },
-      {
-        "Id": "8e77ac341a0a4a0a942121a500e33a5d",
-        "Name": "Python Script",
-        "IsSetAsInput": false,
-        "IsSetAsOutput": false,
-        "Excluded": false,
-        "ShowGeometry": true,
-        "X": 2068.7304115884958,
-        "Y": 330.91138450893175
-      },
-      {
-        "Id": "2a915ddef3c6498492737b52b4736eae",
-        "Name": "Watch",
-        "IsSetAsInput": false,
-        "IsSetAsOutput": false,
-        "Excluded": false,
-        "ShowGeometry": true,
-        "X": 2284.1156620953188,
-        "Y": 318.89689269648477
+        "X": 260.14881885206586,
+        "Y": 297.15766023248267
       }
     ],
     "Annotations": [
@@ -3394,7 +3319,7 @@
       {
         "Id": "0d5009669f9a4d388ee12ea4412ba830",
         "Title": "Seleção das faces das paredes do vínculo de arquitetura",
-        "DescriptionText": null,
+        "DescriptionText": "",
         "IsExpanded": true,
         "WidthAdjustment": 0.0,
         "HeightAdjustment": 0.0,
@@ -3405,14 +3330,14 @@
           "05f0d05c04694eed9e7e7837308655c7"
         ],
         "HasNestedGroups": false,
-        "Left": -1037.6648862527338,
-        "Top": 257.69492636665564,
-        "Width": 1341.7497947344409,
-        "Height": 301.90254896667136,
+        "Left": -1035.5697512483421,
+        "Top": 266.07546638422212,
+        "Width": 1272.610339589517,
+        "Height": 284.09390142934257,
         "FontSize": 24.0,
         "GroupStyleId": "00000000-0000-0000-0000-000000000000",
-        "InitialTop": 316.69492636665564,
-        "InitialHeight": 191.90254896667136,
+        "InitialTop": 325.07546638422212,
+        "InitialHeight": 174.09390142934257,
         "TextblockHeight": 49.0,
         "Background": "#FFFF931E"
       },
@@ -3495,14 +3420,14 @@
           "7fcf062819b348509ac75182d03afd9e"
         ],
         "HasNestedGroups": false,
-        "Left": -932.88258681845127,
-        "Top": 749.76713487255279,
+        "Left": -1538.4218985647653,
+        "Top": 783.09957405124919,
         "Width": 2755.128915849853,
         "Height": 1314.641139931731,
         "FontSize": 30.0,
         "GroupStyleId": "00000000-0000-0000-0000-000000000000",
-        "InitialTop": 815.76713487255279,
-        "InitialHeight": 1261.6411399317308,
+        "InitialTop": 849.09957405124919,
+        "InitialHeight": 1261.641139931731,
         "TextblockHeight": 56.0,
         "Background": "#FFD4B6DB"
       },
@@ -3527,8 +3452,8 @@
         "Background": "#FFC1D676"
       }
     ],
-    "X": 218.47096952468937,
-    "Y": 360.881170716734,
-    "Zoom": 0.1879299387942053
+    "X": -19.508865954951887,
+    "Y": 196.28428605482702,
+    "Zoom": 0.3802135267188898
   }
 }
