@@ -1990,7 +1990,7 @@
           "KeepListStructure": false
         }
       ],
-      "Replication": "CrossProduct",
+      "Replication": "Longest",
       "Description": "Modela conexões (fittings) entre curvas MEP (eletrodutos, bandejas de cabos, tubulações e dutos)."
     },
     {
@@ -3367,7 +3367,7 @@
       "NodeType": "CodeBlockNode",
       "Inputs": [
         {
-          "Id": "8d3f7369de9646f0944838bbef3fa6bb",
+          "Id": "7dfadc9efe344fef87a0551bf84f5c35",
           "Name": "test",
           "Description": "test",
           "UsingDefaultValue": false,
@@ -3376,7 +3376,7 @@
           "KeepListStructure": false
         },
         {
-          "Id": "d2937c355eb04c5fa4f6dd8db9627ef5",
+          "Id": "97653d59a8de41e3b3fa28802e6e6f2f",
           "Name": "verd",
           "Description": "verd",
           "UsingDefaultValue": false,
@@ -3385,7 +3385,7 @@
           "KeepListStructure": false
         },
         {
-          "Id": "c693f9cf0359452293e6492f02a7df29",
+          "Id": "a592025bc8164cdc90b27d1960fdfced",
           "Name": "fals",
           "Description": "fals",
           "UsingDefaultValue": false,
@@ -3396,7 +3396,7 @@
       ],
       "Outputs": [
         {
-          "Id": "043a0e040e0b4383b9dc2180e698e013",
+          "Id": "ca7798b9cefd4c15888d9882ecebae2d",
           "Name": "",
           "Description": "indx",
           "UsingDefaultValue": false,
@@ -3405,7 +3405,7 @@
           "KeepListStructure": false
         },
         {
-          "Id": "616afde1faf24cb4b2b890bcef7f08b8",
+          "Id": "ff4ec47924614dc98838b04f40750d5c",
           "Name": "",
           "Description": "rslt",
           "UsingDefaultValue": false,
@@ -3416,7 +3416,7 @@
       ],
       "Replication": "Disabled",
       "Description": "Permite que o código DesignScript seja criado diretamente",
-      "Code": "//Condições IF\nindx = (test) ? 0 : 1;\nrslt = [List.Flatten((verd), -1),List.Flatten((fals), -1)][indx];"
+      "Code": "//Condições IF\nindx = (test) ? 0 : 1;\nrslt = [verd,fals][indx];"
     },
     {
       "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
@@ -4441,7 +4441,7 @@
       "NodeType": "CodeBlockNode",
       "Inputs": [
         {
-          "Id": "af3a3c077adc45bc9222c2d01414ba39",
+          "Id": "4c93e10419904278832c947b85d7c3c5",
           "Name": "test1",
           "Description": "test1",
           "UsingDefaultValue": false,
@@ -4450,7 +4450,7 @@
           "KeepListStructure": false
         },
         {
-          "Id": "8782d76cbde545d881d25b699834073d",
+          "Id": "9830bdda67494bbaafc21484762e05ac",
           "Name": "test2",
           "Description": "test2",
           "UsingDefaultValue": false,
@@ -4459,7 +4459,7 @@
           "KeepListStructure": false
         },
         {
-          "Id": "2b8273880f8742859cc3bc6b0b96612b",
+          "Id": "eb40950d062b47ff84d07bf42dfad391",
           "Name": "verd",
           "Description": "verd",
           "UsingDefaultValue": false,
@@ -4468,7 +4468,7 @@
           "KeepListStructure": false
         },
         {
-          "Id": "a82819a8ee7a41329b40cd4727f81158",
+          "Id": "2a2bba64f37d4d419e360ea70ae675e8",
           "Name": "fals",
           "Description": "fals",
           "UsingDefaultValue": false,
@@ -4479,7 +4479,7 @@
       ],
       "Outputs": [
         {
-          "Id": "a7b7b2ea0dc54172a2e1d7a11e6ec089",
+          "Id": "3bc8a544adef4cbaa7295df8c5d42e23",
           "Name": "",
           "Description": "indx",
           "UsingDefaultValue": false,
@@ -4488,7 +4488,7 @@
           "KeepListStructure": false
         },
         {
-          "Id": "52b75fc3baed401792273273fb0fa8f9",
+          "Id": "0fa21806e93a4232a303a26e4031578f",
           "Name": "",
           "Description": "rslt",
           "UsingDefaultValue": false,
@@ -4499,7 +4499,7 @@
       ],
       "Replication": "Disabled",
       "Description": "Permite que o código DesignScript seja criado diretamente",
-      "Code": "//Condições IF\nindx = (test1) || (test2) ? 0 : 1;\nrslt = [List.Flatten((verd), -1),List.Flatten((fals), -1)][indx];"
+      "Code": "//Condições IF\nindx = (test1) || (test2) ? 0 : 1;\nrslt = [verd,fals][indx];"
     },
     {
       "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
@@ -4636,6 +4636,36 @@
       "Replication": "Disabled",
       "Description": "Permite que o código DesignScript seja criado diretamente",
       "Code": "//Condições IF\nindx = (test) ? 0 : 1;\nrslt = [List.Flatten((verd), -1),List.Flatten((fals), -1)][indx];"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "7fe26229c8404512b20de1050e3a83cf",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "8dc54a576bf842e7b0c62d0e06091ad7",
+          "Name": "input",
+          "Description": "var",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "5172afea7f0545f8854f7459cd44929d",
+          "Name": "var[]..[]",
+          "Description": "var[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Revit.Transaction.Transaction.Start@var",
+      "Replication": "Auto",
+      "Description": "Inicie uma transação se necessário, retornando aquilo que foi passado.\n\nTransaction.Start (input: var): var[]..[]"
     }
   ],
   "Connectors": [
@@ -4779,8 +4809,8 @@
     },
     {
       "Start": "deb1166198f6494f8325a580c4efcafd",
-      "End": "c693f9cf0359452293e6492f02a7df29",
-      "Id": "f287204a36fb457eac02cca57c605d88",
+      "End": "a592025bc8164cdc90b27d1960fdfced",
+      "Id": "4f2fc4136cae4744bbd56a8a187f83e4",
       "IsHidden": "False"
     },
     {
@@ -5030,12 +5060,6 @@
       "IsHidden": "False"
     },
     {
-      "Start": "d547524559f74bd28b3950c8c504ebdc",
-      "End": "f80f6e920ba84f38b5296e53b0032837",
-      "Id": "3ce150b22ceb4c3488529b93a755b347",
-      "IsHidden": "False"
-    },
-    {
       "Start": "31b213fbe3394a2a848de4ab9f464330",
       "End": "463390ea7e02439182a105180d9c144c",
       "Id": "6addfbcc41094a769563313b3db54a5e",
@@ -5055,8 +5079,8 @@
     },
     {
       "Start": "5a07e1b7575341acb04caf828a1835bc",
-      "End": "54fcb53f72234048be7e9dc85dc6ad77",
-      "Id": "fcc8e90fd1374032b9f7eeda6ddc7c9e",
+      "End": "8dc54a576bf842e7b0c62d0e06091ad7",
+      "Id": "54795ef2114641848c0b600856cf5699",
       "IsHidden": "False"
     },
     {
@@ -5354,9 +5378,9 @@
       "IsHidden": "False"
     },
     {
-      "Start": "616afde1faf24cb4b2b890bcef7f08b8",
+      "Start": "ff4ec47924614dc98838b04f40750d5c",
       "End": "c44c852fc0214aaeb1a8fc6faabdd957",
-      "Id": "e3e6af97e1044e968a299392d9818ab9",
+      "Id": "3c489ced584a49edbda5bfda2dd6d3ae",
       "IsHidden": "False"
     },
     {
@@ -5475,8 +5499,8 @@
     },
     {
       "Start": "3a77300262c04932b12c0ef2f4e1f4a1",
-      "End": "d2937c355eb04c5fa4f6dd8db9627ef5",
-      "Id": "641dc2979189419bbf7219fd37126de4",
+      "End": "97653d59a8de41e3b3fa28802e6e6f2f",
+      "Id": "53eb6d2757574c748990c24ab851f774",
       "IsHidden": "False"
     },
     {
@@ -5577,8 +5601,8 @@
     },
     {
       "Start": "5e19f2ce26a44170933dca2a66b1e5ee",
-      "End": "af3a3c077adc45bc9222c2d01414ba39",
-      "Id": "4f0efb08e2c54f95bb30558182cd50ca",
+      "End": "4c93e10419904278832c947b85d7c3c5",
+      "Id": "d5b37d1576424ab4b40ed594a32eec83",
       "IsHidden": "False"
     },
     {
@@ -5607,32 +5631,32 @@
     },
     {
       "Start": "1e46f0403fc04603bfc7d321cfb32396",
-      "End": "8782d76cbde545d881d25b699834073d",
-      "Id": "d3316bb557604a2eaba13aedbb0911f0",
+      "End": "9830bdda67494bbaafc21484762e05ac",
+      "Id": "5f1dd78d8fb9449e9610d4d167b9b579",
       "IsHidden": "False"
     },
     {
-      "Start": "52b75fc3baed401792273273fb0fa8f9",
-      "End": "8d3f7369de9646f0944838bbef3fa6bb",
-      "Id": "12c2d588bad342a0a894b88dda5128b7",
-      "IsHidden": "False"
-    },
-    {
-      "Start": "52b75fc3baed401792273273fb0fa8f9",
+      "Start": "0fa21806e93a4232a303a26e4031578f",
       "End": "7ece03de08334dae806b7c9f91236081",
-      "Id": "29298d12a60e4c88bca5eea8e156146e",
+      "Id": "1d61435df8d84a94be39d1ba6a39b744",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "0fa21806e93a4232a303a26e4031578f",
+      "End": "7dfadc9efe344fef87a0551bf84f5c35",
+      "Id": "305885d2079f4671a962d71dfcccbffa",
       "IsHidden": "False"
     },
     {
       "Start": "0c463bbf865344dd98a948f156f4dedd",
-      "End": "2b8273880f8742859cc3bc6b0b96612b",
-      "Id": "56795ae1e2db4b0599b6b5a692d902db",
+      "End": "eb40950d062b47ff84d07bf42dfad391",
+      "Id": "6537f93030bc423385cee0bc9e54e784",
       "IsHidden": "False"
     },
     {
       "Start": "f9676f4c86c94d50879a209c55770643",
-      "End": "a82819a8ee7a41329b40cd4727f81158",
-      "Id": "faab9f4140d74f4ab4e5204c1aa4e3d4",
+      "End": "2a2bba64f37d4d419e360ea70ae675e8",
+      "Id": "d88b672c18de45dfb432bf64aa1a4a20",
       "IsHidden": "False"
     },
     {
@@ -5645,6 +5669,18 @@
       "Start": "80689f689d0b4f3e9ded01d074db2223",
       "End": "f5679e038853439c9582d6a847e6aacf",
       "Id": "e49903cdb94846558a210e2fb42cb36f",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "5172afea7f0545f8854f7459cd44929d",
+      "End": "54fcb53f72234048be7e9dc85dc6ad77",
+      "Id": "3aace346911342808f583d5cfbeead92",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "5172afea7f0545f8854f7459cd44929d",
+      "End": "f80f6e920ba84f38b5296e53b0032837",
+      "Id": "8bd189b1a03e4c6cbcb0f9dd54d50f0f",
       "IsHidden": "False"
     }
   ],
@@ -5738,6 +5774,13 @@
         "5601f95ba47a4bd2af64cbf1397ac7ce",
         "3dac1701dbe4414badcee0a06e135971"
       ]
+    },
+    {
+      "Name": "reddonda-removebg-preview.png",
+      "ReferenceType": "External",
+      "Nodes": [
+        "d55eaae7d3d34e0890bb9e0993a0eb00"
+      ]
     }
   ],
   "Thumbnail": "",
@@ -5814,8 +5857,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 8729.9746053643539,
-        "Y": -1415.5889294241813
+        "X": 9350.9345681737577,
+        "Y": -1328.9433532182181
       },
       {
         "Id": "4176f253345b4ac38322deadabeb0959",
@@ -5824,8 +5867,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 8420.12753393794,
-        "Y": -1401.8707291929575
+        "X": 9041.0874967473428,
+        "Y": -1315.2251529869943
       },
       {
         "Id": "01f888fc4bbb4c968a80fe1c23e2b4bb",
@@ -5834,8 +5877,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 8090.1714170600153,
-        "Y": -1306.59082303633
+        "X": 8711.1313798694173,
+        "Y": -1219.9452468303668
       },
       {
         "Id": "a3544cb9f3684c79ac98cbcf32d3d791",
@@ -5844,8 +5887,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 7790.4157948417433,
-        "Y": -1364.6223731765861
+        "X": 8411.3757576511452,
+        "Y": -1277.9767969706229
       },
       {
         "Id": "4af725c879af4e0ab31b09642a02039f",
@@ -5854,8 +5897,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 7387.8773883939939,
-        "Y": -1406.8632803085563
+        "X": 8008.8373512033968,
+        "Y": -1320.2177041025932
       },
       {
         "Id": "66496d751b154113b716c1c09e538890",
@@ -5944,8 +5987,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 9031.1511188038912,
-        "Y": -1685.6865158873313
+        "X": 9652.1110816132932,
+        "Y": -1599.0409396813682
       },
       {
         "Id": "d0995c3314b3438ab52829e1cd2ef13f",
@@ -5954,8 +5997,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 8696.843907116172,
-        "Y": -589.0514700926858
+        "X": 9317.803869925574,
+        "Y": -502.40589388672265
       },
       {
         "Id": "efde4017a54847d09216f685fe13b250",
@@ -5964,8 +6007,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 9010.2819934991239,
-        "Y": -920.39001037340654
+        "X": 9631.2419563085277,
+        "Y": -833.74443416744339
       },
       {
         "Id": "fc6504c62c764049a00e9d1278e87fa8",
@@ -5974,8 +6017,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 8336.77294862509,
-        "Y": -588.59942913163059
+        "X": 8957.7329114344939,
+        "Y": -501.95385292566743
       },
       {
         "Id": "a1ed62548c384f7bab8d59b7577e42f2",
@@ -5984,8 +6027,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 8018.4248495869106,
-        "Y": -500.02612565523555
+        "X": 8639.3848123963144,
+        "Y": -413.38054944927239
       },
       {
         "Id": "dda26af90ef64ed8806063220f890eeb",
@@ -5994,8 +6037,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 7704.79495061421,
-        "Y": -595.03900040628309
+        "X": 8325.7549134236142,
+        "Y": -508.39342420031994
       },
       {
         "Id": "c0ac537f82664ec58dbfd96e50e267ad",
@@ -6004,8 +6047,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 7337.4686926680406,
-        "Y": -621.46764067273284
+        "X": 7958.4286554774435,
+        "Y": -534.82206446676969
       },
       {
         "Id": "738d99ac0f5a440d909f062a28d897eb",
@@ -6284,8 +6327,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 6836.9191524497119,
-        "Y": -680.43462315029115
+        "X": 6752.2617774660621,
+        "Y": -677.11472609210875
       },
       {
         "Id": "555e5d9659814233ae9820542608a44a",
@@ -6324,8 +6367,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 7052.2033487115386,
-        "Y": -624.66250924544511
+        "X": 7122.0227963425095,
+        "Y": -675.44028934069684
       },
       {
         "Id": "8202b719719040a699294932de179709",
@@ -6724,8 +6767,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 6151.495929876316,
-        "Y": -551.6240924376591
+        "X": 6174.6387977753493,
+        "Y": -550.08123457772354
       },
       {
         "Id": "2e35201d6086461493b790964ee3e022",
@@ -7076,6 +7119,16 @@
         "ShowGeometry": true,
         "X": 3884.6631727126696,
         "Y": -466.80817140629688
+      },
+      {
+        "Id": "7fe26229c8404512b20de1050e3a83cf",
+        "Name": "Transaction.Start",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 7361.0575120889016,
+        "Y": -678.857231143791
       }
     ],
     "Annotations": [
@@ -7094,13 +7147,13 @@
           "4af725c879af4e0ab31b09642a02039f"
         ],
         "HasNestedGroups": false,
-        "Left": 7377.8773883939939,
-        "Top": -1488.5889294241813,
-        "Width": 1557.09721697036,
+        "Left": 7998.8373512033968,
+        "Top": -1401.9433532182181,
+        "Width": 1557.0972169703609,
         "Height": 313.99810638785129,
         "FontSize": 36.0,
         "GroupStyleId": "00000000-0000-0000-0000-000000000000",
-        "InitialTop": -1415.5889294241813,
+        "InitialTop": -1328.9433532182181,
         "InitialHeight": 253.99810638785129,
         "TextblockHeight": 63.0,
         "Background": "#FFC1D676"
@@ -7120,13 +7173,13 @@
           "c0ac537f82664ec58dbfd96e50e267ad"
         ],
         "HasNestedGroups": false,
-        "Left": 7327.4686926680406,
-        "Top": -694.46764067273284,
-        "Width": 1574.3752144481314,
+        "Left": 7948.4286554774435,
+        "Top": -607.82206446676969,
+        "Width": 1574.3752144481305,
         "Height": 326.4415150174973,
         "FontSize": 36.0,
         "GroupStyleId": "00000000-0000-0000-0000-000000000000",
-        "InitialTop": -621.46764067273284,
+        "InitialTop": -534.82206446676969,
         "InitialHeight": 266.4415150174973,
         "TextblockHeight": 63.0,
         "Background": "#FFC1D676"
@@ -7151,7 +7204,7 @@
         "HasNestedGroups": false,
         "Left": 4969.0160933318211,
         "Top": -1072.9033468302673,
-        "Width": 2109.9030591178907,
+        "Width": 2025.2456841342409,
         "Height": 1023.0090160844275,
         "FontSize": 36.0,
         "GroupStyleId": "00000000-0000-0000-0000-000000000000",
@@ -7475,8 +7528,8 @@
         "Background": "#FFFFB8D8"
       }
     ],
-    "X": 415.6182777761997,
-    "Y": 250.50175030694851,
-    "Zoom": 0.303878519568145
+    "X": -813.81375562401217,
+    "Y": 563.81622593501083,
+    "Zoom": 0.16148802370067275
   }
 }
