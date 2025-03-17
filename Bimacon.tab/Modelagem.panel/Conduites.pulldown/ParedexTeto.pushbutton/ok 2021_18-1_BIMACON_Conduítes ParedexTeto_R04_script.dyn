@@ -2,7 +2,7 @@
   "Uuid": "6f541095-5e06-4907-96bf-adc5aad0d877",
   "IsCustomNode": false,
   "Description": null,
-  "Name": "ok 2021_18-0_BIMACON_Conduítes ParedexTeto_R03_script",
+  "Name": "ok 2021_18-1_BIMACON_Conduítes ParedexTeto_R03_script",
   "ElementResolver": {
     "ResolutionMap": {
       "DSCore.List": {
@@ -1018,8 +1018,8 @@
       "Outputs": [
         {
           "Id": "9e4b1b30a59d438e982afb79b1183846",
-          "Name": "geometry[]",
-          "Description": "A localização do elemento",
+          "Name": "Geometry",
+          "Description": "Geometria da localização",
           "UsingDefaultValue": false,
           "Level": 2,
           "UseLevels": false,
@@ -1028,7 +1028,7 @@
       ],
       "FunctionSignature": "Revit.Elements.Element.GetLocation",
       "Replication": "Auto",
-      "Description": "Retorna a localização de um elemento\n\nElement.GetLocation ( ): Geometry"
+      "Description": "Obter localização de um elemento existente\n\nElement.GetLocation ( ): Geometry"
     },
     {
       "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
@@ -1708,6 +1708,7 @@
       "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
       "Code": "# Importando as bibliotecas necessárias da API do Revit\r\nimport clr\r\nclr.AddReference('RevitServices')  # Referência aos serviços do Revit\r\nfrom RevitServices.Persistence import DocumentManager\r\n\r\nclr.AddReference('RevitAPI')  # Referência à API do Revit\r\nclr.AddReference('RevitAPIUI')  # Referência à API de Interface de Usuário do Revit\r\n\r\nfrom Autodesk.Revit.UI import TaskDialog, TaskDialogCommonButtons, TaskDialogResult\r\n\r\n# Recebe o texto de instrução como entrada do nó\r\ninstrucoes = IN[0]\r\n\r\n# Verifica se a entrada é \"Cancelar\"\r\nif instrucoes.lower() == \"Pressione ESC para finalizar\":\r\n    OUT = False\r\nelse:\r\n    # Criando o TaskDialog\r\n    dialog = TaskDialog(\"Aviso\")\r\n    dialog.MainInstruction = instrucoes\r\n    dialog.CommonButtons = TaskDialogCommonButtons.Ok | TaskDialogCommonButtons.Cancel\r\n\r\n    # Exibindo o dialog para o usuário e capturando a resposta\r\n    resultado = dialog.Show()\r\n\r\n    # Interpretando a resposta\r\n    if resultado == TaskDialogResult.Ok:\r\n        OUT = True\r\n    elif resultado == TaskDialogResult.Cancel:\r\n        OUT = False\r\n    else:\r\n        OUT = None\r\n",
       "Engine": "IronPython2",
+      "EngineName": "IronPython2",
       "VariableInputPorts": true,
       "Id": "e9f1499ac91b4814b05933c227f79c06",
       "NodeType": "PythonScriptNode",
@@ -1821,6 +1822,7 @@
       "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
       "Code": "# Carregar as bibliotecas DesignScript e padrão do Python\r\nimport sys\r\nimport clr\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\n\r\n# Função para concatenar os valores de uma lista em uma única string com múltiplas linhas\r\ndef concatenate_list_to_string(input_list, delimiter=\"\\n\"):\r\n    # Verifica se a entrada é uma lista\r\n    if not isinstance(input_list, list):\r\n        return \"A entrada deve ser uma lista.\"\r\n    \r\n    # Converte todos os elementos para string e junta com o delimitador especificado\r\n    result = delimiter.join(str(item) for item in input_list)\r\n    return result\r\n\r\n# Entrada pelo nó do Dynamo\r\nlista = IN[0]  # Lista de valores a serem concatenados\r\ndelimitador = IN[1] if len(IN) > 1 else \"\\n\"  # Delimitador opcional, padrão é nova linha\r\n\r\n# Saída para o Dynamo\r\nOUT = concatenate_list_to_string(lista, delimitador)\r\n\r\n",
       "Engine": "IronPython2",
+      "EngineName": "IronPython2",
       "VariableInputPorts": true,
       "Id": "30ce3305776641b3b6f0b1c5f27ddac1",
       "NodeType": "PythonScriptNode",
@@ -1983,6 +1985,33 @@
           "Level": 2,
           "UseLevels": false,
           "KeepListStructure": false
+        },
+        {
+          "Id": "4ddb0ba6272b4682b264be3697268e9b",
+          "Name": "item5",
+          "Description": "Índice do Item nº 5",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "e2a3ab6007434529ba7c2b996f8962e4",
+          "Name": "item6",
+          "Description": "Índice do Item nº 6",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "036916069b8845e899c1af50277b15e6",
+          "Name": "item7",
+          "Description": "Índice do Item nº 7",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
         }
       ],
       "Outputs": [
@@ -2060,7 +2089,7 @@
     },
     {
       "ConcreteType": "DSRevitNodesUI.Categories, DSRevitNodesUI",
-      "SelectedIndex": 472,
+      "SelectedIndex": 470,
       "SelectedString": "OST_LightingFixtures",
       "Id": "6c179e472f7540ceaf6712b4d2c3cff0",
       "NodeType": "ExtensionNode",
@@ -2083,6 +2112,7 @@
       "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
       "Code": "# Importando as bibliotecas necessárias da API do Revit\r\nimport clr\r\nclr.AddReference('RevitServices')  # Referência aos serviços do Revit\r\nfrom RevitServices.Persistence import DocumentManager\r\n\r\nclr.AddReference('RevitAPI')  # Referência à API do Revit\r\nclr.AddReference('RevitAPIUI')  # Referência à API de Interface de Usuário do Revit\r\n\r\nfrom Autodesk.Revit.UI import TaskDialog, TaskDialogCommonButtons, TaskDialogResult\r\n\r\n# Recebe o texto de instrução como entrada do nó\r\ninstrucoes = IN[0]\r\n\r\n# Verifica se a entrada é \"Cancelar\"\r\nif instrucoes.lower() == \"Pressione ESC para finalizar\":\r\n    OUT = False\r\nelse:\r\n    # Criando o TaskDialog\r\n    dialog = TaskDialog(\"Aviso\")\r\n    dialog.MainInstruction = instrucoes\r\n    dialog.CommonButtons = TaskDialogCommonButtons.Ok | TaskDialogCommonButtons.Cancel\r\n\r\n    # Exibindo o dialog para o usuário e capturando a resposta\r\n    resultado = dialog.Show()\r\n\r\n    # Interpretando a resposta\r\n    if resultado == TaskDialogResult.Ok:\r\n        OUT = False\r\n    elif resultado == TaskDialogResult.Cancel:\r\n        OUT = False\r\n    else:\r\n        OUT = None\r\n",
       "Engine": "IronPython2",
+      "EngineName": "IronPython2",
       "VariableInputPorts": true,
       "Id": "bd24607821d94abd8c4e2e753d13f3e8",
       "NodeType": "PythonScriptNode",
@@ -2202,6 +2232,7 @@
       "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
       "Code": "# Carregar as bibliotecas DesignScript e padrão do Python\r\nimport sys\r\nimport clr\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\n\r\n# Função para concatenar os valores de uma lista em uma única string com múltiplas linhas\r\ndef concatenate_list_to_string(input_list, delimiter=\"\\n\"):\r\n    # Verifica se a entrada é uma lista\r\n    if not isinstance(input_list, list):\r\n        return \"A entrada deve ser uma lista.\"\r\n    \r\n    # Converte todos os elementos para string e junta com o delimitador especificado\r\n    result = delimiter.join(str(item) for item in input_list)\r\n    return result\r\n\r\n# Entrada pelo nó do Dynamo\r\nlista = IN[0]  # Lista de valores a serem concatenados\r\ndelimitador = IN[1] if len(IN) > 1 else \"\\n\"  # Delimitador opcional, padrão é nova linha\r\n\r\n# Saída para o Dynamo\r\nOUT = concatenate_list_to_string(lista, delimitador)\r\n\r\n",
       "Engine": "IronPython2",
+      "EngineName": "IronPython2",
       "VariableInputPorts": true,
       "Id": "dde387c880ec4975bd2b9befabaed73a",
       "NodeType": "PythonScriptNode",
@@ -2261,6 +2292,15 @@
           "Id": "0c6ac2af2e9e4d37b539c7eb0b0d2877",
           "Name": "item0",
           "Description": "Índice do item nº 0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "324f5fbf10e140529bb6c4705f8a100b",
+          "Name": "item1",
+          "Description": "Índice do Item nº 1",
           "UsingDefaultValue": false,
           "Level": 2,
           "UseLevels": false,
@@ -3678,7 +3718,7 @@
     },
     {
       "ConcreteType": "DSRevitNodesUI.ElementTypes, DSRevitNodesUI",
-      "SelectedIndex": 65,
+      "SelectedIndex": 62,
       "SelectedString": "ConduitType",
       "Id": "ae7ff2847e6c41e5a8fef0aaa2890f19",
       "NodeType": "ExtensionNode",
@@ -5038,6 +5078,7 @@
       "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
       "Code": "import clr\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\n\r\n# Entrada do Dynamo (listas aninhadas no nível 2)\r\nlistas_ordenadas = IN[0]  # Exemplo: [[4, 4, 6, 8, 6], [1, 6, 7, 7, 7], [6, 1, 4, 5, 4], [2, 7, 8, 6, 8], [7, 2, 1, 3, 1]]\r\n\r\n# Lista para armazenar os números selecionados\r\nresultado_final = []\r\nusados = set()  # Conjunto para rastrear os números já utilizados\r\n\r\n# Iterar sobre cada lista individualmente (nível 2)\r\nfor lista in listas_ordenadas:\r\n    for item in lista:\r\n        if item not in usados:  # Se o número ainda não foi usado\r\n            resultado_final.append(item)\r\n            usados.add(item)  # Marca como usado\r\n            break  # Sai do loop e passa para a próxima lista\r\n\r\n# Saída do Dynamo\r\nOUT = resultado_final\r\n",
       "Engine": "IronPython2",
+      "EngineName": "IronPython2",
       "VariableInputPorts": true,
       "Id": "c7ba9d6112e04fedac21b856ff277894",
       "NodeType": "PythonScriptNode",
@@ -5379,6 +5420,69 @@
       "FunctionSignature": "DSCore.List.Transpose@var[]..[]",
       "Replication": "Auto",
       "Description": "Troca as linhas e as colunas de uma lista de listas. Se houver algumas linhas que sejam menores do que outras, valores nulos serão inseridos como marcadores de posição na matriz resultante para que seja sempre retangular.\n\nList.Transpose (lists: var[]..[]): var[]..[]"
+    },
+    {
+      "ConcreteType": "DSRevitNodesUI.Categories, DSRevitNodesUI",
+      "SelectedIndex": 170,
+      "SelectedString": "OST_ElectricalEquipment",
+      "Id": "c4dc93db923b4bfa8d1cf12987884628",
+      "NodeType": "ExtensionNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "03dad616863b44519406560e456e3627",
+          "Name": "Category",
+          "Description": "A categoria selecionada.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Todas as categorias incorporadas."
+    },
+    {
+      "ConcreteType": "DSRevitNodesUI.Categories, DSRevitNodesUI",
+      "SelectedIndex": 470,
+      "SelectedString": "OST_LightingFixtures",
+      "Id": "1aa54218293643d3b3ac8f31c40791b1",
+      "NodeType": "ExtensionNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "32b2b741ca7e440fb17b6eec02dd1d30",
+          "Name": "Category",
+          "Description": "A categoria selecionada.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Todas as categorias incorporadas."
+    },
+    {
+      "ConcreteType": "DSRevitNodesUI.Categories, DSRevitNodesUI",
+      "SelectedIndex": 98,
+      "SelectedString": "OST_ConduitFitting",
+      "Id": "d4ea137df8e948beb8fb47af0a11289d",
+      "NodeType": "ExtensionNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "fed91d4302b44c1181a10a08ceebc6b5",
+          "Name": "Category",
+          "Description": "A categoria selecionada.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Todas as categorias incorporadas."
     }
   ],
   "Connectors": [
@@ -5836,6 +5940,12 @@
       "Start": "e45a3fee395c49fda39a279678bdf8c3",
       "End": "895abc33ef2643e2954f19dd08211f58",
       "Id": "098f9756461a4b4e8abc7baf02f19795",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "39c767c9ccc744578ea79477e4b5f03a",
+      "End": "324f5fbf10e140529bb6c4705f8a100b",
+      "Id": "3957ad6a42ca4effb136e5457c16e384",
       "IsHidden": "False"
     },
     {
@@ -6539,6 +6649,24 @@
       "End": "991ea66d73744126a6e7a12ac3cc4c0c",
       "Id": "d2d4446e7153476d9099bf040bcac7bf",
       "IsHidden": "False"
+    },
+    {
+      "Start": "03dad616863b44519406560e456e3627",
+      "End": "4ddb0ba6272b4682b264be3697268e9b",
+      "Id": "1a44569955054fb3b6708ccc6c871ba1",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "32b2b741ca7e440fb17b6eec02dd1d30",
+      "End": "e2a3ab6007434529ba7c2b996f8962e4",
+      "Id": "5966a4a5dcba4aa3a1405bc9b4826057",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "fed91d4302b44c1181a10a08ceebc6b5",
+      "End": "036916069b8845e899c1af50277b15e6",
+      "Id": "6b2fb0450db84f1aae486355b97962a5",
+      "IsHidden": "False"
     }
   ],
   "Dependencies": [
@@ -6641,7 +6769,6 @@
       ]
     }
   ],
-  "EnableLegacyPolyCurveBehavior": true,
   "Thumbnail": "",
   "GraphDocumentationURL": null,
   "ExtensionWorkspaceData": [
@@ -6671,18 +6798,18 @@
       "ScaleFactor": 1.0,
       "HasRunWithoutCrash": true,
       "IsVisibleInDynamoLibrary": true,
-      "Version": "3.2.1.5366",
+      "Version": "2.19.3.6394",
       "RunType": "Manual",
       "RunPeriod": "1000"
     },
     "Camera": {
       "Name": "_Visualização do plano de fundo",
       "EyeX": 21.1240291595459,
-      "EyeY": 737.8356323242188,
-      "EyeZ": -44.50743103027344,
+      "EyeY": 737.83563232421875,
+      "EyeZ": -44.507431030273438,
       "LookX": -0.46677398681640625,
       "LookY": -3.862060546875,
-      "LookZ": 4.683452606201172,
+      "LookZ": 4.6834526062011719,
       "UpX": -0.04500802606344223,
       "UpY": 0.891006588935852,
       "UpZ": 0.45175403356552124
@@ -6696,7 +6823,7 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 3787.716648510158,
+        "X": 3787.7166485101579,
         "Y": 440.05129746326395
       },
       {
@@ -6706,8 +6833,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 2658.424101310544,
-        "Y": -844.0814418666041
+        "X": 2658.4241013105438,
+        "Y": -844.08144186660411
       },
       {
         "Id": "8fb5c009ef914286a15c8a3ec4cf40fd",
@@ -6717,7 +6844,7 @@
         "Excluded": false,
         "ShowGeometry": true,
         "X": 4988.082494927623,
-        "Y": 739.2071056334755
+        "Y": 739.20710563347552
       },
       {
         "Id": "d25ba10be4d8445e9a730a8e457405fa",
@@ -6726,7 +6853,7 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 5010.281034000457,
+        "X": 5010.2810340004571,
         "Y": -384.928546049431
       },
       {
@@ -6736,7 +6863,7 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 7467.968123917954,
+        "X": 7467.9681239179536,
         "Y": 314.74514272732915
       },
       {
@@ -6747,7 +6874,7 @@
         "Excluded": false,
         "ShowGeometry": true,
         "X": 10496.35679260695,
-        "Y": -688.3508181114464
+        "Y": -688.35081811144642
       },
       {
         "Id": "4176f253345b4ac38322deadabeb0959",
@@ -6757,7 +6884,7 @@
         "Excluded": false,
         "ShowGeometry": true,
         "X": 10132.378492124048,
-        "Y": -765.1381361183678
+        "Y": -765.13813611836781
       },
       {
         "Id": "01f888fc4bbb4c968a80fe1c23e2b4bb",
@@ -6767,7 +6894,7 @@
         "Excluded": false,
         "ShowGeometry": true,
         "X": 9839.892727158076,
-        "Y": -673.1165214323448
+        "Y": -673.11652143234483
       },
       {
         "Id": "a3544cb9f3684c79ac98cbcf32d3d791",
@@ -6776,8 +6903,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 9571.090873910547,
-        "Y": -747.4395289256238
+        "X": 9571.0908739105471,
+        "Y": -747.43952892562379
       },
       {
         "Id": "4af725c879af4e0ab31b09642a02039f",
@@ -6786,7 +6913,7 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 9248.592661689541,
+        "X": 9248.5926616895413,
         "Y": -791.1097252402144
       },
       {
@@ -6807,7 +6934,7 @@
         "Excluded": false,
         "ShowGeometry": false,
         "X": 383.38310586641137,
-        "Y": 870.5308567149629
+        "Y": 870.53085671496285
       },
       {
         "Id": "5d90937b9dea483a9242834598dbbb4b",
@@ -6827,7 +6954,7 @@
         "Excluded": false,
         "ShowGeometry": false,
         "X": 1769.1129481070984,
-        "Y": 59.25053544343473
+        "Y": 59.250535443434728
       },
       {
         "Id": "544ffec37d084022ada496360b346a21",
@@ -6847,7 +6974,7 @@
         "Excluded": false,
         "ShowGeometry": false,
         "X": 1886.7267555545013,
-        "Y": 865.4448239084631
+        "Y": 865.44482390846315
       },
       {
         "Id": "61192ed05bc941c18bb253f296cfd1ee",
@@ -6866,7 +6993,7 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 652.7085914849011,
+        "X": 652.70859148490115,
         "Y": 221.25429254930634
       },
       {
@@ -6876,7 +7003,7 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 852.5929871089361,
+        "X": 852.59298710893609,
         "Y": 80.1320346594348
       },
       {
@@ -6907,7 +7034,7 @@
         "Excluded": false,
         "ShowGeometry": true,
         "X": 2372.9656982257247,
-        "Y": -828.1862738821346
+        "Y": -828.18627388213463
       },
       {
         "Id": "3b858a3e955945e3b1acd6be6d615977",
@@ -6936,7 +7063,7 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 3755.220387029229,
+        "X": 3755.2203870292292,
         "Y": 275.7172116979342
       },
       {
@@ -6946,8 +7073,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 8647.375378461204,
-        "Y": 570.0780267285276
+        "X": 8647.3753784612036,
+        "Y": 570.07802672852756
       },
       {
         "Id": "f4d81bbc3a8144cb89353e118ab11c2e",
@@ -6957,7 +7084,7 @@
         "Excluded": false,
         "ShowGeometry": true,
         "X": 8260.03689416764,
-        "Y": 56.59903578088313
+        "Y": 56.599035780883128
       },
       {
         "Id": "e08a3dfc79394343a0e506bba07129dc",
@@ -6967,7 +7094,7 @@
         "Excluded": false,
         "ShowGeometry": true,
         "X": 10811.826197872695,
-        "Y": -1068.503671636369
+        "Y": -1068.5036716363691
       },
       {
         "Id": "9a3bd86c826542b7b5749141a0717941",
@@ -6976,7 +7103,7 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 3479.641551029424,
+        "X": 3479.6415510294241,
         "Y": -271.49435271673656
       },
       {
@@ -6986,7 +7113,7 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": false,
-        "X": 3797.147177098306,
+        "X": 3797.1471770983062,
         "Y": -426.42160595744485
       },
       {
@@ -7007,7 +7134,7 @@
         "Excluded": false,
         "ShowGeometry": true,
         "X": 11016.205618300515,
-        "Y": -159.1958008180029
+        "Y": -159.19580081800291
       },
       {
         "Id": "fc6504c62c764049a00e9d1278e87fa8",
@@ -7017,7 +7144,7 @@
         "Excluded": false,
         "ShowGeometry": true,
         "X": 10347.032806026702,
-        "Y": 68.52519801847893
+        "Y": 68.525198018478932
       },
       {
         "Id": "a1ed62548c384f7bab8d59b7577e42f2",
@@ -7036,7 +7163,7 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 9715.054808015822,
+        "X": 9715.0548080158223,
         "Y": 62.08562674382631
       },
       {
@@ -7046,7 +7173,7 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 9347.728550069653,
+        "X": 9347.7285500696526,
         "Y": 35.65698647737679
       },
       {
@@ -7057,7 +7184,7 @@
         "Excluded": false,
         "ShowGeometry": true,
         "X": -159.31393108861573,
-        "Y": 9.292886941881193
+        "Y": 9.2928869418811928
       },
       {
         "Id": "e49ce3ffb8154774a54a4f1b30cfd9a1",
@@ -7067,7 +7194,7 @@
         "Excluded": false,
         "ShowGeometry": true,
         "X": -612.2116371561724,
-        "Y": -199.8229268809198
+        "Y": -199.82292688091979
       },
       {
         "Id": "707d30b94fdd414ab9d836aaa134a3d3",
@@ -7087,7 +7214,7 @@
         "Excluded": false,
         "ShowGeometry": true,
         "X": -1432.6186389527636,
-        "Y": -266.0339148973969
+        "Y": -266.03391489739693
       },
       {
         "Id": "3f7d8f8465d841e6a5cde1ae378f2428",
@@ -7097,7 +7224,7 @@
         "Excluded": false,
         "ShowGeometry": true,
         "X": -2442.798778178184,
-        "Y": 69.70225157348364
+        "Y": 69.702251573483636
       },
       {
         "Id": "729e64aaf2104970a2a63a9ec77500d0",
@@ -7117,7 +7244,7 @@
         "Excluded": false,
         "ShowGeometry": true,
         "X": -958.64837414756,
-        "Y": 83.61409068756677
+        "Y": 83.614090687566772
       },
       {
         "Id": "7be94bef5cbb4f2b84496ecbc4191e9f",
@@ -7156,8 +7283,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -1580.1388552436126,
-        "Y": 393.01828684925806
+        "X": -1594.0330174530473,
+        "Y": 365.22996243038881
       },
       {
         "Id": "b5030fef1c064f359d63f618276399df",
@@ -7166,8 +7293,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -1588.9253281535225,
-        "Y": 568.7831573964264
+        "X": -1596.8648494160566,
+        "Y": 537.02507234629013
       },
       {
         "Id": "c0a1695931ae41f29beed7afa41f93ff",
@@ -7176,8 +7303,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -1561.9553559962317,
-        "Y": 721.9320427835801
+        "X": -1567.9099969431322,
+        "Y": 715.97740183667952
       },
       {
         "Id": "14697afaa4124e0e9b3284587c322497",
@@ -7196,7 +7323,7 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -946.8400091856713,
+        "X": -946.84000918567131,
         "Y": -102.76919740691767
       },
       {
@@ -7206,8 +7333,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -940.5304318471963,
-        "Y": 1332.6220921069444
+        "X": -912.41281623649866,
+        "Y": 1923.850864670384
       },
       {
         "Id": "6c179e472f7540ceaf6712b4d2c3cff0",
@@ -7216,8 +7343,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -1580.0174616955542,
-        "Y": 1216.5072313082537
+        "X": -1551.8998460848566,
+        "Y": 1807.7360038716934
       },
       {
         "Id": "bd24607821d94abd8c4e2e753d13f3e8",
@@ -7226,8 +7353,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -1442.805923009268,
-        "Y": 985.5806276640438
+        "X": -1414.6883073985705,
+        "Y": 1576.8094002274834
       },
       {
         "Id": "39ba91f0326f41cca4fae252369a9a9d",
@@ -7236,8 +7363,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -1876.883200224659,
-        "Y": 1046.042046892386
+        "X": -1848.7655846139614,
+        "Y": 1637.2708194558254
       },
       {
         "Id": "19b62784e9d047daadb2cb40751009e0",
@@ -7246,8 +7373,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -2347.423398779789,
-        "Y": 1266.1615783445172
+        "X": -2319.3057831690912,
+        "Y": 1857.3903509079569
       },
       {
         "Id": "08b6bc47a3e44292a795ac2bde9ff9f3",
@@ -7256,8 +7383,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -2556.3101289137694,
-        "Y": 1095.8514583059946
+        "X": -2528.1925133030718,
+        "Y": 1687.0802308694342
       },
       {
         "Id": "dde387c880ec4975bd2b9befabaed73a",
@@ -7266,8 +7393,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -1675.4034801651492,
-        "Y": 1002.8681582898009
+        "X": -1647.2858645544516,
+        "Y": 1594.0969308532403
       },
       {
         "Id": "c4ab4494bd464b98bd756caf659ffc94",
@@ -7276,8 +7403,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -1615.6296776272306,
-        "Y": 1371.726327507754
+        "X": -1587.512062016533,
+        "Y": 1962.9551000711936
       },
       {
         "Id": "4c9a481756814208b6386fcfe287cd70",
@@ -7286,8 +7413,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -1243.8076630434505,
-        "Y": 1201.8330150690263
+        "X": -1215.6900474327529,
+        "Y": 1793.0617876324659
       },
       {
         "Id": "578ac59f20c84825ba3e097548d9b7ff",
@@ -7296,8 +7423,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -693.2296254363191,
-        "Y": 1021.895619816999
+        "X": -665.1120098256215,
+        "Y": 1613.1243923804386
       },
       {
         "Id": "8adeb16889974311affc054119a65d93",
@@ -7316,8 +7443,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -1013.1571643499735,
-        "Y": 1147.466564034943
+        "X": -985.03954873927592,
+        "Y": 1738.6953365983827
       },
       {
         "Id": "4ce5a29f3fdb4112a8aa4ca9f5af9e6f",
@@ -7326,7 +7453,7 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -588.1418125521855,
+        "X": -588.14181255218546,
         "Y": -2289.4659900058996
       },
       {
@@ -7336,7 +7463,7 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -802.9273389887753,
+        "X": -802.92733898877532,
         "Y": -2179.737683024131
       },
       {
@@ -7386,7 +7513,7 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -3253.567831117406,
+        "X": -3253.5678311174061,
         "Y": -3032.8225219531637
       },
       {
@@ -7427,7 +7554,7 @@
         "Excluded": false,
         "ShowGeometry": true,
         "X": -3066.49825670302,
-        "Y": -2842.890190057295
+        "Y": -2842.8901900572951
       },
       {
         "Id": "54910993f0214dd1a802daedc34d936e",
@@ -7436,7 +7563,7 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -2097.343882924836,
+        "X": -2097.3438829248362,
         "Y": -2734.9991167188055
       },
       {
@@ -7467,7 +7594,7 @@
         "Excluded": false,
         "ShowGeometry": true,
         "X": -2143.5061359043866,
-        "Y": -2168.256461519449
+        "Y": -2168.2564615194492
       },
       {
         "Id": "20aaa92b5ee241a6850e9f43ceca35a0",
@@ -7496,7 +7623,7 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -2936.031252794576,
+        "X": -2936.0312527945762,
         "Y": -2003.0836656084928
       },
       {
@@ -7527,7 +7654,7 @@
         "Excluded": false,
         "ShowGeometry": true,
         "X": -2203.5785520189447,
-        "Y": -520.9515824997982
+        "Y": -520.95158249979818
       },
       {
         "Id": "1844e98ae0164f5e92cd03fbb69642a1",
@@ -7537,7 +7664,7 @@
         "Excluded": false,
         "ShowGeometry": true,
         "X": -2608.0325342373603,
-        "Y": -561.8266512213245
+        "Y": -561.82665122132448
       },
       {
         "Id": "7997c37881114cc7be50714fbeb2bcb5",
@@ -7546,7 +7673,7 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -760.1069425138108,
+        "X": -760.10694251381085,
         "Y": -1300.7379429280993
       },
       {
@@ -7566,8 +7693,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 4038.055797899043,
-        "Y": 772.7554135714645
+        "X": 4038.0557978990432,
+        "Y": 772.75541357146449
       },
       {
         "Id": "50214124c1cf491f8aaf74ee59ed2ac0",
@@ -7576,8 +7703,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 4453.754237838411,
-        "Y": 758.8928775083289
+        "X": 4453.7542378384114,
+        "Y": 758.89287750832887
       },
       {
         "Id": "cce5cf0d9e0b41caa0ee9ccd1a0336ed",
@@ -7586,7 +7713,7 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 4169.920716439223,
+        "X": 4169.9207164392228,
         "Y": 1049.4091964315396
       },
       {
@@ -7596,7 +7723,7 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 5002.491272002313,
+        "X": 5002.4912720023131,
         "Y": 1118.3202757888298
       },
       {
@@ -7606,7 +7733,7 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 8674.061216635168,
+        "X": 8674.0612166351675,
         "Y": 131.02163786045236
       },
       {
@@ -7627,7 +7754,7 @@
         "Excluded": false,
         "ShowGeometry": true,
         "X": 2987.36398166741,
-        "Y": -978.5381470670326
+        "Y": -978.53814706703258
       },
       {
         "Id": "fe65573b6f624b928723a0ccf65dd9a6",
@@ -7636,7 +7763,7 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -596.2346889657165,
+        "X": -596.23468896571649,
         "Y": -1562.1592565865287
       },
       {
@@ -7646,7 +7773,7 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -857.3380774743417,
+        "X": -857.33807747434173,
         "Y": -1494.057608310475
       },
       {
@@ -7656,7 +7783,7 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -2840.863266562734,
+        "X": -2840.8632665627342,
         "Y": -1138.5105825517285
       },
       {
@@ -7667,7 +7794,7 @@
         "Excluded": false,
         "ShowGeometry": true,
         "X": -2808.2923958257747,
-        "Y": -995.2671800648891
+        "Y": -995.26718006488909
       },
       {
         "Id": "9e0dd523d1684ffdb90d20b81142a00e",
@@ -7676,8 +7803,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -2819.518259533194,
-        "Y": -831.9361972057454
+        "X": -2819.5182595331939,
+        "Y": -831.93619720574543
       },
       {
         "Id": "fafeff5e14434cfdb33c61214864fcc2",
@@ -7696,8 +7823,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -2665.857974698842,
-        "Y": -2481.227235836851
+        "X": -2665.8579746988421,
+        "Y": -2481.2272358368509
       },
       {
         "Id": "8517b792bad7403facf1e964f8377ebb",
@@ -7746,7 +7873,7 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 921.9497788191491,
+        "X": 921.94977881914906,
         "Y": -1477.9134630190306
       },
       {
@@ -7766,7 +7893,7 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 966.3782680809936,
+        "X": 966.37826808099362,
         "Y": -1299.0508806618889
       },
       {
@@ -7806,7 +7933,7 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 988.3087488532349,
+        "X": 988.30874885323487,
         "Y": -1003.5277142527264
       },
       {
@@ -7816,7 +7943,7 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 4979.197906300135,
+        "X": 4979.1979063001354,
         "Y": 397.9494099586293
       },
       {
@@ -7826,7 +7953,7 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 8320.260096510556,
+        "X": 8320.2600965105557,
         "Y": -680.9571998004626
       },
       {
@@ -7836,7 +7963,7 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 8535.144793674635,
+        "X": 8535.1447936746354,
         "Y": -197.47112745262103
       },
       {
@@ -7846,7 +7973,7 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -2949.823192932581,
+        "X": -2949.8231929325812,
         "Y": -2315.7789726988754
       },
       {
@@ -7866,8 +7993,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 7947.809502149659,
-        "Y": -692.9266536841664
+        "X": 7947.8095021496592,
+        "Y": -692.92665368416635
       },
       {
         "Id": "76bbd3f468974a4e805c42fda115ab37",
@@ -7876,8 +8003,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 7912.157399554622,
-        "Y": 55.84309785995208
+        "X": 7912.1573995546223,
+        "Y": 55.843097859952081
       },
       {
         "Id": "59b97b2cd740460fb44c9340f004fd31",
@@ -7886,7 +8013,7 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 8808.841067070964,
+        "X": 8808.8410670709636,
         "Y": -580.0383633061698
       },
       {
@@ -7896,8 +8023,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -2932.435383652903,
-        "Y": -1650.128879487956
+        "X": -2932.4353836529031,
+        "Y": -1650.1288794879561
       },
       {
         "Id": "6b2d201f74f145398e5a9812e18a8906",
@@ -7906,7 +8033,7 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -2616.057122571153,
+        "X": -2616.0571225711528,
         "Y": -1512.3657062665561
       },
       {
@@ -7916,7 +8043,7 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -2934.758400896603,
+        "X": -2934.7584008966028,
         "Y": -1478.5334452871662
       },
       {
@@ -7926,7 +8053,7 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -2900.022340804893,
+        "X": -2900.0223408048928,
         "Y": -1346.917443128586
       },
       {
@@ -7936,7 +8063,7 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -842.7925840523151,
+        "X": -842.79258405231508,
         "Y": -1747.8748306892676
       },
       {
@@ -7957,7 +8084,7 @@
         "Excluded": false,
         "ShowGeometry": true,
         "X": 6057.6509143834255,
-        "Y": -867.0304170649024
+        "Y": -867.03041706490239
       },
       {
         "Id": "58bde87d35ca4705b38ab317949fa5d9",
@@ -7976,8 +8103,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 6153.577969278735,
-        "Y": 187.2044983711457
+        "X": 6153.5779692787346,
+        "Y": 187.20449837114569
       },
       {
         "Id": "e654d48fb3164cf5b6de195b0a95c912",
@@ -7996,8 +8123,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 9032.084864002278,
-        "Y": 140.9465428874651
+        "X": 9032.0848640022778,
+        "Y": 140.94654288746511
       },
       {
         "Id": "5c45c002a96f4ab69880997906e8f30b",
@@ -8006,7 +8133,7 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 2058.400858906433,
+        "X": 2058.4008589064329,
         "Y": 210.45511863096897
       },
       {
@@ -8016,7 +8143,7 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": false,
-        "X": 2344.481446500048,
+        "X": 2344.4814465000482,
         "Y": 21.265640163818944
       },
       {
@@ -8047,7 +8174,7 @@
         "Excluded": false,
         "ShowGeometry": true,
         "X": 3405.420775994814,
-        "Y": 834.5165993374237
+        "Y": 834.51659933742371
       },
       {
         "Id": "e710afc36d374df2bc68607ad9d030b3",
@@ -8087,7 +8214,7 @@
         "Excluded": false,
         "ShowGeometry": true,
         "X": 2777.4536085200034,
-        "Y": 999.2215205181643
+        "Y": 999.22152051816431
       },
       {
         "Id": "c7ba9d6112e04fedac21b856ff277894",
@@ -8097,7 +8224,7 @@
         "Excluded": false,
         "ShowGeometry": true,
         "X": 3043.3256934059586,
-        "Y": 991.7109520347162
+        "Y": 991.71095203471623
       },
       {
         "Id": "800f0eebc7684846843e304e2cb66505",
@@ -8107,7 +8234,7 @@
         "Excluded": false,
         "ShowGeometry": false,
         "X": 813.377649551211,
-        "Y": 831.1639068263974
+        "Y": 831.16390682639735
       },
       {
         "Id": "8202b719719040a699294932de179709",
@@ -8116,7 +8243,7 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": -964.3316781415408,
+        "X": -964.33167814154081,
         "Y": 215.31746559976034
       },
       {
@@ -8126,8 +8253,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 5452.462982463061,
-        "Y": 313.8186383937577
+        "X": 5452.4629824630611,
+        "Y": 313.81863839375768
       },
       {
         "Id": "9be855dd2fe3432da30cfd8eaca772b8",
@@ -8136,8 +8263,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 5530.700071507411,
-        "Y": 973.9371145062703
+        "X": 5530.7000715074109,
+        "Y": 973.93711450627029
       },
       {
         "Id": "f090b07daff4445fa5a1b18a3c4e7b51",
@@ -8156,8 +8283,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 5809.322943906316,
-        "Y": 892.1622717563476
+        "X": 5809.3229439063161,
+        "Y": 892.16227175634765
       },
       {
         "Id": "534386ce2cfd4e77bc2e826ecdb1049e",
@@ -8166,8 +8293,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 4997.329443560294,
-        "Y": -46.96332878800274
+        "X": 4997.3294435602938,
+        "Y": -46.963328788002741
       },
       {
         "Id": "fb7fbc11f74846a8b8cd2d4b8076b798",
@@ -8186,8 +8313,38 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 5429.773192396669,
+        "X": 5429.7731923966694,
         "Y": -369.30310101277695
+      },
+      {
+        "Id": "c4dc93db923b4bfa8d1cf12987884628",
+        "Name": "Categories",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -1574.2258326703829,
+        "Y": 877.11362005843318
+      },
+      {
+        "Id": "1aa54218293643d3b3ac8f31c40791b1",
+        "Name": "Categories",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -1578.4624347222434,
+        "Y": 1018.6419745161751
+      },
+      {
+        "Id": "d4ea137df8e948beb8fb47af0a11289d",
+        "Name": "Categories",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -1566.0099528960902,
+        "Y": 1142.4980030260356
       }
     ],
     "Annotations": [
@@ -8206,14 +8363,14 @@
           "4af725c879af4e0ab31b09642a02039f"
         ],
         "HasNestedGroups": false,
-        "Left": 9238.592661689541,
+        "Left": 9238.5926616895413,
         "Top": -864.1097252402144,
         "Width": 1462.7641309174087,
         "Height": 337.758907128768,
         "FontSize": 36.0,
         "GroupStyleId": "00000000-0000-0000-0000-000000000000",
         "InitialTop": -791.1097252402144,
-        "InitialHeight": 262.9932038078696,
+        "InitialHeight": 262.99320380786958,
         "TextblockHeight": 63.0,
         "Background": "#FFC1D676"
       },
@@ -8232,14 +8389,14 @@
           "c0ac537f82664ec58dbfd96e50e267ad"
         ],
         "HasNestedGroups": false,
-        "Left": 9337.728550069653,
+        "Left": 9337.7285500696526,
         "Top": -37.34301352262321,
         "Width": 1577.1461620739574,
-        "Height": 363.0138636709976,
+        "Height": 363.01386367099758,
         "FontSize": 36.0,
         "GroupStyleId": "00000000-0000-0000-0000-000000000000",
         "InitialTop": 35.65698647737679,
-        "InitialHeight": 273.0138636709976,
+        "InitialHeight": 273.01386367099758,
         "TextblockHeight": 63.0,
         "Background": "#FFC1D676"
       },
@@ -8259,14 +8416,14 @@
           "76bbd3f468974a4e805c42fda115ab37"
         ],
         "HasNestedGroups": false,
-        "Left": 7457.968123917954,
+        "Left": 7457.9681239179536,
         "Top": -270.47112745262103,
-        "Width": 1458.093092717214,
-        "Height": 972.5491541811487,
+        "Width": 1458.0930927172139,
+        "Height": 972.54915418114865,
         "FontSize": 36.0,
         "GroupStyleId": "00000000-0000-0000-0000-000000000000",
         "InitialTop": -197.47112745262103,
-        "InitialHeight": 912.5491541811487,
+        "InitialHeight": 912.54915418114865,
         "TextblockHeight": 63.0,
         "Background": "#FFFFAA45"
       },
@@ -8292,16 +8449,19 @@
           "14697afaa4124e0e9b3284587c322497",
           "c7210708010b42f7866be70393ebc5dd",
           "e49ce3ffb8154774a54a4f1b30cfd9a1",
-          "8202b719719040a699294932de179709"
+          "8202b719719040a699294932de179709",
+          "c4dc93db923b4bfa8d1cf12987884628",
+          "1aa54218293643d3b3ac8f31c40791b1",
+          "d4ea137df8e948beb8fb47af0a11289d"
         ],
         "HasNestedGroups": false,
         "Left": -2614.35057317189,
-        "Top": -339.0339148973969,
+        "Top": -339.03391489739693,
         "Width": 2275.1389360157177,
-        "Height": 1192.965957680977,
+        "Height": 1613.5319179234325,
         "FontSize": 36.0,
         "GroupStyleId": "00000000-0000-0000-0000-000000000000",
-        "InitialTop": -266.0339148973969,
+        "InitialTop": -266.03391489739693,
         "InitialHeight": 1132.965957680977,
         "TextblockHeight": 63.0,
         "Background": "#FFC1D676"
@@ -8327,14 +8487,14 @@
           "578ac59f20c84825ba3e097548d9b7ff"
         ],
         "HasNestedGroups": false,
-        "Left": -2566.3101289137694,
-        "Top": 912.5806276640438,
+        "Left": -2538.1925133030718,
+        "Top": 1503.8094002274834,
         "Width": 2146.0805034774503,
-        "Height": 591.1456998437101,
+        "Height": 591.14569984371019,
         "FontSize": 36.0,
         "GroupStyleId": "00000000-0000-0000-0000-000000000000",
-        "InitialTop": 985.5806276640438,
-        "InitialHeight": 531.1456998437101,
+        "InitialTop": 1576.8094002274834,
+        "InitialHeight": 531.14569984371008,
         "TextblockHeight": 63.0,
         "Background": "#FFC1D676"
       },
@@ -8356,14 +8516,14 @@
           "f99ce8fabfdb40d2a1aa9e1c420b331b"
         ],
         "HasNestedGroups": false,
-        "Left": -867.3380774743417,
+        "Left": -867.33807747434173,
         "Top": -2362.4659900058996,
-        "Width": 512.1962649221563,
+        "Width": 512.19626492215627,
         "Height": 1000.4083816954246,
         "FontSize": 36.0,
         "GroupStyleId": "00000000-0000-0000-0000-000000000000",
         "InitialTop": -2289.4659900058996,
-        "InitialHeight": 940.4083816954246,
+        "InitialHeight": 940.40838169542462,
         "TextblockHeight": 63.0,
         "Background": "#FFC1D676"
       },
@@ -8406,7 +8566,7 @@
           "db2c3a7ed96341f9b25ae345d38decc1"
         ],
         "HasNestedGroups": false,
-        "Left": -3263.567831117406,
+        "Left": -3263.5678311174061,
         "Top": -3106.2283954730924,
         "Width": 1969.5937033299565,
         "Height": 2406.292198267347,
@@ -8429,12 +8589,12 @@
         ],
         "HasNestedGroups": false,
         "Left": 6047.6509143834255,
-        "Top": -940.0304170649024,
+        "Top": -940.03041706490239,
         "Width": 347.0,
         "Height": 270.0,
         "FontSize": 36.0,
         "GroupStyleId": "00000000-0000-0000-0000-000000000000",
-        "InitialTop": -867.0304170649024,
+        "InitialTop": -867.03041706490239,
         "InitialHeight": 145.0,
         "TextblockHeight": 63.0,
         "Background": "#FF87CEFA"
@@ -8472,7 +8632,7 @@
           "d25ba10be4d8445e9a730a8e457405fa"
         ],
         "HasNestedGroups": false,
-        "Left": 5000.281034000457,
+        "Left": 5000.2810340004571,
         "Top": -457.928546049431,
         "Width": 291.0,
         "Height": 235.0,
@@ -8494,7 +8654,7 @@
           "555e5d9659814233ae9820542608a44a"
         ],
         "HasNestedGroups": false,
-        "Left": 4969.197906300135,
+        "Left": 4969.1979063001354,
         "Top": 324.9494099586293,
         "Width": 291.0,
         "Height": 235.0,
@@ -8517,12 +8677,12 @@
         ],
         "HasNestedGroups": false,
         "Left": 4978.082494927623,
-        "Top": 666.2071056334755,
+        "Top": 666.20710563347552,
         "Width": 291.0,
         "Height": 235.0,
         "FontSize": 36.0,
         "GroupStyleId": "00000000-0000-0000-0000-000000000000",
-        "InitialTop": 739.2071056334755,
+        "InitialTop": 739.20710563347552,
         "InitialHeight": 145.0,
         "TextblockHeight": 63.0,
         "Background": "#FFFFB8D8"
@@ -8538,7 +8698,7 @@
           "00026279a210471fb92affb6a35f1aeb"
         ],
         "HasNestedGroups": false,
-        "Left": 4992.491272002313,
+        "Left": 4992.4912720023131,
         "Top": 1045.3202757888298,
         "Width": 291.0,
         "Height": 235.0,
@@ -8560,13 +8720,13 @@
           "c33e6d69c40f4fb5a9cc7765f7995fb7"
         ],
         "HasNestedGroups": false,
-        "Left": 6143.577969278735,
+        "Left": 6143.5779692787346,
         "Top": 114.20449837114569,
         "Width": 347.0,
         "Height": 270.0,
         "FontSize": 36.0,
         "GroupStyleId": "00000000-0000-0000-0000-000000000000",
-        "InitialTop": 187.2044983711457,
+        "InitialTop": 187.20449837114569,
         "InitialHeight": 145.0,
         "TextblockHeight": 63.0,
         "Background": "#FF87CEFA"
@@ -8594,12 +8754,12 @@
         "HasNestedGroups": false,
         "Left": 302.12866386014264,
         "Top": -1693.263413181729,
-        "Width": 1864.349173720207,
-        "Height": 821.7356989290026,
+        "Width": 1864.3491737202071,
+        "Height": 821.73569892900264,
         "FontSize": 36.0,
         "GroupStyleId": "00000000-0000-0000-0000-000000000000",
         "InitialTop": -1620.263413181729,
-        "InitialHeight": 761.7356989290026,
+        "InitialHeight": 761.73569892900264,
         "TextblockHeight": 63.0,
         "Background": "#FFC1D676"
       },
@@ -8638,13 +8798,13 @@
         ],
         "HasNestedGroups": false,
         "Left": 3394.2039932027756,
-        "Top": 761.5165993374237,
+        "Top": 761.51659933742371,
         "Width": 249.0,
-        "Height": 538.5150813774385,
+        "Height": 538.51508137743849,
         "FontSize": 36.0,
         "GroupStyleId": "00000000-0000-0000-0000-000000000000",
-        "InitialTop": 834.5165993374237,
-        "InitialHeight": 406.2488565298453,
+        "InitialTop": 834.51659933742371,
+        "InitialHeight": 478.51508137743849,
         "TextblockHeight": 63.0,
         "Background": "#FF87CEFA"
       },
@@ -8703,13 +8863,13 @@
           "50214124c1cf491f8aaf74ee59ed2ac0"
         ],
         "HasNestedGroups": false,
-        "Left": 4443.754237838411,
-        "Top": 685.8928775083289,
+        "Left": 4443.7542378384114,
+        "Top": 685.89287750832887,
         "Width": 262.0,
         "Height": 270.0,
         "FontSize": 36.0,
         "GroupStyleId": "00000000-0000-0000-0000-000000000000",
-        "InitialTop": 758.8928775083289,
+        "InitialTop": 758.89287750832887,
         "InitialHeight": 145.0,
         "TextblockHeight": 63.0,
         "Background": "#FF87CEFA"
@@ -8725,13 +8885,13 @@
           "ee1483995dc34c6790cb98b63a479c8a"
         ],
         "HasNestedGroups": false,
-        "Left": 5442.462982463061,
+        "Left": 5442.4629824630611,
         "Top": 240.81863839375768,
         "Width": 180.0,
         "Height": 270.0,
         "FontSize": 36.0,
         "GroupStyleId": "00000000-0000-0000-0000-000000000000",
-        "InitialTop": 313.8186383937577,
+        "InitialTop": 313.81863839375768,
         "InitialHeight": 145.0,
         "TextblockHeight": 63.0,
         "Background": "#FFFFC999"
@@ -8747,13 +8907,13 @@
           "9be855dd2fe3432da30cfd8eaca772b8"
         ],
         "HasNestedGroups": false,
-        "Left": 5520.700071507411,
-        "Top": 900.9371145062703,
+        "Left": 5520.7000715074109,
+        "Top": 900.93711450627029,
         "Width": 180.0,
         "Height": 235.0,
         "FontSize": 36.0,
         "GroupStyleId": "00000000-0000-0000-0000-000000000000",
-        "InitialTop": 973.9371145062703,
+        "InitialTop": 973.93711450627029,
         "InitialHeight": 145.0,
         "TextblockHeight": 63.0,
         "Background": "#FFFFC999"
@@ -8769,13 +8929,13 @@
           "534386ce2cfd4e77bc2e826ecdb1049e"
         ],
         "HasNestedGroups": false,
-        "Left": 4987.329443560294,
+        "Left": 4987.3294435602938,
         "Top": -119.96332878800274,
         "Width": 291.0,
         "Height": 235.0,
         "FontSize": 36.0,
         "GroupStyleId": "00000000-0000-0000-0000-000000000000",
-        "InitialTop": -46.96332878800274,
+        "InitialTop": -46.963328788002741,
         "InitialHeight": 145.0,
         "TextblockHeight": 63.0,
         "Background": "#FFFFB8D8"
@@ -8823,18 +8983,18 @@
         "HasNestedGroups": true,
         "Left": 273.770688303463,
         "Top": -499.42160595744485,
-        "Width": 4441.983549534949,
+        "Width": 4441.9835495349489,
         "Height": 1933.9524626724076,
         "FontSize": 36.0,
         "GroupStyleId": "00000000-0000-0000-0000-000000000000",
         "InitialTop": -426.42160595744485,
-        "InitialHeight": 1730.648066694593,
+        "InitialHeight": 1754.4532866723071,
         "TextblockHeight": 63.0,
         "Background": "#FFC1D676"
       }
     ],
-    "X": -479.3412105647766,
-    "Y": 197.58284768643344,
-    "Zoom": 0.1491696587682725
+    "X": 233.64727496217432,
+    "Y": 347.94872613648687,
+    "Zoom": 0.018336406789338545
   }
 }
