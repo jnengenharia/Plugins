@@ -2,7 +2,7 @@
   "Uuid": "493269f6-10bf-4e69-a05c-34e85648190a",
   "IsCustomNode": false,
   "Description": "Deleta todos espaços ou ambientes do projeto.",
-  "Name": "ok 00-1_BIMACON_Deletar Ambientes (Rooms) Espaços (Spaces) ou Areas_R04_script",
+  "Name": "00-1_BIMACON_Deletar Ambientes (Rooms) Espaços (Spaces) ou Areas_R04_script",
   "ElementResolver": {
     "ResolutionMap": {}
   },
@@ -559,27 +559,6 @@
       "Description": "Cria um objeto de arquivo com base no caminho fornecido"
     },
     {
-      "ConcreteType": "CoreNodeModels.Input.Filename, CoreNodeModels",
-      "Id": "05690e47fcf9455fa714a06bd215a829",
-      "NodeType": "ExtensionNode",
-      "Inputs": [],
-      "Outputs": [
-        {
-          "Id": "9865b9120c82442c882f9e9244a0eee8",
-          "Name": "",
-          "Description": "Filename",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Replication": "Disabled",
-      "Description": "Permite selecionar um arquivo no sistema e retornar seu caminho",
-      "HintPath": "C:\\Users\\jneng\\AppData\\Roaming\\pyRevit\\Extensions\\Bimacon.extension\\Bimacon.tab\\LogoBimacon.png",
-      "InputValue": "C:\\Users\\jneng\\AppData\\Roaming\\pyRevit\\Extensions\\Bimacon.extension\\Bimacon.tab\\LogoBimacon.png"
-    },
-    {
       "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
       "Id": "0ff99930ad93430db110fe20b7005a11",
       "NodeType": "FunctionNode",
@@ -980,6 +959,59 @@
       ],
       "Replication": "Disabled",
       "Description": "Executa um script Python incorporado."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "Id": "339a01cc806e4cf58fed8e65a17deae9",
+      "NodeType": "StringInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "bcbd59953cbf4333bb0bdf70782a71a1",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Cria uma sequência de caracteres.",
+      "InputValue": "LogoBimacon.png"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "Code": "import clr\r\n\r\n# Adiciona referência ao ambiente .NET\r\nclr.AddReference('System')\r\nfrom System import Environment, IO\r\n\r\n# Nome da imagem (entrada do usuário)\r\nnome_arquivo_imagem = IN[0]\r\n\r\n# Recupera o nome do usuário logado no Windows\r\nusuario = Environment.UserName\r\n\r\n# Monta o caminho completo para a pasta de imagens\r\ncaminho_base = r\"C:\\Users\\{0}\\AppData\\Roaming\\pyRevit\\Extensions\\Bimacon.extension\\Bimacon.tab\\Imagens_Bimacon\".format(usuario)\r\n\r\n# Junta o caminho base com o nome do arquivo\r\ncaminho_completo = IO.Path.Combine(caminho_base, nome_arquivo_imagem)\r\n\r\n# Verifica se o arquivo existe\r\nexiste = IO.File.Exists(caminho_completo)\r\n\r\nOUT = caminho_completo if existe else \"Imagem não encontrada: {0}\".format(caminho_completo)\r\n",
+      "Engine": "IronPython2",
+      "EngineName": "IronPython2",
+      "VariableInputPorts": true,
+      "Id": "8f48f960ec9a4f228e4df5916fc03001",
+      "NodeType": "PythonScriptNode",
+      "Inputs": [
+        {
+          "Id": "850dad2073b74555ace6125f8b5eebd8",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "43cd1be1271c48d6bd2dd2786ba15981",
+          "Name": "OUT",
+          "Description": "Resultado do script Python",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Executa um script Python incorporado."
     }
   ],
   "Connectors": [
@@ -1059,12 +1091,6 @@
       "Start": "c0eb89c98e66496fb550de53d478eefa",
       "End": "4663691da5c249a9b1ce45d70f7ea473",
       "Id": "d774386604d74cd2b3fbfd351d95c337",
-      "IsHidden": "False"
-    },
-    {
-      "Start": "9865b9120c82442c882f9e9244a0eee8",
-      "End": "80453d22833f473f8fc7b66f095cdd02",
-      "Id": "bc0602ff69e546b1ab72306bf9c35cd9",
       "IsHidden": "False"
     },
     {
@@ -1155,6 +1181,18 @@
       "Start": "50dc7df801bf480f98db94c14b9f8c8b",
       "End": "237da75b29b74efaadfa28efa7bec879",
       "Id": "e16a516d6c1149e3a81c87f0447c4059",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "bcbd59953cbf4333bb0bdf70782a71a1",
+      "End": "850dad2073b74555ace6125f8b5eebd8",
+      "Id": "d1a0952d69f64bc1a65e4632db876877",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "43cd1be1271c48d6bd2dd2786ba15981",
+      "End": "80453d22833f473f8fc7b66f095cdd02",
+      "Id": "af1a7d53a04b4c97a4d29d35b7392b37",
       "IsHidden": "False"
     }
   ],
@@ -1379,16 +1417,6 @@
         "Y": 285.463592825105
       },
       {
-        "Id": "05690e47fcf9455fa714a06bd215a829",
-        "Name": "File Path",
-        "IsSetAsInput": false,
-        "IsSetAsOutput": false,
-        "Excluded": false,
-        "ShowGeometry": true,
-        "X": -1913.2719206957838,
-        "Y": 222.19894283546077
-      },
-      {
         "Id": "0ff99930ad93430db110fe20b7005a11",
         "Name": "Image.ReadFromFile",
         "IsSetAsInput": false,
@@ -1517,6 +1545,26 @@
         "ShowGeometry": true,
         "X": 2087.2070687944756,
         "Y": 832.68502507932021
+      },
+      {
+        "Id": "339a01cc806e4cf58fed8e65a17deae9",
+        "Name": "String",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -1737.3979736046288,
+        "Y": 249.34193333510251
+      },
+      {
+        "Id": "8f48f960ec9a4f228e4df5916fc03001",
+        "Name": "Python Script",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -1507.0381511277958,
+        "Y": 249.84195095249351
       }
     ],
     "Annotations": [
@@ -1587,7 +1635,6 @@
           "f7f52a3866bf4ab9b36308b058c820fa",
           "e93245f081bd4a1f8188628a74e5cab7",
           "9ee31edb7222406c86d0b3fb46edff5f",
-          "05690e47fcf9455fa714a06bd215a829",
           "0ff99930ad93430db110fe20b7005a11",
           "7fcad11749b5449e9e3ccf79c860c26b",
           "419f1a1365e74670ac1808e1e5d5e673",
@@ -1598,7 +1645,8 @@
           "826e9163e1f44499bf84bccec5da4e8f",
           "2197bc25b86b47be8475d536dca15ad3",
           "7b82940b07404f1396a7fb3687d98636",
-          "12e0b96ca2e5438ea5261ed4989c0172"
+          "12e0b96ca2e5438ea5261ed4989c0172",
+          "339a01cc806e4cf58fed8e65a17deae9"
         ],
         "HasNestedGroups": false,
         "Left": -2095.91810570642,
@@ -1613,8 +1661,8 @@
         "Background": "#FFD4B6DB"
       }
     ],
-    "X": 435.07202951004837,
-    "Y": 153.23168345118955,
-    "Zoom": 0.18203067086335911
+    "X": 1233.697722715634,
+    "Y": -40.550639695263158,
+    "Zoom": 0.67103196227142259
   }
 }
