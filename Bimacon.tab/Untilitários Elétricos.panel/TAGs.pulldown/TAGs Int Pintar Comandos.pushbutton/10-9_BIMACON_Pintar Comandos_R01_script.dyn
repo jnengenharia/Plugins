@@ -2,7 +2,7 @@
   "Uuid": "e2c4035c-69be-4a7c-b6ba-9ce9d26f9fd4",
   "IsCustomNode": false,
   "Description": "Inseri Identificadores nas conexões ",
-  "Name": "10-9_BIMACON_Pintar Comandos_R00_script",
+  "Name": "10-9_BIMACON_Pintar Comandos_R01_script",
   "ElementResolver": {
     "ResolutionMap": {
       "DSCore.List": {
@@ -1811,36 +1811,6 @@
     {
       "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
       "NodeType": "FunctionNode",
-      "FunctionSignature": "DSCore.List.RestOfItems@var[]..[]",
-      "Id": "f1b3fc4c298c4b268c360e49a9d47bac",
-      "Inputs": [
-        {
-          "Id": "d37ed9cfdab24d32ba00ea72cf4c9c01",
-          "Name": "list",
-          "Description": "Lista da qual para obter o resto.\n\nvar[]..[]",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Outputs": [
-        {
-          "Id": "c77c2f14969548f094bbe9aaa438b48a",
-          "Name": "rest",
-          "Description": "Restante da lista.",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Replication": "Auto",
-      "Description": "Remove o primeiro item da determinada lista.\n\nList.RestOfItems (list: var[]..[]): var[]..[]"
-    },
-    {
-      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
-      "NodeType": "FunctionNode",
       "FunctionSignature": "DSCore.List.GetItemAtIndex@var[]..[],int",
       "Id": "8db4f835c5f74287867e5463a4b9604d",
       "Inputs": [
@@ -1915,6 +1885,45 @@
       ],
       "Replication": "Auto",
       "Description": "Aplaina uma lista aninhada de listas por um determinado montante.\n\nList.Flatten (list: var[]..[], amt: int = -1): var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "DSCore.List.Clean@var[]..[],bool",
+      "Id": "04bb78b72f10433d9172a7646166c38c",
+      "Inputs": [
+        {
+          "Id": "80c474f19b594ec29a275eb71f90016b",
+          "Name": "list",
+          "Description": "var[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "a8d2918c8a40427c80488d6766630fc1",
+          "Name": "preserveIndices",
+          "Description": "Forneça uma opção para preservar os índices dos dados, para que nulos não à esquerda não possam ser filtrados\n\nbool\nValor padrão : true",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "f0c9d74415c243e4952ae4fb864bbce1",
+          "Name": "var[]..[]",
+          "Description": "Uma lista limpa de listas nulas e listas vazias",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Limpa os dados de listas nulas e vazias de uma determinada de cotas arbitrárias\n\nList.Clean (list: var[]..[], preserveIndices: bool = true): var[]..[]"
     }
   ],
   "Connectors": [
@@ -2194,6 +2203,11 @@
       "Id": "bbc9381ecdec48b0afc196f1e69fdcdf"
     },
     {
+      "Start": "4cd99c3f14a4488ebab44edb39e0d022",
+      "End": "7c3f637aaeab4504a75e56c178dda0cd",
+      "Id": "7712a25ee0e747309ef62af8812479fc"
+    },
+    {
       "Start": "f6c3a3786667490a9412bde660d77ff6",
       "End": "42c830f3d7f344569358900172789506",
       "Id": "2511745ade244ed780b9778b42bdebba"
@@ -2205,8 +2219,8 @@
     },
     {
       "Start": "3f4e3a1f7e064dfaa1f11294002b368d",
-      "End": "d37ed9cfdab24d32ba00ea72cf4c9c01",
-      "Id": "a3eddbd31a884fd3a410c2d13fc9adec"
+      "End": "80c474f19b594ec29a275eb71f90016b",
+      "Id": "ad3715eb98464a3e956730ebe19d50d5"
     },
     {
       "Start": "7dde6e9de9734f06a99e2e24b4e1405b",
@@ -2224,6 +2238,11 @@
       "Id": "29a597a5be2f4e7abed7dc23b08e7130"
     },
     {
+      "Start": "75bdd5676d84457eabe880d8c78e8f2c",
+      "End": "a8d2918c8a40427c80488d6766630fc1",
+      "Id": "a1fbc5e8bb4b4df5b33ae8a03f69b836"
+    },
+    {
       "Start": "22c322f44e3445e887bcf61b54c032e9",
       "End": "1decbb0fc2d345529d25820f316be7db",
       "Id": "954eb710abde4886944e255dacb4091b"
@@ -2239,16 +2258,6 @@
       "Id": "8e8119c2165d4bf889023073c9aef824"
     },
     {
-      "Start": "4bed7e399ce44022a45eb3bc71d0b82f",
-      "End": "7c3f637aaeab4504a75e56c178dda0cd",
-      "Id": "619a19c3e33641ed9fd82b97d293297f"
-    },
-    {
-      "Start": "c77c2f14969548f094bbe9aaa438b48a",
-      "End": "aa775c6b98364c6c902821e40e44afca",
-      "Id": "9627641497344285b2965bda185382ce"
-    },
-    {
       "Start": "7a751125fbf84bd39568cc4cf4a60856",
       "End": "8aea5f6b5ff84e1486fc99e2a7a0a053",
       "Id": "1f3fcbfce57c442d8f142d3c4b58b949"
@@ -2257,6 +2266,11 @@
       "Start": "53ed38fb517c4edbb35493192a674159",
       "End": "3075a61a58724fcda8af33ebb2c7b025",
       "Id": "e39e903ff97d4956b915aa3a0459da1b"
+    },
+    {
+      "Start": "f0c9d74415c243e4952ae4fb864bbce1",
+      "End": "aa775c6b98364c6c902821e40e44afca",
+      "Id": "17a84c0924c64d488ffabec5a7c1f953"
     }
   ],
   "Dependencies": [
@@ -2791,8 +2805,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 5480.2845442763492,
-        "Y": 1730.1176292145583
+        "X": 5490.36247128397,
+        "Y": 1770.4293372450429
       },
       {
         "ShowGeometry": true,
@@ -2831,8 +2845,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 7262.85050826063,
-        "Y": 1318.57150471999
+        "X": 7272.1284434465615,
+        "Y": 1312.3862145960354
       },
       {
         "ShowGeometry": true,
@@ -2841,18 +2855,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 6441.2776787893836,
-        "Y": 1502.5142727704088
-      },
-      {
-        "ShowGeometry": true,
-        "Name": "List.RestOfItems",
-        "Id": "f1b3fc4c298c4b268c360e49a9d47bac",
-        "IsSetAsInput": false,
-        "IsSetAsOutput": false,
-        "Excluded": false,
-        "X": 6822.216946151837,
-        "Y": 1044.0140436002268
+        "X": 6363.8647162360685,
+        "Y": 1411.8596192540272
       },
       {
         "ShowGeometry": true,
@@ -2873,6 +2877,16 @@
         "Excluded": false,
         "X": 10008.62428616893,
         "Y": 1218.8419483652842
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "List.Clean",
+        "Id": "04bb78b72f10433d9172a7646166c38c",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 6811.9423189324662,
+        "Y": 1092.5003951135043
       }
     ],
     "Annotations": [
@@ -3057,8 +3071,8 @@
         "Background": "#FFC1D676"
       }
     ],
-    "X": -6941.473028193981,
-    "Y": -1051.5825257613658,
-    "Zoom": 0.97004342233895113
+    "X": -5073.8935274976484,
+    "Y": -443.26327230147473,
+    "Zoom": 0.75618722189606757
   }
 }
